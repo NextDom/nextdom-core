@@ -40,11 +40,6 @@ class eqLogic extends NextDom\Model\Entity\EqLogic
         return EqLogicManager::all($_onlyEnable);
     }
 
-    public static function byEqRealId($_eqReal_id)
-    {
-        return EqLogicManager::byEqRealId($_eqReal_id);
-    }
-
     public static function byObjectId($_object_id, $_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null, $_orderByName = false)
     {
         return EqLogicManager::byObjectId($_object_id, $_onlyEnable, $_onlyVisible, $_eqType_name, $_logicalId, $_orderByName);

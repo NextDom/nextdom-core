@@ -53,22 +53,6 @@ class EqLogicManager extends BaseManager
     const DB_CLASS_NAME = '`eqLogic`';
 
     /**
-     * Get an EqLogic from his EqRealId
-     * No EqRealId usage founds
-     *
-     * @param $eqRealId ???
-     *
-     * @return array|mixed
-     * @throws \Exception
-     */
-    public static function byEqRealId($eqRealId)
-    {
-        return self::cast(static::getMultipleByClauses([
-            'eqReal_id' => $eqRealId,
-        ]));
-    }
-
-    /**
      * Cast a base eqLogic(s) to plugin eqLogic type
      *
      * @param EqLogic|EqLogic[] $eqLogicInput EqLogic to cast or array of EqLogics

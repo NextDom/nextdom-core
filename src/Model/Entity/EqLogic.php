@@ -38,7 +38,6 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
@@ -70,7 +69,6 @@ use NextDom\Model\Entity\Parents\RefreshEntity;
  *  ORM\Index(name="logica_id_eqTypeName", columns={"logicalId", "eqType_name"}),
  *  ORM\Index(name="object_id", columns={"object_id"}),
  *  ORM\Index(name="timeout", columns={"timeout"}),
- *  ORM\Index(name="eqReal_id", columns={"eqReal_id"}),
  *  ORM\Index(name="tags", columns={"tags"})
  * })
  * ORM\Entity
@@ -139,12 +137,6 @@ class EqLogic extends BaseEntity
      * @ORM\Column(name="tags", type="string", length=255, nullable=true)
      */
     protected $tags;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="eqReal_id", type="integer", nullable=true)
-     */
-    protected $eqReal_id;
     /**
      * @var integer
      *
@@ -226,42 +218,6 @@ class EqLogic extends BaseEntity
         $this->updateChangeState($this->comment, $comment);
         $this->comment = $comment;
         return $this;
-    }
-
-    /**
-     * TODO: Unused
-     * @param null $defaultValue
-     * @return int|null
-     */
-    public function getEqReal_id($defaultValue = null)
-    {
-        if ($this->eqReal_id == '' || !is_numeric($this->eqReal_id)) {
-            return $defaultValue;
-        }
-        return $this->eqReal_id;
-    }
-
-    /**
-     * @TODO: Unused
-     * @param $_eqReal_id
-     * @return $this
-     */
-    public function setEqReal_id($_eqReal_id)
-    {
-        $this->updateChangeState($this->eqReal_id, $_eqReal_id);
-        $this->eqReal_id = $_eqReal_id;
-        return $this;
-    }
-
-    /**
-     * @TODO: Unused
-     * @return array|mixed|null
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function getEqReal()
-    {
-        return EqRealManager::byId($this->eqReal_id);
     }
 
     /**
@@ -1962,7 +1918,6 @@ class EqLogic extends BaseEntity
             'comment' => $this->comment,
             'tags' => $this->tags,
             'id' => $this->id,
-            'eqReal_id' => $this->eqReal_id,
             'object_id' => $this->object_id,
         ];
     }

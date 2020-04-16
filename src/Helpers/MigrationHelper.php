@@ -562,6 +562,9 @@ class MigrationHelper
         FileSystemHelper::rrmdir($custom_plans);
 
         DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
+        DBHelper::exec("ALTER TABLE `eqLogic` DROP `eqReal_id`;");
+        DBHelper::exec("DROP TABLE `eqReal`;");
+        
         DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
         $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (

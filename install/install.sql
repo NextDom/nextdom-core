@@ -38,25 +38,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `eqReal`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `eqReal` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `logicalId` VARCHAR(45) NULL,
-  `name` VARCHAR(45) NULL,
-  `type` VARCHAR(45) NOT NULL,
-  `configuration` TEXT NULL,
-  `cat` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC),
-  INDEX `logicalId` (`logicalId` ASC),
-  INDEX `type` (`type` ASC),
-  INDEX `logicalId_Type` (`logicalId` ASC, `type` ASC),
-  INDEX `name` (`name` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `eqLogic`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `eqLogic` (
@@ -68,7 +49,6 @@ CREATE TABLE IF NOT EXISTS `eqLogic` (
   `eqType_name` VARCHAR(127) NOT NULL,
   `configuration` TEXT NULL,
   `isVisible` TINYINT(1) NULL,
-  `eqReal_id` INT NULL,
   `isEnable` TINYINT(1) NULL,
   `status` TEXT NULL,
   `timeout` INT NULL,
@@ -86,13 +66,7 @@ CREATE TABLE IF NOT EXISTS `eqLogic` (
   INDEX `logica_id_eqTypeName` (`logicalId` ASC, `eqType_name` ASC),
   INDEX `object_id` (`object_id` ASC),
   INDEX `timeout` (`timeout` ASC),
-  INDEX `eqReal_id` (`eqReal_id` ASC),
   INDEX `tags` (`tags` ASC),
-  CONSTRAINT `fk_eqLogic_jeenode1`
-    FOREIGN KEY (`eqReal_id`)
-    REFERENCES `eqReal` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
   CONSTRAINT `fk_eqLogic_object1`
     FOREIGN KEY (`object_id`)
     REFERENCES `object` (`id`)
