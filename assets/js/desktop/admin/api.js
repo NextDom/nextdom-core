@@ -107,14 +107,14 @@ function initEvents() {
                   data: {
                       target: 'Config',
                       action: "genApiKey",
-                      plugin:el.attr('data-plugin'),
+                      plugin:el.attr('data-plugin')
                   },
                   dataType: 'json',
                   error: function (request, status, error) {
                       handleAjaxError(request, status, error);
                   },
                   success: function (data) {
-                      if (data.state != 'ok') {
+                      if (data.state !== 'ok') {
                           notify('Erreur', data.result, 'error');
                           return;
                       }

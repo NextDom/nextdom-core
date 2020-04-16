@@ -80,7 +80,7 @@ function uncollapseHealth() {
      }
   });
   $('#bt_healthUncollapse').hide();
-  $('#bt_healthCollapse').show()
+  $('#bt_healthCollapse').show();
 }
 
 /**
@@ -94,7 +94,7 @@ function collapseHealth() {
      }
   });
   $('#bt_healthCollapse').hide();
-  $('#bt_healthUncollapse').show()
+  $('#bt_healthUncollapse').show();
 }
 
 /**
@@ -112,9 +112,9 @@ function showSelectedTabFromUrl(url) {
       window.location.hash = e.target.hash;
       showSelectedTabFromUrl(document.location.toString());
     });
-    if (tabCode == 'div_Health') {
+    if (tabCode === 'div_Health') {
         $('#bt_healthCollapse').hide();
-        $('#bt_healthUncollapse').hide()
+        $('#bt_healthUncollapse').hide();
     } else {
         uncollapseHealth();
     }

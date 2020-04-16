@@ -33,22 +33,22 @@ nextdom.cmd.execute = function(queryParams) {
     var eqLogic = $('.cmd[data-cmd_id=' + queryParams.id + ']').closest('.eqLogic');
     eqLogic.find('.statusCmd').empty().append('<i class="fa fa-spinner fa-spin"></i>');
   }
-  if (queryParams.value != 'undefined' && (is_array(queryParams.value) || is_object(queryParams.value))) {
+  if (queryParams.value !== 'undefined' && (is_array(queryParams.value) || is_object(queryParams.value))) {
     queryParams.value = json_encode(queryParams.value);
   }
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     global: false,
     pre_success: function (data) {
-      if (data.state != 'ok') {
-        if (data.code == -32005) {
+      if (data.state !== 'ok') {
+        if (data.code === -32005) {
           bootbox.prompt("{{Veuillez indiquer le code ?}}", function (result) {
-            if (result != null) {
+            if (result !== null) {
               queryParams.codeAccess = result;
               nextdom.cmd.execute(queryParams);
             } else {
               nextdom.cmd.refreshValue({id: queryParams.id});
-              if ('function' != typeof (queryParams.error)) {
+              if ('function' !== typeof (queryParams.error)) {
                 notify('Core', data.result, "error");
               }
               if (notifyMe) {
@@ -60,14 +60,14 @@ nextdom.cmd.execute = function(queryParams) {
               return data;
             }
           });
-        } else if (data.code == -32006) {
+        } else if (data.code === -32006) {
           bootbox.confirm("{{Etes-vous sûr de vouloir faire cette action ?}}", function (result) {
             if (result) {
               queryParams.confirmAction = 1;
               nextdom.cmd.execute(queryParams);
             } else {
               nextdom.cmd.refreshValue({id: queryParams.id});
-              if ('function' != typeof (queryParams.error)) {
+              if ('function' !== typeof (queryParams.error)) {
                 notify('Core', data.result, "error");
               }
               if (notifyMe) {
@@ -80,7 +80,7 @@ nextdom.cmd.execute = function(queryParams) {
             }
           });
         } else {
-          if ('function' != typeof (queryParams.error)) {
+          if ('function' !== typeof (queryParams.error)) {
             notify('Core', data.result, "error");
           }
           if (notifyMe) {
@@ -243,7 +243,7 @@ nextdom.cmd.refreshByEqLogic = function(queryParams) {
         success: function (data) {
           $('.cmd[data-cmd_id=' + data.id + ']').replaceWith(data.html);
         }
-      })
+      });
     });
   }
 };
@@ -316,7 +316,7 @@ nextdom.cmd.byId = function(queryParams) {
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
-    if (isset(nextdom.cmd.cache.byId[params.id]) && init(params.noCache, false) == false) {
+    if (isset(nextdom.cmd.cache.byId[params.id]) && init(params.noCache, false) === false) {
       params.success(nextdom.cmd.cache.byId[params.id]);
       return;
     }
@@ -336,7 +336,7 @@ nextdom.cmd.byHumanName = function(queryParams) {
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
-    if (isset(nextdom.cmd.cache.byHumanName[params.humanName]) && init(params.noCache, false) == false) {
+    if (isset(nextdom.cmd.cache.byHumanName[params.humanName]) && init(params.noCache, false) === false) {
       params.success(nextdom.cmd.cache.byHumanName[params.humanName]);
       return;
     }
@@ -388,7 +388,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
       for (var i in subtype) {
         if (isset(subtype[i].visible)) {
           var el = _cmd.find('.cmdAttr[data-l1key=' + i + ']');
-          if (el.attr('type') == 'checkbox' && el.parent().is('span')) {
+          if (el.attr('type') === 'checkbox' && el.parent().is('span')) {
             el = el.parent();
           }
           if (subtype[i].visible) {
@@ -396,7 +396,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
               el.parent().parent().show();
               el.parent().parent().removeClass('hide');
             }
-            if (el.attr('type') == 'checkbox') {
+            if (el.attr('type') === 'checkbox') {
               el.parent().show();
               el.parent().removeClass('hide');
             }
@@ -407,7 +407,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
               el.parent().parent().hide();
               el.parent().parent().addClass('hide');
             }
-            if (el.attr('type') == 'checkbox') {
+            if (el.attr('type') === 'checkbox') {
               el.parent().hide();
               el.parent().addClass('hide');
             }
@@ -426,7 +426,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
         } else {
           for (var j in subtype[i]) {
             var el = _cmd.find('.cmdAttr[data-l1key=' + i + '][data-l2key=' + j + ']');
-            if (el.attr('type') == 'checkbox' && el.parent().is('span')) {
+            if (el.attr('type') === 'checkbox' && el.parent().is('span')) {
               el = el.parent();
             }
 
@@ -436,7 +436,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
                   el.parent().parent().parent().show();
                   el.parent().parent().parent().removeClass('hide');
                 }
-                if (el.attr('type') == 'checkbox') {
+                if (el.attr('type') === 'checkbox') {
                   el.parent().show();
                   el.parent().removeClass('hide');
                 }
@@ -447,7 +447,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
                   el.parent().parent().parent().hide();
                   el.parent().parent().parent().addClass('hide');
                 }
-                if (el.attr('type') == 'checkbox') {
+                if (el.attr('type') === 'checkbox') {
                   el.parent().hide();
                   el.parent().addClass('hide');
                 }
@@ -468,7 +468,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
         }
       }
 
-      if (_cmd.find('.cmdAttr[data-l1key=type]').value() == 'action') {
+      if (_cmd.find('.cmdAttr[data-l1key=type]').value() === 'action') {
         _cmd.find('.cmdAttr[data-l1key=value]').show();
         _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdId]').show();
         _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdToValue]').show();
@@ -527,7 +527,7 @@ nextdom.cmd.getSelectModal = function(_options, _callback) {
       retour.cmd.id = mod_insertCmd.getCmdId();
       retour.cmd.type = mod_insertCmd.getType();
       retour.cmd.subType = mod_insertCmd.getSubType();
-      if ($.trim(retour) != '' && 'function' == typeof (_callback)) {
+      if ($.trim(retour) !== '' && 'function' === typeof (_callback)) {
         _callback(retour);
       }
       $(this).dialog('close');
@@ -549,20 +549,20 @@ nextdom.cmd.displayActionOption = function(_expression, _options, _callback) {
       option: json_encode(_options)
     },
     dataType: 'json',
-    async: ('function' == typeof (_callback)),
+    async: ('function' === typeof (_callback)),
     global: false,
     error: function (request, status, error) {
       handleAjaxError(request, status, error);
     },
     success: function (data) {
-      if (data.state != 'ok') {
+      if (data.state !== 'ok') {
         notify('Core', data.result, "error");
         return;
       }
-      if (data.result.html != '') {
+      if (data.result.html !== '') {
         html += data.result.html;
       }
-      if ('function' == typeof (_callback)) {
+      if ('function' === typeof (_callback)) {
         _callback(html);
       }
     }
@@ -605,7 +605,7 @@ nextdom.cmd.normalizeName = function(_tagname) {
   };
   var cmdTestsList = [' ', '-', '_'];
   for (var i in cmdTestsList) {
-    cmdTests = cmdTests.concat(cmdName.split(cmdTestsList[i]))
+    cmdTests = cmdTests.concat(cmdName.split(cmdTestsList[i]));
   }
   for (var j in cmdTests) {
     if (cmdList[cmdTests[j]]) {

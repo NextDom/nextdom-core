@@ -132,7 +132,7 @@ function initEvents() {
 
     // Repo activation/desactivation
     $('#services').delegate('.enableRepository', 'change', function () {
-        if($(this).value() == 1){
+        if($(this).value() === 1){
             $('.repositoryConfiguration'+$(this).attr('data-repo')).show();
         }else{
             $('.repositoryConfiguration'+$(this).attr('data-repo')).hide();

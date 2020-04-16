@@ -52,14 +52,14 @@ function initEvents() {
     $('.li_reportType').on('click',function(){
        $('.li_reportType').removeClass('active');
        $(this).addClass('active');
-       getReportList($(this).attr('data-type'),$(this).attr('data-id'))
+       getReportList($(this).attr('data-type'),$(this).attr('data-id'));
     });
 
     // Report selection
     $('#ul_report').on('click','.li_report',function(){
         $('.li_report').removeClass('active');
         $(this).addClass('active');
-        getReport($(this).attr('data-type'),$(this).attr('data-id'),$(this).attr('data-report'))
+        getReport($(this).attr('data-type'),$(this).attr('data-id'),$(this).attr('data-report'));
     });
 
     // Report download button
@@ -156,7 +156,7 @@ function getReport(_type, _id, _report){
            var id = $('#div_reportForm .reportAttr[data-l1key=id]').value();
            var filename = $('#div_reportForm .reportAttr[data-l1key=filename]').value();
            var extension = $('#div_reportForm .reportAttr[data-l1key=extension]').value();
-           if(extension != 'pdf'){
+           if(extension !== 'pdf'){
                $('#div_imgreport').append('<img class="img-responsive" src="src/Api/downloadFile.php?pathfile=data/report/' + type+'/'+id+'/'+filename+'.'+extension+'" />');
            }else{
                $('#div_imgreport').append('{{Aucun aperçu possible en pdf}}');

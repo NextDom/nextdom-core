@@ -99,7 +99,7 @@ function initEvents() {
 
     // LDAP activation/desactivation
     $('#security').delegate('.configKey[data-l1key="ldap::enable"]', 'change', function () {
-        if($(this).value() == 1){
+        if($(this).value() === 1){
             $('#div_config_ldap').show();
         }else{
             $('#div_config_ldap').hide();
@@ -133,14 +133,14 @@ function initEvents() {
                     url: 'src/ajax.php',
                     data: {
                         target: 'User',
-                        action: 'testLdapConnection',
+                        action: 'testLdapConnection'
                     },
                     dataType: 'json',
                     error: function (request, status, error) {
                         handleAjaxError(request, status, error);
                     },
                     success: function (data) {
-                        if (data.state != 'ok') {
+                        if (data.state !== 'ok') {
                             notify('Erreur', '{{Connexion échouée :}} ' + data.result, 'error');
                             return;
                         }

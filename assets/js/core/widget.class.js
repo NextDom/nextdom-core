@@ -54,6 +54,6 @@ nextdom.widget.save = function (queryParams) {
 //Modal de Remplacement bouton dans le menu de configuration
 nextdom.widget.replacement = function(queryParams) {
   nextdom.private.ajax('Widget', 'replacement', queryParams, ['version','replace','by']);
-}
+};
 
 nextdom.widgets = nextdom.widget;

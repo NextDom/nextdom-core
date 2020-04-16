@@ -44,7 +44,7 @@ nextdom.user.isConnect = function(queryParams) {
     var paramsRequired = [];
     var paramsSpecifics = {
       pre_success: function (data) {
-        if (data.state != 'ok') {
+        if (data.state !== 'ok') {
           return {state: 'ok', result: false};
         } else {
           nextdom.user.connectCheck = Math.round(+new Date() / 1000);
@@ -59,7 +59,7 @@ nextdom.user.isConnect = function(queryParams) {
       nextdom.private.ajaxCall(ajaxParams);
     }
   } else {
-    if ('function' == typeof (queryParams.success)) {
+    if ('function' === typeof (queryParams.success)) {
       queryParams.success(true);
     }
   }

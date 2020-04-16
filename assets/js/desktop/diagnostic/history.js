@@ -51,7 +51,7 @@ function loadInformations() {
     // Height update
     $('#div_graph').css('height', $('#div_mainContainer').height()-325);
     // Remove graphs
-    delete nextdom.history.chart['div_graph']
+    delete nextdom.history.chart['div_graph'];
 }
 
 /**
@@ -67,7 +67,7 @@ function initEvents() {
 
     // Add calcul chart
     $('#bt_displayCalculHistory').on('click',function(){
-        addChart($('#in_calculHistory').value(), 1)
+        addChart($('#in_calculHistory').value(), 1);
     });
 
     // Configure calcul charts
@@ -101,7 +101,7 @@ function initEvents() {
 
     // Filtering search
     $("body").delegate("ul div input.filter", 'keyup', function () {
-        if ($(this).value() == '') {
+        if ($(this).value() === '') {
             $('.cmdList').hide();
         } else {
             $('.cmdList').show();
@@ -158,10 +158,10 @@ function initEvents() {
 function initHistoryTrigger() {
     // Chart type change
     $('#sel_chartType').off('change').on('change', function () {
-        if(lastId == null){
+        if(lastId === null){
             return;
         }
-        if(lastId.indexOf('#') != -1){
+        if(lastId.indexOf('#') !== -1){
             addChart(lastId,0);
             addChart(lastId,1);
             return;
@@ -181,10 +181,10 @@ function initHistoryTrigger() {
 
     // Grouping select change
     $('#sel_groupingType').off('change').on('change', function () {
-        if(lastId == null){
+        if(lastId === null){
             return;
         }
-        if(lastId.indexOf('#') != -1){
+        if(lastId.indexOf('#') !== -1){
             addChart(lastId,0);
             addChart(lastId,1);
             return;
@@ -204,10 +204,10 @@ function initHistoryTrigger() {
 
     // Derive checkbox change
     $('#cb_derive').off('change').on('change', function () {
-        if(lastId == null){
+        if(lastId === null){
             return;
         }
-        if(lastId.indexOf('#') != -1){
+        if(lastId.indexOf('#') !== -1){
             addChart(lastId,0);
             addChart(lastId,1);
             return;
@@ -227,10 +227,10 @@ function initHistoryTrigger() {
 
     // Step checkbox change
     $('#cb_step').off('change').on('change', function () {
-        if(lastId == null){
+        if(lastId === null){
             return;
         }
-        if(lastId.indexOf('#') != -1){
+        if(lastId.indexOf('#') !== -1){
             addChart(lastId,0);
             addChart(lastId,1);
             return;
@@ -270,7 +270,7 @@ function emptyHistory(_cmd_id, _date) {
             handleAjaxError(request, status, error);
         },
         success: function (data) {
-            if (data.state != 'ok') {
+            if (data.state !== 'ok') {
                 notify('Erreur', data.result, 'error');
                 return;
             }
@@ -291,11 +291,11 @@ function emptyHistory(_cmd_id, _date) {
  * @param _options Draw options
  */
 function addChart(_cmd_id, _action, _options) {
-    if (_action == 0) {
+    if (_action === 0) {
         if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
             $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
                 try {
-                    if(serie.options.id == _cmd_id){
+                    if(serie.options.id === _cmd_id){
                         serie.remove();
                     }
                 }catch(error) {
@@ -315,16 +315,16 @@ function addChart(_cmd_id, _action, _options) {
         option : _options,
         success: function (data) {
             if(isset(data.cmd) && isset(data.cmd.display)){
-                if (init(data.cmd.display.graphStep) != '') {
+                if (init(data.cmd.display.graphStep) !== '') {
                     $('#cb_step').off().value(init(data.cmd.display.graphStep));
                 }
-                if (init(data.cmd.display.graphType) != '') {
+                if (init(data.cmd.display.graphType) !== '') {
                     $('#sel_chartType').off().value(init(data.cmd.display.graphType));
                 }
-                if (init(data.cmd.display.groupingType) != '') {
+                if (init(data.cmd.display.groupingType) !== '') {
                     $('#sel_groupingType').off().value(init(data.cmd.display.groupingType));
                 }
-                if (init(data.cmd.display.graphDerive) != '') {
+                if (init(data.cmd.display.graphDerive) !== '') {
                     $('#cb_derive').off().value(init(data.cmd.display.graphDerive));
                 }
             }

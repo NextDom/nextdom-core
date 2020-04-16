@@ -145,7 +145,7 @@ function initEvents() {
     // DNS changes
     $('#network').delegate('.configKey[data-l1key="market::allowDNS"],.configKey[data-l1key="network::disableMangement"]', 'change', function () {
         setTimeout(function() {
-            if ($('.configKey[data-l1key="market::allowDNS"]').value() == 1 && $('.configKey[data-l1key="network::disableMangement"]').value() == 0) {
+            if ($('.configKey[data-l1key="market::allowDNS"]').value() === 1 && $('.configKey[data-l1key="network::disableMangement"]').value() === 0) {
                 $('.configKey[data-l1key=externalProtocol]').attr('disabled', true);
                 $('.configKey[data-l1key=externalAddr]').attr('disabled', true);
                 $('.configKey[data-l1key=externalPort]').attr('disabled', true);
