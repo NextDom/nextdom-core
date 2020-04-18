@@ -19,6 +19,7 @@
 
 namespace NextDom\Rest;
 
+use Exception;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
@@ -30,9 +31,46 @@ use NextDom\Model\Entity\JeeObject;
 class SummaryRest
 {
     /**
+     * Get all rooms and data
+     */
+    public static function getAll()
+    {
+        $result = [];
+        // Limit number of SQL queries
+        $rooms = JeeObjectManager::all();
+        $eqLogics = EqLogicRest::getAll();
+        $cmds = CmdRest::getAll();
+        // For cmd location
+        $eqLogicsToRooms = [];
+        foreach ($rooms as $room) {
+            $roomData = [];
+            $roomData['id'] = $room->getId();
+            $roomData['name'] = $room->getName();
+            $roomData['icon'] = $room->getDisplay('icon');
+            $roomData['eqLogics'] = [];
+            $result[$roomData['id']] = $roomData;
+        }
+        if (is_array($eqLogics)) {
+            foreach ($eqLogics as $eqLogic) {
+                $result[$eqLogic['objectId']]['eqLogics'][$eqLogic['id']] = $eqLogic;
+                $result[$eqLogic['objectId']]['eqLogics'][$eqLogic['id']]['cmds'] = [];
+                $eqLogicsToRooms[$eqLogic['id']] = $eqLogic['objectId'];
+            }
+        }
+        if (is_array($cmds)) {
+            foreach ($cmds as $cmd) {
+                $eqLogicId = $cmd['eqLogicId'];
+                $roomId = $eqLogicsToRooms[$eqLogicId];
+                $result[$roomId]['eqLogics'][$eqLogicId]['cmds'][$cmd['id']] = $cmd;
+            }
+        }
+        return $result;
+    }
+    
+    /**
      * Get tree of rooms from room defined by the user or root room
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getDefaultRoomTree()
     {
@@ -53,7 +91,7 @@ class SummaryRest
      *
      * @return JeeObjectManager[] Tree of rooms
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getRoomTree(int $roomId)
     {
@@ -76,7 +114,7 @@ class SummaryRest
      *
      * @return array Data for response
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private static function prepareResult(JeeObject $room)
     {
@@ -107,7 +145,7 @@ class SummaryRest
      *
      * @return array List of rooms with eqLogics data
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private static function addEqLogicsInformations(int $roomId)
     {

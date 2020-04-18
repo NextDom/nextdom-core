@@ -32,6 +32,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CmdRest
 {
+    public static function getAll()
+    {
+        $cmds = CmdManager::all();
+        return self::prepareResults($cmds);
+    }
+    
     /**
      * Get all commands linked to an eqLogic
      *
@@ -81,6 +87,7 @@ class CmdRest
             $cmdRow['genericType'] = $cmd->getGeneric_type();
             $cmdRow['logicalId'] = $cmd->getLogicalId();
             $cmdRow['template'] = $cmd->getTemplate('dashboard');
+            $cmdRow['eqLogicId'] = $cmd->getEqLogic_Id();
             $cmdRow['cmdValue'] = $cmd->getCmdValue();
             $cmdRow['value'] = $cmd->getValue();
             $cmdRow['visible'] = $cmd->getIsVisible();

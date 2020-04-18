@@ -46,6 +46,10 @@ room_get_summary:
   methods: GET
   requirements:
     roomdId: \d+
+summary_get_all:
+  path: '/summary/all'
+  controller: NextDom\Rest\SummaryRest::getAll
+  methods: GET
 summary_get_room_tree:
   path: '/summary/get_room_tree/{roomId}'
   controller: NextDom\Rest\SummaryRest::getRoomTree
