@@ -86,9 +86,9 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
   } else {
     $('.eqLogic').show();
   }
-  var liEqLogic = document.getElementsByClassName('li_eqLogic');
+  var liEqLogic = $('.li_eqLogic');
   if (liEqLogic.length !== 0) {
-    liEqLogic.classList.remove('active');
+    liEqLogic.removeClass('active');
   }
   $(this).addClass('active');
   if ($('.li_eqLogic[data-eqLogic_id=' + $(this).attr('data-eqLogic_id') + ']').html() !== undefined) {
