@@ -77,6 +77,7 @@ class Common extends Enum
     const OPTIONS = 'options';
     const ORDER = 'order';
     const PHP_CLASS = 'phpClass';
+    const PLUGIN = 'plugin';
     const PROFILE = 'profile';
     const QUERY = 'query';
     const REPLACE = 'replace';

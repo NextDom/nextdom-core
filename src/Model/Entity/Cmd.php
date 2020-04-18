@@ -1340,7 +1340,7 @@ class Cmd extends BaseEntity
             $templateType = $name[0];
             $widgetName = $name[1];
             switch ($templateType) {
-                case 'custom':
+                case Common::CUSTOM:
                     $widget = WidgetManager::byTypeSubtypeAndName($this->getType(), $this->getSubType(), $widgetName);
                     if (is_object($widget)) {
                         $widgetTemplate = [

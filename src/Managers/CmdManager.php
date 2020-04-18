@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -36,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Enums\CmdType;
 use NextDom\Enums\Common;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -51,12 +53,13 @@ use NextDom\Model\Entity\EqLogic;
  *
  * @package NextDom\Managers
  */
-class CmdManager extends BaseManager
-{
+class CmdManager extends BaseManager {
+
     use CastedObjectManager;
 
     /** @var string Class of the commands */
     const CLASS_NAME = Cmd::class;
+
     /** @var string Table name of the class in database */
     const DB_CLASS_NAME = '`cmd`';
 
@@ -67,8 +70,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function allHistoryCmd()
-    {
+    public static function allHistoryCmd() {
         $sql = static::getPrefixedBaseSQL('c') . "
                 INNER JOIN `eqLogic` el ON c.eqLogic_id = el.id
                 INNER JOIN `object` ob ON el.object_id = ob.id
@@ -94,8 +96,7 @@ class CmdManager extends BaseManager
      *
      * @return array|mixed Casted command
      */
-    public static function cast($inputs, $eqLogic = null)
-    {
+    public static function cast($inputs, $eqLogic = null) {
         if (is_object($inputs)) {
             $targetClassName = $inputs->getEqType() . 'Cmd';
             if (class_exists($targetClassName)) {
@@ -134,8 +135,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byEqLogicId($eqLogicId, $_type = null, $_visible = null, $_eqLogic = null, $_has_generic_type = null)
-    {
+    public static function byEqLogicId($eqLogicId, $_type = null, $_visible = null, $_eqLogic = null, $_has_generic_type = null) {
         $values = [];
         $sql = static::getBaseSQL();
         if (is_array($eqLogicId)) {
@@ -170,8 +170,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byLogicalId($logicalId, $type = null)
-    {
+    public static function byLogicalId($logicalId, $type = null) {
         $clauses = ['logicalId' => $logicalId];
         if ($type !== null) {
             $clauses['type'] = $type;
@@ -190,8 +189,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byGenericType($genericType, $eqLogicId = null, $one = false)
-    {
+    public static function byGenericType($genericType, $eqLogicId = null, $one = false) {
         $sql = static::getBaseSQL();
         if (is_array($genericType)) {
             $in = '';
@@ -227,8 +225,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function searchConfiguration($configuration, $eqType = null)
-    {
+    public static function searchConfiguration($configuration, $eqType = null) {
         $sql = static::getBaseSQL() . '
                 WHERE `configuration` LIKE :configuration';
         if (!is_array($configuration)) {
@@ -263,8 +260,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function searchConfigurationEqLogic($eqLogicId, $configuration, $type = null)
-    {
+    public static function searchConfigurationEqLogic($eqLogicId, $configuration, $type = null) {
         $values = [
             'configuration' => '%' . $configuration . '%',
             'eqLogic_id' => $eqLogicId,
@@ -291,8 +287,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function searchTemplate($template, $eqType = null, $type = null, $subtype = null)
-    {
+    public static function searchTemplate($template, $eqType = null, $type = null, $subtype = null) {
         $params = [
             'template' => '%' . $template . '%',
         ];
@@ -326,8 +321,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byEqLogicIdAndLogicalId($eqLogicId, $logicalId, $multiple = false, $type = null)
-    {
+    public static function byEqLogicIdAndLogicalId($eqLogicId, $logicalId, $multiple = false, $type = null) {
         $clauses = [
             'eqLogic_id' => $eqLogicId,
             'logicalId' => $logicalId,
@@ -353,8 +347,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byEqLogicIdAndGenericType($eqLogicId, $genericType, $multiple = false, $type = null)
-    {
+    public static function byEqLogicIdAndGenericType($eqLogicId, $genericType, $multiple = false, $type = null) {
         $clauses = [
             'eqLogic_id' => $eqLogicId,
             'generic_type' => $genericType,
@@ -379,8 +372,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byValue($value, $type = null, $onlyEnable = false)
-    {
+    public static function byValue($value, $type = null, $onlyEnable = false) {
         $values = [
             'value' => $value,
             'search' => '%#' . $value . '#%',
@@ -421,8 +413,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byTypeEqLogicNameCmdName($eqTypeName, $eqLogicName, $cmdName)
-    {
+    public static function byTypeEqLogicNameCmdName($eqTypeName, $eqLogicName, $cmdName) {
         $values = [
             'eqType_name' => $eqTypeName,
             'eqLogic_name' => $eqLogicName,
@@ -446,8 +437,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byEqLogicIdCmdName($eqLogicId, $cmdName)
-    {
+    public static function byEqLogicIdCmdName($eqLogicId, $cmdName) {
         $values = [
             'eqLogic_id' => $eqLogicId,
             'cmd_name' => $cmdName,
@@ -468,8 +458,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byObjectNameCmdName($objectName, $cmdName)
-    {
+    public static function byObjectNameCmdName($objectName, $cmdName) {
         $values = [
             'object_name' => $objectName,
             'cmd_name' => $cmdName,
@@ -492,8 +481,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byTypeSubType($type, $subType = '')
-    {
+    public static function byTypeSubType($type, $subType = '') {
         $values = [
             'type' => $type,
         ];
@@ -513,8 +501,7 @@ class CmdManager extends BaseManager
      * @return string Human readable command
      * @throws \ReflectionException
      */
-    public static function cmdToHumanReadable($input)
-    {
+    public static function cmdToHumanReadable($input) {
         if (is_object($input)) {
             $reflections = [];
             $uuid = spl_object_hash($input);
@@ -559,8 +546,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byIds($idsList)
-    {
+    public static function byIds($idsList) {
         if (!is_array($idsList) || count($idsList) == 0) {
             return [];
         }
@@ -582,8 +568,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byString($needle)
-    {
+    public static function byString($needle) {
         $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($needle)));
         if (!is_object($cmd)) {
             throw new CoreException(__('La commande n\'a pas pu être trouvée : ') . $needle . __(' => ') . self::humanReadableToCmd($needle));
@@ -600,8 +585,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function humanReadableToCmd($input)
-    {
+    public static function humanReadableToCmd($input) {
         $isJson = false;
         if (Utils::isJson($input)) {
             $isJson = true;
@@ -663,8 +647,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function byObjectNameEqLogicNameCmdName($objectName, $eqLogicName, $cmdName)
-    {
+    public static function byObjectNameEqLogicNameCmdName($objectName, $eqLogicName, $cmdName) {
         $values = [
             'eqLogic_name' => $eqLogicName,
             'cmd_name' => (html_entity_decode($cmdName) != '') ? html_entity_decode($cmdName) : $cmdName,
@@ -699,8 +682,7 @@ class CmdManager extends BaseManager
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public static function cmdToValue($input, $quote = false)
-    {
+    public static function cmdToValue($input, $quote = false) {
         if (is_object($input)) {
             $reflections = [];
             $uuid = spl_object_hash($input);
@@ -771,8 +753,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function allType()
-    {
+    public static function allType() {
         $sql = 'SELECT DISTINCT(`type`) as type
                 FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql);
@@ -787,8 +768,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function allSubType($type = '')
-    {
+    public static function allSubType($type = '') {
         $values = [];
         $sql = 'SELECT distinct(`subType`) as subtype';
         if ($type != '') {
@@ -805,8 +785,7 @@ class CmdManager extends BaseManager
      * @return array|mixed|null
      * @throws \Exception
      */
-    public static function allUnite()
-    {
+    public static function allUnite() {
         $sql = 'SELECT DISTINCT(`unite`) as unite
                 FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql);
@@ -821,8 +800,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function convertColor($color)
-    {
+    public static function convertColor($color) {
         $colors = ConfigManager::byKey('convertColor');
         if (isset($colors[$color])) {
             return $colors[$color];
@@ -838,23 +816,39 @@ class CmdManager extends BaseManager
      * @return array
      * @throws \Exception
      */
-    public static function availableWidget($version)
-    {
+    public static function availableWidget($version) {
+        global $NEXTDOM_INTERNAL_CONFIG;
         $result = [];
         $lsOptions = ['files', 'quiet'];
         $widgetFileSearch = 'cmd.*';
         $widgetLocationPaths = [];
         foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
-            $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/' . $plugin->getId() . '/core/template/' . $version, 'key' => $plugin->getId()];
+            $pluginId = $plugin->getId();
+            $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version, Common::LOCATION => $pluginId, Common::TYPE => Common::PLUGIN . ' - ' . $pluginId];
+            if (method_exists($pluginId, 'templateWidget')) {
+                foreach ($pluginId::templateWidget() as $type => $data1) {
+                    foreach ($data1 as $subtype => $data2) {
+                        foreach ($data2 as $name => $data3) {
+                            if (!isset($result[$type])) {
+                                $result[$type] = [];
+                            }
+                            if (!isset($result[$type][$subtype])) {
+                                $result[$type][$subtype] = [];
+                            }
+                            $result[$type][$subtype][Common::PLUGIN . ' - ' . $pluginId][$pluginId . '::' . $name] = array(Common::NAME => $name, Common::LOCATION => $pluginId, Common::TYPE => Common::PLUGIN);
+                        }
+                    }
+                }
+            }
         }
-        $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/views/templates/' . $version, 'key' => Common::CORE];
-        $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version, 'key' => 'widget'];
+        $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/views/templates/' . $version, Common::LOCATION => Common::CORE, Common::TYPE => Common::CORE];
+        $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version, Common::LOCATION => Common::WIDGET, Common::TYPE => Common::WIDGET];
         foreach ($widgetLocationPaths as $widgetLocationPath) {
             if (file_exists($widgetLocationPath['path'])) {
                 $files = FileSystemHelper::ls($widgetLocationPath['path'], $widgetFileSearch, false, $lsOptions);
                 foreach ($files as $file) {
                     $informations = explode('.', $file);
-                    if (count($informations) > 3) {
+                    if (count($informations) > 3 && stripos($informations[3], 'tmpl') === false) {
                         if (!isset($result[$informations[1]])) {
                             $result[$informations[1]] = [];
                         }
@@ -862,11 +856,33 @@ class CmdManager extends BaseManager
                             $result[$informations[1]][$informations[2]] = [];
                         }
                         if (!isset($result[$informations[1]][$informations[2]][$informations[3]])) {
-                            $result[$informations[1]][$informations[2]][$informations[3]] = [Common::NAME => $informations[3], Common::LOCATION => $widgetLocationPath['key']];
+                            $result[$informations[1]][$informations[2]][$widgetLocationPath['type']][$informations[3]] = [Common::NAME => $informations[3], Common::LOCATION => $widgetLocationPath[Common::LOCATION], Common::TYPE => $widgetLocationPath['type']];
                         }
                     }
                 }
             }
+        }
+        foreach ($NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][NextDomObj::WIDGET] as $type => $data1) {
+            foreach ($data1 as $subtype => $data2) {
+                foreach ($data2 as $name => $data3) {
+                    if (!isset($result[$type])) {
+                        $result[$type] = [];
+                    }
+                    if (!isset($result[$type][$subtype])) {
+                        $result[$type][$subtype] = [];
+                    }
+                    $result[$type][$subtype][Common::TEMPLATE][$name] = array(Common::NAME => $name, Common::LOCATION => Common::CORE, Common::TYPE => Common::TEMPLATE);
+                }
+            }
+        }
+        foreach (WidgetManager::all() as $widget) {
+            if (!isset($result[$widget->getType()])) {
+                $result[$widget->getType()] = [];
+            }
+            if (!isset($result[$widget->getType()][$widget->getSubtype()])) {
+                $result[$widget->getType()][$widget->getSubtype()] = [];
+            }
+            $result[$widget->getType()][$widget->getSubtype()][Common::CUSTOM][$widget->getName()] = array(Common::NAME => $widget->getName(), Common::LOCATION => Common::CUSTOM, Common::TYPE => Common::CUSTOM);
         }
         return $result;
     }
@@ -878,8 +894,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function returnState($options)
-    {
+    public static function returnState($options) {
         $cmd = self::byId($options['cmd_id']);
         if (is_object($cmd)) {
             $cmd->event($cmd->getConfiguration('returnStateValue', 0));
@@ -893,8 +908,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function deadCmd()
-    {
+    public static function deadCmd() {
         $result = [];
         $configToCheck = [
             'actionCheckCmd' => 'Action sur valeur',
@@ -912,7 +926,6 @@ class CmdManager extends BaseManager
                         }
                     }
                 }
-
             }
         }
         return $result;
@@ -925,8 +938,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function all()
-    {
+    public static function all() {
         $sql = static::getBaseSQL() . '
                 ORDER BY `id`';
         return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
@@ -939,8 +951,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function cmdAlert($options)
-    {
+    public static function cmdAlert($options) {
         $cmd = self::byId($options['cmd_id']);
         if (!is_object($cmd)) {
             return;
@@ -961,8 +972,7 @@ class CmdManager extends BaseManager
      *
      * @throws \Exception
      */
-    public static function timelineDisplay($event)
-    {
+    public static function timelineDisplay($event) {
         $result = [];
         $result['date'] = $event['datetime'];
         $result['type'] = $event['type'];
@@ -979,28 +989,27 @@ class CmdManager extends BaseManager
 
         if ($event['subtype'] == 'action') {
             $result['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
-                . '<span class="time"><i class="fa fa-clock-o spacing-right"></i>' . trim(substr($event['datetime'], -9)) . '</span>'
-                . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
-                . '<div class="timeline-body">'
-                . $event['options']
-                . '<div class="timeline-footer">'
-                . '</div>'
-                . '</div>';
+                    . '<span class="time"><i class="fa fa-clock-o spacing-right"></i>' . trim(substr($event['datetime'], -9)) . '</span>'
+                    . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                    . '<div class="timeline-body">'
+                    . $event['options']
+                    . '<div class="timeline-footer">'
+                    . '</div>'
+                    . '</div>';
         } else {
             $result['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
-                . '<span class="time"><i class="fa fa-clock-o spacing-right"></i>' . trim(substr($event['datetime'], -9)) . '</span>'
-                . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
-                . '<div class="timeline-body">'
-                . $event['value']
-                . '<div class="timeline-footer">'
-                . '</div>'
-                . '</div>';
+                    . '<span class="time"><i class="fa fa-clock-o spacing-right"></i>' . trim(substr($event['datetime'], -9)) . '</span>'
+                    . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                    . '<div class="timeline-body">'
+                    . $event['value']
+                    . '<div class="timeline-footer">'
+                    . '</div>'
+                    . '</div>';
         }
         return $result;
     }
 
-    public static function checkAlertCmds($alertConfigKey, $alertType, $message, $logicalId)
-    {
+    public static function checkAlertCmds($alertConfigKey, $alertType, $message, $logicalId) {
         if (ConfigManager::ByKey($alertConfigKey) == 1) {
             MessageManager::add('core', $message, '', $logicalId);
         }
@@ -1017,4 +1026,5 @@ class CmdManager extends BaseManager
             }
         }
     }
+
 }
