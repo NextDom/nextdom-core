@@ -100,9 +100,41 @@ class DisplayCardWidget extends DisplayCardPageA {
         });
         $('#div_programmation').off('click', '.chooseIcon').on('click', '.chooseIcon', function () {
             var bt = $(this);
-            chooseIcon(function (_icon) {
-                bt.closest('.input-group').find('.testAttr').value(_icon);
-            }, {img: true});
+            bt.addClass('disabled');
+            bt.find('.fa-refresh').show();
+            bt.find('.initial').hide();
+            var clazz = bt.attr('class'); //Ne marche pas
+            setTimeout(function () {
+                chooseIcon(function (_icon) {
+                    bt.closest('.input-group').find('.testAttr').value(_icon);
+                }, {  img: false,
+                      clazz: clazz,
+                      finally: function() {
+                          $('.chooseIcon').removeClass('disabled');
+                          $('.chooseIcon').find('.fa-refresh').hide();
+                          $('.chooseIcon').find('.initial').show();
+                      }
+                });
+            }, 50);
+        });
+        $('#div_display_config').off('click', '.chooseIcon').on('click', '.chooseIcon', function () {
+            var bt = $(this);
+            bt.addClass('disabled');
+            bt.find('.fa-refresh').show();
+            bt.find('.initial').hide();
+            var clazz = bt.attr('class'); //Ne marche pas
+            setTimeout(function () {
+                chooseIcon(function (_icon) {
+                    bt.closest('.form-group').find('.attr[data-l1key=replace]').value(_icon);
+                }, {  img: false,
+                      clazz: clazz,
+                      finally: function() {
+                          $('.chooseIcon').removeClass('disabled');
+                          $('.chooseIcon').find('.fa-refresh').hide();
+                          $('.chooseIcon').find('.initial').show();
+                      }
+                });
+            }, 50);
         });
         $("#bt_import").change(function (event) {
             $('#div_alert').hide();
@@ -383,7 +415,7 @@ class DisplayCardWidget extends DisplayCardPageA {
         div += '<div class="input-group">';
         div += '<input type="text" class="testAttr form-control roundedLeft" data-l1key="state_light" placeholder="Résultat si test ok (light)"/>';
         div += '<span class="input-group-btn">';
-        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-flag"></i></a>';
+        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
         div += '</span>';
         div += '</div>';
         div += '</div>';
@@ -391,7 +423,7 @@ class DisplayCardWidget extends DisplayCardPageA {
         div += '<div class="input-group">';
         div += '<input type="text" class="testAttr form-control roundedLeft" data-l1key="state_dark" placeholder="Résultat si test ok (dark)"/>';
         div += '<span class="input-group-btn">';
-        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-flag"></i></a>';
+        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
         div += '</span>';
         div += '</div>';
         div += '</div>';
@@ -424,7 +456,7 @@ class DisplayCardWidget extends DisplayCardPageA {
                         }
                         replace += '<div class="mix-group">';
                         if (data.replace[i].indexOf('icon_') !== -1 || data.replace[i].indexOf('img_') !== -1) {
-                            replace += '<a class="btn btn-action chooseIcon"><i class="fas fa-flag"></i><span>{{ Choisir }}</span></a>';
+                            replace += '<a class="btn btn-action chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ Choisir }}</span></a>';
                             replace += '<div class="label label-icon attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"></div>';
                         }
                         if ($this.widget_parameters_opt[data.replace[i]]) {
