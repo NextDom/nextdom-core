@@ -201,7 +201,7 @@ nextdom.getConfiguration = function(queryParams) {
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
-    if (nextdom.cache.getConfiguration !== null) {
+    if (nextdom.cache.getConfiguration != null) {
       var keys = queryParams.key.split(':');
       var result = nextdom.cache.getConfiguration;
       for (var i in keys) {
