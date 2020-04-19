@@ -37,7 +37,7 @@ function install_nodemodules {
     if [[ ! -d ./vendor ]]; then
         mkdir vendor
     fi
-    cp package.json ./vendor/
+    cp package* ./vendor/
     if [[ "$1" = "--no-dev" ]]; then
         npm install --unsafe-perm --no-save --production --prefix ./vendor
     else
