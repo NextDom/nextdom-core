@@ -410,16 +410,32 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
+
     public function testConsistency() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'consistency']);
         $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
+
     public function testCleanFileSystemRight() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'cleanFileSystemRight']);
         $this->assertStringContainsString('"result":""', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testVersionAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'version']);
+        $this->assertStringContainsString('"result":{"nextdom":', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testVersionAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'version']);
+        $this->assertStringContainsString('"result":{"nextdom":', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 }

@@ -450,8 +450,10 @@ CREATE TABLE IF NOT EXISTS `planHeader` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(127) NULL,
   `image` MEDIUMTEXT NULL,
+  `order` int(11) DEFAULT NULL,
   `configuration` TEXT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  KEY `order` (`order`))
 ENGINE = InnoDB;
 
 

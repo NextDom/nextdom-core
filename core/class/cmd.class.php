@@ -50,6 +50,10 @@ class cmd extends NextDom\Model\Entity\Cmd {
         return CmdManager::byGenericType($_generic_type, $_eqLogic_id, $_one);
     }
 
+    public static function searchDisplay($_display, $_eqType = null) {
+        return CmdManager::searchDisplay($_display, $_eqType);
+    }
+    
     public static function searchConfiguration($_configuration, $_eqType = null) {
         return CmdManager::searchConfiguration($_configuration, $_eqType);
     }

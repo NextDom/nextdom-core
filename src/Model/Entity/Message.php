@@ -69,51 +69,67 @@ class Message extends BaseEntity
 
     /**
      * @param bool $_writeMessage
-     * @return bool|null
-     * @throws \NextDom\Exceptions\CoreException
+     *
+     * @return bool|Message|null
+     *
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function save($_writeMessage = true)
     {
         if ($this->getMessage() == '') {
             return null;
         }
+
+        $values = ['plugin' => $this->getPlugin()];
         if ($this->getLogicalId() == '') {
             $this->setLogicalId($this->getPlugin() . '::' . ConfigManager::genKey());
-            $values = [
-                'message' => $this->getMessage(),
-                'plugin' => $this->getPlugin(),
-            ];
+            $values['message'] = $this->getMessage();
             $sql = 'SELECT count(*)
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE `plugin` = :plugin
-                    AND `message` = :message';
+                    FROM message
+                    WHERE plugin = :plugin
+                    AND message = :message';
             $result = DBHelper::getOne($sql, $values);
+            if ($result['count(*)'] != 0) {
+                $values['date'] = $this->getDate();
+                $sql = 'UPDATE message
+                        SET date = :date
+                        WHERE plugin = :plugin
+                        AND message = :message
+                        LIMIT 1';
+                DBHelper::exec($sql, $values);
+                return $this;
+            }
         } else {
-            $values = [
-                'logicalId' => $this->getLogicalId(),
-                'plugin' => $this->getPlugin(),
-            ];
+            $values['logicalId'] = $this->getLogicalId();
             $sql = 'SELECT count(*)
-            FROM ' . self::DB_CLASS_NAME . '
-            WHERE `plugin` = :plugin
-            AND `logicalId` = :logicalId';
+                    FROM message
+                    WHERE plugin = :plugin
+                    AND logicalId = :logicalId';
             $result = DBHelper::getOne($sql, $values);
+            if ($result['count(*)'] != 0) {
+                $values['date'] = $this->getDate();
+                $sql = 'UPDATE message
+                        SET date = :date
+                        WHERE plugin = :plugin
+                        AND logicalId = :logicalId
+                        LIMIT 1';
+                DBHelper::exec($sql, $values);
+                return $this;
+            }
         }
-        if ($result['count(*)'] != 0) {
-            return null;
-        }
-        EventManager::add('notify', ['title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message']);
+
         if ($_writeMessage) {
             DBHelper::save($this);
             $params = [
                 '#plugin#' => $this->getPlugin(),
+                '#subject#' => $this->getMessage(),
                 '#message#' => $this->getMessage(),
             ];
             $actions = ConfigManager::byKey('actionOnMessage');
             if (is_array($actions) && count($actions) > 0) {
                 foreach ($actions as $action) {
-                    $options = [];
+                    $options = array();
                     if (isset($action['options'])) {
                         $options = $action['options'];
                     }
@@ -123,8 +139,11 @@ class Message extends BaseEntity
                     ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
                 }
             }
+            EventManager::add('notify', ['title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message']);
             EventManager::add('message::refreshMessageNumber');
         }
+
+
         return true;
     }
 
@@ -148,7 +167,7 @@ class Message extends BaseEntity
         $this->message = $_message;
         return $this;
     }
-    
+
     /**
      * @return string
      */

@@ -26,7 +26,8 @@ use NextDom\Enums\EqLogicViewType;
  */
 class eqLogic extends NextDom\Model\Entity\EqLogic
 {
-    public static function getAllTags() {
+    public static function getAllTags()
+    {
         return EqLogicManager::getAllTags();
     }
 
@@ -123,5 +124,10 @@ class eqLogic extends NextDom\Model\Entity\EqLogic
     public static function byString($_string)
     {
         return EqLogicManager::byString($_string);
+    }
+
+    public static function deadCmdGeneric($_plugin_id)
+    {
+        return EqLogicManager::deadCmdGeneric($_plugin_id);
     }
 }

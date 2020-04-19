@@ -437,4 +437,21 @@ class CacheManager
         }
         return $cache;
     }
+    
+    public static function flushWidget() {
+        foreach (EqLogicManager::all() as $eqLogic) {
+            try {
+                $eqLogic->emptyCacheWidget();
+            } catch (Exception $e) {
+
+            }
+        }
+        foreach (ScenarioManager::all() as $scenario) {
+            try {
+                $scenario->emptyCacheWidget();
+            } catch (Exception $e) {
+
+            }
+        }
+    }
 }

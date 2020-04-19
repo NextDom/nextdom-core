@@ -18,6 +18,7 @@
 
 /* * ***************************Includes********************************* */
 
+use NextDom\Helpers\DnsHelper;
 use NextDom\Helpers\NetworkHelper;
 
 require_once __DIR__ . '/../../core/php/core.inc.php';
@@ -45,19 +46,31 @@ class network {
     }
 
     public static function dns_create() {
-        return NetworkHelper::dnsCreate();
+        return DnsHelper::dnsCreate();
     }
 
     public static function dns_start() {
-        NetworkHelper::dnsStart();
+        DnsHelper::dnsStart();
     }
 
     public static function dns_run() {
-        return NetworkHelper::dnsRun();
+        return DnsHelper::dnsRun();
     }
 
     public static function dns_stop() {
-        NetworkHelper::dnsStop();
+        DnsHelper::dnsStop();
+    }
+
+    public static function dns2_start() {
+        DnsHelper::dns2Start();
+    }
+
+    public static function dns2_stop() {
+        DnsHelper::dns2Stop();
+    }
+
+    public static function dns2_run() {
+        DnsHelper::dns2Run();
     }
 
     public static function getInterfaceIp($_interface) {
@@ -74,5 +87,9 @@ class network {
 
     public static function cron5() {
         NetworkHelper::cron5();
+    }
+    
+    public static function portOpen($host, $port) {
+        return NetworkHelper::checkOpenPort($host, $port);
     }
 }

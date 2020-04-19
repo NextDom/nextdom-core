@@ -123,6 +123,11 @@ class scenarioExpression extends \NextDom\Model\Entity\ScenarioExpression
         return ScenarioExpressionManager::median();
     }
 
+    public static function avg()
+    {
+        return ScenarioExpressionManager::avg();
+    }
+
     public static function tendance($_cmd_id, $_period = '1 hour', $_threshold = '')
     {
         return ScenarioExpressionManager::tendance($_cmd_id, $_period, $_threshold);

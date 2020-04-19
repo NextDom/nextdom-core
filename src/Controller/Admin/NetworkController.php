@@ -24,6 +24,7 @@ namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
 use NextDom\Enums\ControllerData;
+use NextDom\Helpers\DnsHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -61,7 +62,7 @@ class NetworkController extends BaseController
             $intData['ip'] = NetworkHelper::getInterfaceIp($interface);
             $pageData['adminNetworkInterfaces'][] = $intData;
         }
-        $pageData['adminDnsRun'] = NetworkHelper::dnsRun();
+        $pageData['adminDnsRun'] = DnsHelper::dnsRun();
         $pageData['adminNetworkExternalAccess'] = NetworkHelper::getNetworkAccess('external');
 
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/admin/network.js';

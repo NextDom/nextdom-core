@@ -429,9 +429,10 @@ class UserManager extends BaseManager
         return null;
     }
 
-    public static function deadCmd() {
+    public static function deadCmd()
+    {
         $result = [];
-        foreach (UserManager::all() as $user) {
+        foreach (self::all() as $user) {
             $cmdId = $user->getOptions('notification::cmd');
             if (!empty($cmdId) && is_object(CmdManager::byId(str_replace('#', '', $cmdId)))) {
                 $result[] = ['detail' => __('Utilisateur'), 'help' => __('Commande notification utilisateur'), 'who' => $cmdId];

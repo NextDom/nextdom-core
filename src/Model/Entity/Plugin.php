@@ -59,6 +59,7 @@ class Plugin extends BaseEntity
     protected $eventjs = 0;
     protected $hasDependency = 0;
     protected $maxDependancyInstallTime = 30;
+    protected $hasTtsEngine;
     protected $hasOwnDeamon = 0;
     protected $issue = '';
     protected $changelog = '';
@@ -96,6 +97,9 @@ class Plugin extends BaseEntity
         }
         if (isset($data['hasOwnDeamon'])) {
             $this->hasOwnDeamon = $data['hasOwnDeamon'];
+        }
+        if (isset($data['hasTtsEngine'])) {
+            $this->hasTtsEngine = $data['hasTtsEngine'];
         }
         if (isset($data['maxDependancyInstallTime'])) {
             $this->maxDependancyInstallTime = $data['maxDependancyInstallTime'];
@@ -1093,5 +1097,14 @@ class Plugin extends BaseEntity
     public function getTableName()
     {
         return 'plugin';
+    }
+
+    public function getHasTtsEngine() {
+        return $this->hasTtsEngine;
+    }
+
+    public function setHasTtsEngine($hasTtsEngine) {
+        $this->hasTtsEngine = $hasTtsEngine;
+        return $this;
     }
 }

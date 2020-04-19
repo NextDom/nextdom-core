@@ -290,4 +290,8 @@ class nextdom
     public static function consistency() {
         SystemHelper::consistency();
     }
+
+    public static function cleanDatabase() {
+        NextDomHelper::cleanDatabase();
+    }
 }

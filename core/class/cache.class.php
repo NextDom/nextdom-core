@@ -73,4 +73,8 @@ class cache extends \NextDom\Model\Entity\Cache {
     public static function clean() {
         CacheManager::clean();
     }
+    
+    public static function flushWidget() {
+        CacheManager::flushWidget();
+    }
 }

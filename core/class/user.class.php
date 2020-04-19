@@ -103,4 +103,13 @@ class user extends \NextDom\Model\Entity\User
     {
         UserManager::supportAccess($_enable);
     }
+
+    public static function deadCmd()
+    {
+        UserManager::deadCmd();
+    }
+
+    public static function regenerateHash() {
+        UserManager::regenerateHash();
+    }
 }

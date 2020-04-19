@@ -1259,20 +1259,20 @@ class NextDomHelper
 
         $param = ['cache_write' => 5000, 'cache_read' => 5000, 'database_write_delete' => 1000, 'database_update' => 1000, 'database_replace' => 1000, 'database_read' => 50000, 'subprocess' => 200];
 
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_write']; $i++) {
             CacheManager::set('nextdom_benchmark', $i);
         }
-        $result['cache_write_' . $param['cache_write']] = Utils::getMicrotime() - $starttime;
+        $result['cache_write_' . $param['cache_write']] = Utils::getMicrotime() - $startTime;
 
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_read']; $i++) {
             $cache = CacheManager::byKey('nextdom_benchmark');
             $cache->getValue();
         }
-        $result['cache_read_' . $param['cache_read']] = Utils::getMicrotime() - $starttime;
+        $result['cache_read_' . $param['cache_read']] = Utils::getMicrotime() - $startTime;
 
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_write_delete']; $i++) {
             $sql = 'DELETE FROM ' . ConfigManager::DB_CLASS_NAME . '
                     WHERE `key`="nextdom_benchmark"
@@ -1290,7 +1290,7 @@ class NextDomHelper
 
             }
         }
-        $result['database_write_delete_' . $param['database_write_delete']] = Utils::getMicrotime() - $starttime;
+        $result['database_write_delete_' . $param['database_write_delete']] = Utils::getMicrotime() - $startTime;
 
         $sql = 'INSERT INTO ' . ConfigManager::DB_CLASS_NAME . '
                 SET `key` = "nextdom_benchmark", `plugin` = "core", `value` = "0"';
@@ -1298,7 +1298,7 @@ class NextDomHelper
             DBHelper::exec($sql);
         } catch (\Exception $e) {
         }
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_update']; $i++) {
             $sql = 'UPDATE ' . ConfigManager::DB_CLASS_NAME . '
                     SET `value`=:value
@@ -1310,25 +1310,25 @@ class NextDomHelper
 
             }
         }
-        $result['database_update_' . $param['database_update']] = Utils::getMicrotime() - $starttime;
+        $result['database_update_' . $param['database_update']] = Utils::getMicrotime() - $startTime;
 
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_replace']; $i++) {
             ConfigManager::save('nextdom_benchmark', $i);
         }
-        $result['database_replace_' . $param['database_replace']] = Utils::getMicrotime() - $starttime;
+        $result['database_replace_' . $param['database_replace']] = Utils::getMicrotime() - $startTime;
 
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_read']; $i++) {
             ConfigManager::byKey('nextdom_benchmark');
         }
-        $result['database_read_' . $param['database_read']] = Utils::getMicrotime() - $starttime;
+        $result['database_read_' . $param['database_read']] = Utils::getMicrotime() - $startTime;
 
-        $starttime = Utils::getMicrotime();
+        $startTime = Utils::getMicrotime();
         for ($i = 0; $i < $param['subprocess']; $i++) {
             shell_exec('echo ' . $i);
         }
-        $result['subprocess_' . $param['subprocess']] = Utils::getMicrotime() - $starttime;
+        $result['subprocess_' . $param['subprocess']] = Utils::getMicrotime() - $startTime;
 
         $total = 0;
         foreach ($result as $value) {
@@ -1336,5 +1336,12 @@ class NextDomHelper
         }
         $result['total'] = $total;
         return $result;
+    }
+
+    public static function cleanDatabase() {
+        LogHelper::clear('cleaningdb');
+        $cmd = __DIR__ . '/../../scripts/cleaningDb.php';
+        $cmd .= ' >> ' . LogHelper::getPathToLog('cleaningdb') . ' 2>&1 &';
+        SystemHelper::php($cmd, true);
     }
 }

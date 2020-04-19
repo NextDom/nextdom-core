@@ -618,4 +618,17 @@ class InteractDef extends BaseEntity
         $this->group = $_group;
         return $this;
     }
+    
+    public function getDisplay($_key = '', $_default = '')
+    {
+            return Utils::getJsonAttr($this->display, $_key, $_default);
+    }
+
+    public function setDisplay($_key, $_value)
+    {
+            $display = Utils::setJsonAttr($this->display, $_key, $_value);
+            $this->_changed = Utils::attrChanged($this->_changed,$this->display,$display);
+            $this->display = $display;
+            return $this;
+    }
 }

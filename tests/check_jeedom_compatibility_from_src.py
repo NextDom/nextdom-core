@@ -190,7 +190,7 @@ def checkout_jeedom():
     """Checkout or update jeedom-core
     """
     checkout_cmd = "git clone https://github.com/jeedom/core /tmp/jeedom-core > /dev/null 2>&1"
-    branch_cmd = "cd /tmp/jeedom-core && git checkout master -f > /dev/null 2>&1"
+    branch_cmd = "cd /tmp/jeedom-core && git checkout V4-stable -f > /dev/null 2>&1"
     update_cmd = "cd /tmp/jeedom-core && git fetch -apt > /dev/null 2>&1 && git pull -f origin master > /dev/null 2>&1" #pylint: disable=line-too-long
     if os.path.exists("/tmp/jeedom-core"):
         print_info("updating jeedom-core in /tmp/jeedom-core")
