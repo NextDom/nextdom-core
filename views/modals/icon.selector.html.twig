@@ -66,8 +66,8 @@
             <div id="config_{{ icons['name'] }}" class="panel-collapse collapse in">
                 <div class="box-body">
                     {% for icon in icons['list'] %}
-                        <a class="btn btn-selector{% if selectIcon|replace({'_':' '})|trim == icon|replace({'_':' '})|trim %} iconSelected {% endif %}">
-                            <div class="iconSel"><i class="icon {{ icon }} {{ colorIcon }}"></i></div>
+                        <a class="btn btn-selector{% if selectIcon|trim|replace({'_':' '}) == icon|trim |replace({'_':' '}) %} iconSelected {% endif %}">
+                            <div class="iconSel"><i class="icon {{icon}} {{colorIcon}}"></i></div>
                             <span>{{ icon|split('-',2)|last }}</span>
                         </a>
                     {% endfor %}

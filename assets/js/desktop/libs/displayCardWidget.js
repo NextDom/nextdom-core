@@ -103,11 +103,11 @@ class DisplayCardWidget extends DisplayCardPageA {
             bt.addClass('disabled');
             bt.find('.fa-refresh').show();
             bt.find('.initial').hide();
-            var clazz = bt.attr('class'); //Ne marche pas
+            var clazz = bt.closest('.input-group').find('input').value();
             setTimeout(function () {
                 chooseIcon(function (_icon) {
                     bt.closest('.input-group').find('.testAttr').value(_icon);
-                }, {  img: false,
+                }, {  img: true,
                       clazz: clazz,
                       finally: function() {
                           $('.chooseIcon').removeClass('disabled');
@@ -122,11 +122,11 @@ class DisplayCardWidget extends DisplayCardPageA {
             bt.addClass('disabled');
             bt.find('.fa-refresh').show();
             bt.find('.initial').hide();
-            var clazz = bt.attr('class'); //Ne marche pas
+            var clazz = bt.closest('.mix-group').find('.attr[data-l1key=replace] i').attr('class');
             setTimeout(function () {
                 chooseIcon(function (_icon) {
-                    bt.closest('.form-group').find('.attr[data-l1key=replace]').value(_icon);
-                }, {  img: false,
+                    bt.closest('.mix-group').find('.attr[data-l1key=replace]').value(_icon);
+                }, {  img: true,
                       clazz: clazz,
                       finally: function() {
                           $('.chooseIcon').removeClass('disabled');
@@ -458,11 +458,14 @@ class DisplayCardWidget extends DisplayCardPageA {
                         if (data.replace[i].indexOf('icon_') !== -1 || data.replace[i].indexOf('img_') !== -1) {
                             replace += '<a class="btn btn-action chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ Choisir }}</span></a>';
                             replace += '<div class="label label-icon attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"></div>';
-                        }
-                        if ($this.widget_parameters_opt[data.replace[i]]) {
-                            replace += '<input id="' + data.replace[i] + '" type="' + $this.widget_parameters_opt[data.replace[i]].type + '" class="form-control attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"/>';
                         } else {
-                            replace += '<input id="' + data.replace[i] + '" type="text" class="form-control attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"/>';
+                            var type;
+                            if ($this.widget_parameters_opt[data.replace[i]]) {
+                                type = $this.widget_parameters_opt[data.replace[i]].type;
+                            } else {
+                                type = "text";
+                            }
+                            replace += '<input id="' + data.replace[i] + 'type="' + type + '" class="form-control attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"/>';
                         }
                         replace += '</div>';
                         replace += '</div>';

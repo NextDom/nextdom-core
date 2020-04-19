@@ -148,59 +148,46 @@ function notify(_title, _text, _class_name) {
  */
 function chooseIcon(callbackFunc, _params) {
     var chooseIconModal = $('#mod_selectIcon');
-    if (chooseIconModal.length === 0) {
-        $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
-        chooseIconModal = $('#mod_selectIcon');
-        // Init choose icon modal
-        chooseIconModal.dialog({
-            closeText: '',
-            autoOpen: false,
-            modal: true,
-            height: (jQuery(window).height() - 150),
-            width: getModalWidth(),
-            open: function () {
-                $('body').css({overflow: 'hidden'});
-                $(this).dialog('option', 'position', {my: 'center', at: 'center', of: window});
-            },
-            beforeClose: function (event, ui) {
-                $('body').css({overflow: 'inherit'});
-            }
-        });
-        // Populate modal
-        var url = 'index.php?v=d&modal=icon.selector';
-        jQuery.ajaxSetup({async: false});
-        if (_params) {
-            // Init choose icon modal
-            if (_params.finally) {
-                 chooseIconModal.on('dialogbeforeclose', _params.finally);
-            }
-            if (_params.img && _params.img === true) {
-                url += '&showimg=1';
-            }
-            //DEPRECATED
-            if (_params.icon) {
-                icon = _params.icon;
-                if (_params && _params.color) {
-                    url += '&colorIcon=' + _params.color;
-                    icon = icon.replace(_params.color, '').replace('.icon.', '').trim();
-                }
-                url += '&selectIcon=' + icon;
-            }
-            //FIN DEPRECATED
-            if (_params.clazz) {
-                var clazz = _params.clazz;
-                var color = clazz.substring(clazz.lastIndexOf(" ")+1, clazz.length);
-                if(color.startsWith('icon_')) {
-                    url += '&colorIcon=' + color;
-                    clazz = clazz.replace(color, '');
-                }
-                clazz = clazz.replace('icon ', '').replace(' ', '_').trim();
-                url += '&selectIcon=' + clazz;
-            }
+    $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
+    // Init choose icon modal
+    chooseIconModal.dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        height: (jQuery(window).height() - 150),
+        width: getModalWidth(),
+        open: function () {
+            $('body').css({overflow: 'hidden'});
+            $(this).dialog('option', 'position', {my: 'center', at: 'center', of: window});
+        },
+        beforeClose: function (event, ui) {
+            $('body').css({overflow: 'inherit'});
         }
-        chooseIconModal.load(url);
-        jQuery.ajaxSetup({async: true});
+    });
+    // Populate modal
+    var url = 'index.php?v=d&modal=icon.selector';
+    jQuery.ajaxSetup({async: false});
+    if (_params) {
+        // Init choose icon modal
+        if (_params.finally) {
+             chooseIconModal.on('dialogbeforeclose', _params.finally);
+        }
+        if (_params.img && _params.img === true) {
+            url += '&showimg=1';
+        }
+        if (_params.clazz) {
+            var clazz = _params.clazz;
+            var color = clazz.substring(clazz.lastIndexOf(" ")+1, clazz.length);
+            if(color.startsWith('icon_')) {
+                url += '&colorIcon=' + color;
+                clazz = clazz.replace(color, '');
+            }
+            clazz = clazz.replace('icon ', '').trim().replace(' ', '_');
+            url += '&selectIcon=' + clazz;
+        }
     }
+    chooseIconModal.load(url);
+    jQuery.ajaxSetup({async: true});        
     chooseIconModal.dialog('option', 'buttons', {
         'Annuler': function () {
             $(this).dialog('close');
