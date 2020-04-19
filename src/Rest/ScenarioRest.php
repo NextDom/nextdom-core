@@ -60,6 +60,7 @@ class ScenarioRest
             $scenarioRow = [];
             $scenarioRow['id'] = $scenario->getId();
             $scenarioRow['name'] = $scenario->getName();
+            $scenarioRow['group'] = $scenario->getGroup();
             $scenarioRow['displayIcon'] = $scenario->getDisplay('icon');
             $scenarioRow['state'] = $scenario->getState();
             $scenarioRow['active'] = $scenario->isActive();
