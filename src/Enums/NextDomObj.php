@@ -26,11 +26,11 @@ class NextDomObj extends Enum
     const CMD = 'cmd';
     const CRON = 'cron';
     const EQLOGIC = 'eqLogic';
-    const EQREAL = 'eqReal';
     const DATASTORE = 'dataStore';
     const HISTORY = 'history';
     const HISTORY_ARCH = 'historyArch';
     const INTERACT = 'interact';
+    const WIDGET = 'widget';
     const INTERACT_DEF = 'interactDef';
     const INTERACT_QUERY = 'interactQuery';
     const JEE_OBJECT = 'jeeObject';

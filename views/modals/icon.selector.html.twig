@@ -33,11 +33,18 @@
 
 #}
 <section class="content-header">
-    <div class="action-bar">
+    <div class="action-bar scroll-shadow">
         <div class="action-group">
             <div class="input-group">
-                <input type="text" class="form-control" id="in_iconSelectorSearch" placeholder="{{ 'Rechercher une icône...' }}">
-                <span class="input-group-addon cursor" id="bt_iconReset"><i class="fas fa-times"></i></span>
+                <select class="form-control roundedLeft" style="width : 200px;" id="sel_colorIcon">
+                    {% for color in colorList %}
+                        <option value="{{ color['id'] }}"{% if colorIcon == color['id'] %} selected {% endif %}>{{ color['label'] }}</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="in_iconSelectorSearch" placeholder="{{ 'Rechercher une icône...' }}">
+                    <span class="input-group-addon cursor" id="bt_iconReset"><i class="fas fa-times"></i></span>
+                </div>
             </div>
         </div>
         <div class="action-group">
@@ -50,7 +57,7 @@
 <section class="content">
     {% for icons in iconsList %}
         {% set iconCounter = 0 %}
-        <div class="panel box box-primary">
+        <div class="panel box box-primary" style="position: inherit">
             <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ icons['name'] }}">
                 <h3 class="box-title">
                     <span>{{ icons['name']|upper }}</span>
@@ -59,8 +66,8 @@
             <div id="config_{{ icons['name'] }}" class="panel-collapse collapse in">
                 <div class="box-body">
                     {% for icon in icons['list'] %}
-                        <a class="btn btn-selector">
-                            <div class="iconSel"><i class="icon {{ icon }}"></i></div>
+                        <a class="btn btn-selector{% if selectIcon|trim|replace({'_':' '}) == icon|trim |replace({'_':' '}) %} iconSelected {% endif %}">
+                            <div class="iconSel"><i class="icon {{icon}} {{colorIcon}}"></i></div>
                             <span>{{ icon|split('-',2)|last }}</span>
                         </a>
                     {% endfor %}

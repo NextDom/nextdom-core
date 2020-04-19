@@ -31,26 +31,56 @@ use NextDom\Managers\CmdManager;
  * Class CmdSelectMultiple
  * @package NextDom\Controller\Modals
  */
-class CmdSelectMultiple extends BaseAbstractModal
-{
+class CmdSelectMultiple extends BaseAbstractModal {
+
     /**
      * Render command select multiple modal (scenario)
      *
      * @return string
      * @throws CoreException
      */
-    public static function get(): string
-    {
-        $cmdId = Utils::init('cmd_id');
-        $cmd = CmdManager::byId($cmdId);
-        if (!is_object($cmd)) {
-            throw new CoreException('Commande non trouvée : ' . $cmdId);
+    public static function get(): string {
+        $cmdId = Utils::initInt('cmd_id', -1);
+        $selectedCmd = CmdManager::byId($cmdId);
+        if (is_object($selectedCmd)) {
+            $cmdType = $selectedCmd->getType();
+            $cmdSubType = $selectedCmd->getSubType();
+        } else {
+            $cmdType = Utils::initStr('type');
+            $cmdSubType = Utils::initStr('subtype');
+            $cmdName = Utils::initStr('name');
         }
-
+        $cmdList = CmdManager::byTypeSubType($cmdType, $cmdSubType);
         $pageData = [];
-        $pageData['currentCmd'] = $cmd;
-        $pageData['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
-
+        $pageData['cmds'] = [];
+        foreach ($cmdList as $cmd) {
+            $data = [];
+            $data['cmdId'] = $cmd->getId();
+            $data['cmdName'] = $cmd->getName();
+            if ($cmdId === -1) {
+                $data['selected'] = false;
+                if (!empty($cmd->getTemplate()['dashboard'])) {
+                    $data['selected'] |= $cmd->getTemplate()['dashboard'] === 'custom::' . $cmdName;
+                }
+                if (!empty($cmd->getTemplate()['mobile'])) {
+                    $data['selected'] |= $cmd->getTemplate()['mobile'] === 'custom::' . $cmdName;
+                }
+            } else {
+                $data['selected'] = $data['cmdId'] == $cmdId;
+            }
+            $data['object'] = '';
+            $data['eqLogic'] = '';
+            $linkedEqLogic = $cmd->getEqLogic();
+            if (is_object($linkedEqLogic)) {
+                $data['eqLogic'] = $linkedEqLogic->getName();
+                $linkedObject = $linkedEqLogic->getObject();
+                if (is_object($linkedObject)) {
+                    $data['object'] = $linkedObject->getName();
+                }
+            }
+            $pageData['cmds'][] = $data;
+        }
         return Render::getInstance()->get('/modals/cmd.selectMultiple.html.twig', $pageData);
     }
+
 }

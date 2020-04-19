@@ -35,7 +35,6 @@ namespace NextDom\Managers\Parents;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
-use NextDom\Model\Entity\PlanHeader;
 
 /**
  * Base manager with commonts functions
@@ -73,6 +72,21 @@ trait CommonManager
     protected static function getAll()
     {
         return DBHelper::getAllObjects(static::getBaseSQL(), [], static::CLASS_NAME);
+    }
+
+    /**
+     * Get count(*).
+     *
+     * @param bool $onlyVisible Filter only visible objects
+     *
+     * @return int
+     *
+     * @throws \Exception
+     */
+    public static function getCount()
+    {
+        $sql = "SELECT count(*) FROM " . static::DB_CLASS_NAME . ";";
+        return DBHelper::Prepare($sql)['count(*)'];
     }
 
     /**

@@ -100,13 +100,13 @@ function initEvents() {
 
     // BDNS restart button
     $('#bt_restartDns').on('click', function () {
-        jeedom.config.save({
+        nextdom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
                 notify('Core',error.message,"error");
                 },
             success: function () {
-                jeedom.network.restartDns({
+                nextdom.network.restartDns({
                     error: function (error) {
                         notify('Core',error.message,"error");
                         },
@@ -122,13 +122,13 @@ function initEvents() {
 
     // DNS halt button
     $('#bt_haltDns').on('click', function () {
-        jeedom.config.save({
+        nextdom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
                 notify('Core',error.message,"error");
                 },
             success: function () {
-                jeedom.network.stopDns({
+                nextdom.network.stopDns({
                     error: function (error) {
                         notify('Core',error.message,"error");
                         },
@@ -145,7 +145,7 @@ function initEvents() {
     // DNS changes
     $('#network').delegate('.configKey[data-l1key="market::allowDNS"],.configKey[data-l1key="network::disableMangement"]', 'change', function () {
         setTimeout(function() {
-            if ($('.configKey[data-l1key="market::allowDNS"]').value() == 1 && $('.configKey[data-l1key="network::disableMangement"]').value() == 0) {
+            if ($('.configKey[data-l1key="market::allowDNS"]').value() === 1 && $('.configKey[data-l1key="network::disableMangement"]').value() === 0) {
                 $('.configKey[data-l1key=externalProtocol]').attr('disabled', true);
                 $('.configKey[data-l1key=externalAddr]').attr('disabled', true);
                 $('.configKey[data-l1key=externalPort]').attr('disabled', true);

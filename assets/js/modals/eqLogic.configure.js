@@ -247,7 +247,7 @@ function initEvents() {
                 var ss = today.getSeconds();
                 var yyyy = today.getFullYear();
                 eqLogic['configuration']['batterytime'] = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + MM + ':' + ss;
-                jeedom.eqLogic.simpleSave({
+                nextdom.eqLogic.simpleSave({
                     eqLogic: eqLogic,
                     error: function (error) {
                         $('#md_displayEqLogicConfigure').showAlert({message: error.message, level: 'danger'});

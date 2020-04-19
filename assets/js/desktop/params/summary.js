@@ -68,9 +68,22 @@ function initEvents() {
     // Delete handlers on delete summary
     $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
         var objectSummary = $(this).closest('.objectSummary');
-        chooseIcon(function (_icon) {
-            objectSummary.find('.objectSummaryAttr[data-l1key=icon]').empty().append(_icon);
-        });
+        objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]').addClass('disabled');
+        objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]').find('.fa-refresh').show();
+        objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]').find('.initial').hide();
+        var clazz = $('.objectSummaryAttr[data-l1key=icon] > i').attr('class');
+        setTimeout(function () {
+            chooseIcon(function (_icon) {
+                objectSummary.find('.objectSummaryAttr[data-l1key=icon]').empty().append(_icon);
+            }, {
+                clazz: clazz,
+                finally: function() {
+                    $('.objectSummaryAction[data-l1key=chooseIcon]').removeClass('disabled');
+                    $('.objectSummaryAction[data-l1key=chooseIcon]').find('.fa-refresh').hide();
+                    $('.objectSummaryAction[data-l1key=chooseIcon]').find('.initial').show();
+                }
+            });
+        }, 50);
         modifyWithoutSave = true;
         $(".bt_cancelModifs").show();
     });
@@ -170,7 +183,7 @@ function addObjectSummary(_summary) {
     tr += '</select>';
     tr += '</td>';
     tr += '<td class="col-xs-1 input-group">';
-    tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
+    tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
     tr += '<span class="label label-icon objectSummaryAttr" data-l1key="icon"></span>';
     tr += '</td>';
     tr += '<td>';

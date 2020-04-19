@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 
 /**
@@ -41,6 +42,17 @@ class IconSelector extends BaseAbstractModal
     {
         $iconsStylePath = 'public/icons/';
         $pageData = [];
+        $pageData['tabimg'] = Utils::init('tabimg', false);
+        $pageData['selectIcon'] = Utils::init('selectIcon', false);
+        $pageData['colorIcon'] = Utils::init('colorIcon', '');
+        $pageData['colorList'] = [
+            ['id' => '', 'label' => 'Aucune'],
+            ['id' => 'icon_blue', 'label' => 'Blue'],
+            ['id' => 'icon_yellow', 'label' => 'Jaune'],
+            ['id' => 'icon_orange', 'label' => 'Orange'],
+            ['id' => 'icon_red', 'label' => 'Rouge'],
+            ['id' => 'icon_green', 'label' => 'Vert']
+        ];
         $pageData['iconsList'] = [];
         foreach (FileSystemHelper::ls($iconsStylePath, '*') as $iconDirectory) {
             if (is_dir($iconsStylePath . $iconDirectory) && file_exists($iconsStylePath . $iconDirectory . 'style.css')) {

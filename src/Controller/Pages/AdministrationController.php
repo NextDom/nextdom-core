@@ -27,9 +27,11 @@ use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\WidgetManager;
+use NextDom\Managers\PlanHeaderManager;
+use NextDom\Managers\ViewManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\JeeObjectManager;
@@ -54,15 +56,21 @@ class AdministrationController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
-        $pageData['scenarioCount'] = count(ScenarioManager::all());
-        $pageData['interactCount'] = count(InteractDefManager::all());
+        $pageData['scenarioCount'] = ScenarioManager::getCount();
+        $pageData['interactCount'] = InteractDefManager::getCount();
         $pageData['pluginsCount'] = count(PluginManager::listPlugin());
-        $pageData['objectCount'] = count(JeeObjectManager::all());
-        $pageData['noteCount'] = count(NoteManager::all());
-        $pageData['cronCount'] = 0;
+        $pageData['objectCount'] = JeeObjectManager::getCount();
+        $pageData['noteCount'] = NoteManager::getCount();
+        $pageData['widgetCount'] = WidgetManager::getCount();
+        $pageData['viewCount'] = ViewManager::getCount();
+        $pageData['planHeaderCount'] = PlanHeaderManager::getCount();
+        $pageData['cronCountEnable'] = 0;
+        $pageData['cronCountDisable'] = 0;
         foreach (CronManager::all() as $cron) {
-            if ($cron->getEnable() == 0) {
-                $pageData['cronCount']++;
+            if ($cron->getEnable()) {
+                $pageData['cronCountEnable']++;
+            } else {
+                $pageData['cronCountDisable']++;
             }
         }
         self::countErrorLog($pageData);

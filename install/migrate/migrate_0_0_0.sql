@@ -39,11 +39,13 @@ ALTER TABLE `view`     ADD `image`         MEDIUMTEXT   NULL;
 ALTER TABLE `view`     ADD `configuration` TEXT         NULL;
 ALTER TABLE `eqLogic`  ADD `tags`          VARCHAR(255) NULL;
 
+ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;
+
 CREATE INDEX `tags` ON eqLogic (`tags` ASC);
 
 UPDATE `update` SET source = 'github', configuration = '{"user":"NextDom","repository":"nextdom-core","version":"master"}' WHERE type = 'core';
-DELETE FROM `update` WHERE name = 'AlternativeMarketForJeedom';
-DELETE FROM `config` WHERE `plugin` = 'AlternativeMarketForJeedom';
-DELETE FROM `update` WHERE name = 'musiccast';
-DELETE FROM `config` WHERE `plugin` = 'musiccast';
+
+INSERT INTO `message` (`date`, `logicalId`, `plugin`, `message`, `action`) SELECT now(), 'AlternativeMarketForJeedom:callRemove', `name`, 'Nous vous proposons de supprimer ce plugin car il est intégré dans nextdom.', '' FROM `update` WHERE `name` = 'AlternativeMarketForJeedom';
+INSERT INTO `message` (`date`, `logicalId`, `plugin`, `message`, `action`) SELECT now(), 'musiccast:callRemove', `name`, 'Nous vous proposons de supprimer ce plugin car une autre version existe dans le market nextdom .', '' FROM `update` WHERE `name` = 'musiccast';
+
 UPDATE `config` SET `value` = 'https://www.jeedom.com/market/' WHERE `plugin` = 'core' AND `key` = 'market::address';

@@ -34,7 +34,7 @@ class MessageAjaxTest extends BaseAjaxTest
     public function tearDown(): void
     {
         $this->cleanGetParams();
-        DBHELPER::exec(
+        DBHelper::exec(
             "DELETE FROM message;
                     INSERT INTO `message` VALUES (1,'2019-05-03 22:00:03','newUpdate','update','De nouvelles mises à jour sont disponibles : nextdom,openzwave','');
                     INSERT INTO `message` VALUES (2,'2019-05-04 00:00:02','scenario::sKEbQHaqQGiOwgvu4sknYQUQqFurIUks','scenario','Une commande du scénario : [Couloir][Couloir][Lumière couloir] est introuvable','');

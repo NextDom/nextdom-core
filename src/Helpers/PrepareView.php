@@ -164,6 +164,7 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/backup.class.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/nextdom_market.class.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/interact.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/widget.class.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/update.class.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/plan.class.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/log.class.js';
@@ -178,6 +179,8 @@ class PrepareView
 
             // Then NextDom JS files
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/globals.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/libs/displayCardPageA.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/libs/displayCardWidget.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/libs/gui.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/conflicts.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/menu.js';

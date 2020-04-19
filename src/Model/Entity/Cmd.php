@@ -58,6 +58,7 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Managers\WidgetManager;
 use NextDom\Model\Entity\Parents\BaseEntity;
 use NextDom\Model\Entity\Parents\ConfigurationEntity;
 use NextDom\Model\Entity\Parents\DisplayEntity;
@@ -490,12 +491,13 @@ class Cmd extends BaseEntity
                     }
                     return $_value;
                 case CmdSubType::BINARY:
-                    if ($this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET) != '') {
+                    $calculValueOffset = $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET);
+                    if ($calculValueOffset != '') {
                         try {
                             if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET)))));
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $calculValueOffset))));
                             } else {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET)));
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $calculValueOffset));
                             }
                         } catch (\Exception $ex) {
 
@@ -1325,36 +1327,111 @@ class Cmd extends BaseEntity
      * @return array|bool|mixed|null|string
      * @throws \Exception
      */
-    public function getWidgetTemplateCode($viewVersion = CmdViewType::DASHBOARD, $_noCustom = false)
+    public function getWidgetTemplateCode($viewVersion = CmdViewType::DASHBOARD)
     {
-        $version = NextDomHelper::versionAlias($viewVersion);
-
-        $templateName = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, Common::DEFAULT);
-        $cacheKey = $version . '::' . $templateName;
-        if (!isset(self::$_templateArray[$cacheKey])) {
-            $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, '');
-            if ($templateContent == '') {
-                if (ConfigManager::byKey('active', Common::WIDGET) == 1) {
-                    $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, Common::WIDGET);
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $templateVersion = NextDomHelper::versionAlias($viewVersion);
+        $replace = null;
+        $widgetTemplate = $NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][NextDomObj::WIDGET];
+        $widgetName = $this->getTemplate($templateVersion, Common::DEFAULT);
+        $templateNamePrefix = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.';
+        if (strpos($this->getTemplate($templateVersion, Common::DEFAULT), '::') !== false) {
+            $name = explode('::', $this->getTemplate($templateVersion, Common::DEFAULT));
+            $templateType = $name[0];
+            $widgetName = $name[1];
+            switch ($templateType) {
+                case Common::CUSTOM:
+                    $widget = WidgetManager::byTypeSubtypeAndName($this->getType(), $this->getSubType(), $widgetName);
+                    if (is_object($widget)) {
+                        $widgetTemplate = [
+                            $this->getType() => [
+                                $this->getSubType() => [
+                                    $widgetName => [
+                                        Common::REPLACE => json_decode($widget->getReplace(), true),
+                                        Common::TEST => json_decode($widget->getTest(), true),
+                                        Common::TEMPLATE => $widget->getTemplate()
+                                    ]
+                                ]
+                            ]
+                        ];
+                    }
+                    break;
+                case 'customtemp':
+                    $file = __DIR__ . '/../../data/customTemplates/' . $templateVersion . '/' . $templateNamePrefix . $widgetName . '.html';
+                    if (file_exists($file)) {
+                        return file_get_contents($file);
+                    }
+                    break;
+                case 'core':
+                    if (method_exists($templateType, 'templateWidget')) {
+                        $widgetTemplate = $templateType::templateWidget();
+                    }
+                    break;
+            }
+        }
+        $templateName = $templateNamePrefix . $widgetName;
+        if (isset($widgetTemplate[$this->getType()]) && isset($widgetTemplate[$this->getType()][$this->getSubType()]) && isset($widgetTemplate[$this->getType()][$this->getSubType()][$widgetName])) {
+            $templateConf = $widgetTemplate[$this->getType()][$this->getSubType()][$widgetName];
+            $templateName = $templateNamePrefix . $templateConf[Common::TEMPLATE];
+            if (isset($templateConf[Common::REPLACE]) && is_array($templateConf[Common::REPLACE]) && count($templateConf[Common::REPLACE]) > 0) {
+                $replace = $templateConf[Common::REPLACE];
+                foreach ($replace as &$value) {
+                    $value = str_replace('#value#', '"+_options.display_value+"', str_replace('"', "'", $value));
                 }
-                if ($templateContent == '') {
+            } else {
+                $replace = [];
+            }
+            $replace['#test#'] = '';
+            $replace['#change_theme#'] = '';
+            if (isset($templateConf[Common::TEST]) && is_array($templateConf[Common::TEST]) && count($templateConf[Common::TEST]) > 0) {
+                $i = 0;
+                foreach ($templateConf[Common::TEST] as &$test) {
+                    if (!isset($test['operation'])) {
+                        continue;
+                    }
+                    if (!isset($test['state_light'])) {
+                        $test['state_light'] = '';
+                    }
+                    if (!isset($test['state_dark'])) {
+                        $test['state_dark'] = '';
+                    }
+                    $test['state_light'] = str_replace('#value#', '"+_options.display_value+"', str_replace('"', "'", $test['state_light']));
+                    $test['state_dark'] = str_replace('#value#', '"+_options.display_value+"', str_replace('"', "'", $test['state_dark']));
+                    $test['operation'] = str_replace('"', "'", str_replace('#value#', '_options.display_value', $test['operation']));
+                    $replace['#test#'] .= 'if(' . $test['operation'] . '){cmd.attr("data-state",' . $i . ');state=nextdom.widget.getThemeImg("' . $test['state_light'] . '","' . $test['state_dark'] . '")}';
+                    $replace['#change_theme#'] .= 'if(cmd.attr("data-state") == ' . $i . '){state=nextdom.widget.getThemeImg("' . $test['state_light'] . '","' . $test['state_dark'] . '")}';
+                    $i++;
+                }
+            }
+        }
+        $templateCode = '';
+        if (!isset(self::$_templateArray[$templateVersion . '::' . $templateName])) {
+            $templateCode = FileSystemHelper::getCoreTemplateFileContent($templateVersion, $templateName);
+            if (empty($templateCode)) {
+                if (ConfigManager::byKey('active', 'widget') == 1) {
+                    $templateCode = FileSystemHelper::getCoreTemplateFileContent($templateVersion, $templateName, 'widget');
+                }
+                if (empty($templateCode)) {
                     foreach (PluginManager::listPlugin(true) as $plugin) {
-                        $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, $plugin->getId());
-                        if ($templateContent != '') {
+                        $templateCode = FileSystemHelper::getCoreTemplateFileContent($templateVersion, $templateName, $plugin->getId());
+                        if (!empty($templateCode)) {
                             break;
                         }
                     }
                 }
-                if ($templateContent == '') {
-                    $templateName = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, '');
+                if (empty($templateCode)) {
+                    $templateName = $templateNamePrefix . 'default';
+                    $templateCode = FileSystemHelper::getCoreTemplateFileContent($templateVersion, $templateName);
                 }
             }
-            self::$_templateArray[$cacheKey] = $templateContent;
+            self::$_templateArray[$templateVersion . '::' . $templateName] = $templateCode;
         } else {
-            $templateContent = self::$_templateArray[$cacheKey];
+            $templateCode = self::$_templateArray[$templateVersion . '::' . $templateName];
         }
-        return $templateContent;
+        if (is_array($replace)) {
+            $templateCode = str_replace(array_keys($replace), $replace, $templateCode);
+        }
+        return $templateCode;
     }
 
     /**
@@ -1451,6 +1528,7 @@ class Cmd extends BaseEntity
             '#name#' => $this->getName(),
             '#name_display#' => ($this->getDisplay('icon') != '') ? $this->getDisplay('icon') : $this->getName(),
             '#history#' => '',
+            '#hide_history#' => 'hidden',
             '#displayHistory#' => 'display : none;',
             '#unite#' => $this->getUnite(),
             '#minValue#' => $this->getConfiguration(CmdConfigKey::MIN_VALUE, 0),
@@ -1461,6 +1539,7 @@ class Cmd extends BaseEntity
             '#eqLogic_id#' => $this->getEqLogic_id(),
             '#generic_type#' => $this->getGeneric_type(),
             '#hideCmdName#' => '',
+            '#value_history#' => ''
         ];
         if ($this->getConfiguration(CmdConfigKey::LIST_VALUE, '') != '') {
             $listOption = '';
@@ -1492,7 +1571,6 @@ class Cmd extends BaseEntity
             $htmlData['#name_display#'] = $this->getDisplay('icon') . ' ' . $this->getName();
         }
         $templateCode = $this->getWidgetTemplateCode($viewVersion);
-
         if ($_cmdColor == null && $version != 'scenario') {
             $eqLogic = $this->getEqLogicId();
             if ($eqLogic->getPrimaryCategory() == '') {
@@ -1503,7 +1581,6 @@ class Cmd extends BaseEntity
         } else {
             $htmlData['#cmdColor#'] = $_cmdColor;
         }
-
         if ($this->isType(CmdType::INFO)) {
             $this->addDataForInfoCmdRender($htmlData, $version, $version2, $templateCode);
             return Utils::templateReplace($htmlData, $templateCode);
@@ -1620,11 +1697,14 @@ class Cmd extends BaseEntity
     {
         $cmdValue = $this->getCmdValue();
         if (is_object($cmdValue) && $cmdValue->isType(CmdType::INFO)) {
+            $htmlData['#value_id#'] = $cmdValue->getId();
             $htmlData['#state#'] = $cmdValue->execCmd();
             $htmlData['#valueName#'] = $cmdValue->getName();
             $htmlData['#unite#'] = $cmdValue->getUnite();
             $htmlData['#valueDate#'] = $cmdValue->getValueDate();
             $htmlData['#collectDate#'] = $cmdValue->getCollectDate();
+            $replace['#valueDate#'] = $cmdValue->getValueDate();
+            $replace['#value_history#'] = ($cmdValue->getIsHistorized() == 1) ? 'history cursor' : '';
             $htmlData['#alertLevel#'] = $cmdValue->getCache('alertLevel', 'none');
             if (trim($htmlData['#state#']) == '' && ($cmdValue->getSubType() == CmdSubType::BINARY || $cmdValue->getSubType() == CmdSubType::NUMERIC)) {
                 $htmlData['#state#'] = 0;
@@ -2079,7 +2159,7 @@ class Cmd extends BaseEntity
             'order' => $this->order,
             Common::NAME => $this->name,
             'configuration' => $this->configuration,
-            'template' => $this->template,
+            Common::TEMPLATE => $this->template,
             'isHistorized' => $this->isHistorized,
             'type' => $this->type,
             'subType' => $this->subType,

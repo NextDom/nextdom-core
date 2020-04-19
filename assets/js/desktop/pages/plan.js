@@ -35,7 +35,7 @@
 */
 
 function unload_page() {
-  if (getUrlVars('p') != 'plan') {
+  if (getUrlVars('p') !== 'plan') {
     return;
   }
   $.contextMenu('destroy', '#div_pageContainer');
@@ -54,9 +54,9 @@ for (var i in planHeader) {
       planHeader_id = key;
       displayPlan();
     }
-  }
+  };
 }
-if (user_isAdmin == 1) {
+if (user_isAdmin === 1) {
   $.contextMenu({
     selector: '#div_pageContainer',
     zIndex: 9999,
@@ -87,8 +87,8 @@ if (user_isAdmin == 1) {
         name: "{{Plein écran}}",
         icon: 'fa-desktop',
         callback: function (key, opt) {
-          if (this.data('fullscreen') == undefined) {
-            this.data('fullscreen', 1)
+          if (this.data('fullscreen') === undefined) {
+            this.data('fullscreen', 1);
           }
           fullScreen(this.data('fullscreen'));
           this.data('fullscreen', !this.data('fullscreen'));
@@ -165,7 +165,7 @@ if (user_isAdmin == 1) {
                 display: {name: 'A configurer'}
               });
             }
-          },
+          }
         }
       },
       addEqLogic: {
@@ -311,11 +311,11 @@ if (user_isAdmin == 1) {
             selected: editOption.highlight,
             events: {
               click: function (e) {
-                editOption.highlight = ($(this).value() == 1) ? false : true;
+                editOption.highlight = ($(this).value() === 1) ? false : true;
                 initEditOption(1);
               }
             }
-          },
+          }
         }
       },
       removePlan: {
@@ -335,7 +335,7 @@ if (user_isAdmin == 1) {
                 success: function () {
                   notify('Info', 'Design supprimé', 'success');
                   loadPage('index.php?v=d&p=plan');
-                },
+                }
               });
             }
           });
@@ -369,7 +369,7 @@ if (user_isAdmin == 1) {
                 },
                 success: function (data) {
                   loadPage('index.php?v=d&p=plan&plan_id=' + data.id);
-                },
+                }
               });
             }
           });
@@ -393,7 +393,7 @@ if (user_isAdmin == 1) {
         callback: function (key, opt) {
           savePlan();
         }
-      },
+      }
     }
   });
 
@@ -428,12 +428,12 @@ if (user_isAdmin == 1) {
         icon: 'fa-cog',
         disabled: function (key, opt) {
           var info = getObjectInfo($(this));
-          return !(info.type == 'eqLogic' || info.type == 'cmd' || info.type == 'graph');
+          return !(info.type === 'eqLogic' || info.type === 'cmd' || info.type === 'graph');
         },
         callback: function (key, opt) {
           $('#md_modal').dialog({title: "{{Configuration avancée}}"});
           var info = getObjectInfo($(this));
-          if (info.type == 'graph') {
+          if (info.type === 'graph') {
             var el = $(this);
             $("#md_modal").load('index.php?v=d&modal=cmd.graph.select', function () {
               $('#table_addViewData tbody tr .enable').prop('checked', false);
@@ -451,7 +451,7 @@ if (user_isAdmin == 1) {
                 "Valider": function () {
                   var tr = $('#table_addViewData tbody tr:first');
                   var options = [];
-                  while (tr.attr('data-link_id') != undefined) {
+                  while (tr.attr('data-link_id') !== undefined) {
                     if (tr.find('.enable').is(':checked')) {
                       var graphData = tr.getValues('.graphDataOption')[0];
                       graphData.link_id = tr.attr('data-link_id');
@@ -483,7 +483,7 @@ if (user_isAdmin == 1) {
             },
             success: function () {
               displayPlan();
-            },
+            }
           });
         }
       },
@@ -492,7 +492,7 @@ if (user_isAdmin == 1) {
         icon: 'fa-files-o',
         disabled: function (key, opt) {
           var info = getObjectInfo($(this));
-          return !(info.type == 'text' || info.type == 'graph' || info.type == 'zone');
+          return !(info.type === 'text' || info.type === 'graph' || info.type === 'zone');
         },
         callback: function (key, opt) {
           var info = getObjectInfo($(this));
@@ -514,14 +514,14 @@ if (user_isAdmin == 1) {
         type: 'checkbox',
         events: {
           click: function (opt) {
-            if ($(this).value() == 1) {
+            if ($(this).value() === 1) {
               opt.handleObj.data.$trigger.addClass('locked');
             } else {
               opt.handleObj.data.$trigger.removeClass('locked');
             }
           }
         }
-      },
+      }
     }
   });
 
@@ -557,7 +557,7 @@ $('#div_pageContainer').on('click', '.zone-widget:not(.zoneEqLogic)', function (
       success: function () {
         el.empty();
         clickedOpen = false;
-      },
+      }
     });
   }
 });
@@ -608,7 +608,7 @@ $('#div_pageContainer').on('click', '.zone-widget.zoneEqLogic.zoneEqLogicOnClic'
 
 $(document).click(function (event) {
   if (!editOption.state) {
-    if ((!$(event.target).hasClass('.zone-widget.zoneEqLogic') && $(event.target).closest('.zone-widget.zoneEqLogic').html() == undefined) && (!$(event.target).hasClass('.zone-widget.zoneEqLogicOnFly') && $(event.target).closest('.zone-widget.zoneEqLogicOnFly').html() == undefined)) {
+    if ((!$(event.target).hasClass('.zone-widget.zoneEqLogic') && $(event.target).closest('.zone-widget.zoneEqLogic').html() === undefined) && (!$(event.target).hasClass('.zone-widget.zoneEqLogicOnFly') && $(event.target).closest('.zone-widget.zoneEqLogicOnFly').html() === undefined)) {
       $('.zone-widget.zoneEqLogic').each(function () {
         if ($(this).hasClass('zoneEqLogicOnClic') || $(this).hasClass('zoneEqLogicOnFly')) {
           $(this).empty();
@@ -690,8 +690,8 @@ function fullScreen(_mode) {
 function initEditOption(_state) {
   if (_state) {
     $('.plan-link-widget,.view-link-widget,.graph-widget,.div_displayObject >.eqLogic-widget,.div_displayObject > .cmd-widget,.scenario-widget,.text-widget,.image-widget,.zone-widget,.summary-widget').draggable({
-      snap: (editOption.snap == 1),
-      grid: (editOption.grid == 1) ? editOption.gridSize : false,
+      snap: (editOption.snap === 1),
+      grid: (editOption.grid === 1) ? editOption.gridSize : false,
       containment: 'parent',
       cancel: '.locked',
       stop: function (event, ui) {
@@ -716,7 +716,7 @@ function initEditOption(_state) {
       }
     });
     $('.div_displayObject a').each(function () {
-      if ($(this).attr('href') != '#') {
+      if ($(this).attr('href') !== '#') {
         $(this).attr('data-href', $(this).attr('href')).removeAttr('href');
       }
     });
@@ -760,22 +760,22 @@ function addObject(_plan) {
 }
 
 function displayPlan(_code) {
-  if (planHeader_id == -1) {
+  if (planHeader_id === -1) {
     return;
   }
-  if (typeof(_code)== 'undefined') {
+  if (typeof(_code)=== 'undefined') {
     _code = null;
   }
-  if (getUrlVars('fullscreen') == 1) {
+  if (getUrlVars('fullscreen') === 1) {
     fullScreen(true);
   }
   nextdom.plan.getHeader({
     id: planHeader_id,
     code: _code,
     error: function (error) {
-      if (error.code == -32005) {
+      if (error.code === -32005) {
         var result = prompt("{{Veuillez indiquer le code ?}}", "");
-        if (result == null) {
+        if (result === null) {
           notify('Erreur', error.message, 'error');
           return;
         }
@@ -792,14 +792,14 @@ function displayPlan(_code) {
         $('.div_displayObject').append(data.image);
       }
       $('.div_backgroundPlan').height($('body').height());
-      if (isset(data.configuration.backgroundTransparent) && data.configuration.backgroundTransparent == 1) {
+      if (isset(data.configuration.backgroundTransparent) && data.configuration.backgroundTransparent === 1) {
         $('.div_backgroundPlan').css('background-color', 'transparent');
       } else if (isset(data.configuration.backgroundColor)) {
         $('.div_backgroundPlan').css('background-color', data.configuration.backgroundColor);
       } else {
         $('.div_backgroundPlan').css('background-color', '#ffffff');
       }
-      if (data.configuration != null && init(data.configuration.desktopSizeX) != '' && init(data.configuration.desktopSizeY) != '') {
+      if (data.configuration !== null && init(data.configuration.desktopSizeX) !== '' && init(data.configuration.desktopSizeY) !== '') {
         $('.div_displayObject').height(data.configuration.desktopSizeY).width(data.configuration.desktopSizeX);
         $('.div_displayObject img').height(data.configuration.desktopSizeY).width(data.configuration.desktopSizeX);
       } else {
@@ -827,7 +827,7 @@ function displayPlan(_code) {
           initReportMode();
         }
       });
-    },
+    }
   });
 }
 
@@ -877,7 +877,7 @@ function savePlan(_refreshDisplay, _async) {
     plan.planHeader_id = planHeader_id;
     plan.display.height = $(this).outerHeight();
     plan.display.width = $(this).outerWidth();
-    if (info.type == 'graph') {
+    if (info.type === 'graph') {
       plan.display.graph = json_decode($(this).find('.graphOptions').value());
     }
     if (!$(this).is(':visible')) {
@@ -901,7 +901,7 @@ function savePlan(_refreshDisplay, _async) {
       if (init(_refreshDisplay, false)) {
         displayPlan();
       }
-    },
+    }
   });
 }
 
@@ -913,13 +913,13 @@ function displayObject(_plan, _html, _noRender) {
   _plan = init(_plan, {});
   _plan.position = init(_plan.position, {});
   _plan.css = init(_plan.css, {});
-  if (_plan.link_type == 'eqLogic' || _plan.link_type == 'scenario' || _plan.link_type == 'text' || _plan.link_type == 'image' || _plan.link_type == 'zone') {
+  if (_plan.link_type === 'eqLogic' || _plan.link_type === 'scenario' || _plan.link_type === 'text' || _plan.link_type === 'image' || _plan.link_type === 'zone') {
     $('.div_displayObject .' + _plan.link_type + '-widget[data-' + _plan.link_type + '_id=' + _plan.link_id + ']').remove();
-  } else if (_plan.link_type == 'view' || _plan.link_type == 'plan') {
+  } else if (_plan.link_type === 'view' || _plan.link_type === 'plan') {
     $('.div_displayObject .' + _plan.link_type + '-link-widget[data-link_id=' + _plan.link_id + ']').remove();
-  } else if (_plan.link_type == 'cmd') {
+  } else if (_plan.link_type === 'cmd') {
     $('.div_displayObject > .cmd-widget[data-cmd_id=' + _plan.link_id + ']').remove();
-  } else if (_plan.link_type == 'graph') {
+  } else if (_plan.link_type === 'graph') {
     for (var i in nextdom.history.chart) {
       delete nextdom.history.chart[i];
     }
@@ -949,19 +949,19 @@ function displayObject(_plan, _html, _noRender) {
     if (_plan.css[key] === '') {
       continue;
     }
-    if (key == 'zoom' || key == 'rotate') {
+    if (key === 'zoom' || key === 'rotate') {
       continue;
     }
-    if (key == 'z-index' && _plan.css[key] < 999) {
+    if (key === 'z-index' && _plan.css[key] < 999) {
       continue;
     }
-    if (key == 'background-color') {
-      if (isset(_plan.display) && (!isset(_plan.display['background-defaut']) || _plan.display['background-defaut'] != 1)) {
-        if (isset(_plan.display['background-transparent']) && _plan.display['background-transparent'] == 1) {
+    if (key === 'background-color') {
+      if (isset(_plan.display) && (!isset(_plan.display['background-defaut']) || _plan.display['background-defaut'] !== 1)) {
+        if (isset(_plan.display['background-transparent']) && _plan.display['background-transparent'] === 1) {
           html.style('background-color', 'transparent', 'important');
           html.style('border-radius', '0px', 'important');
           html.style('box-shadow', 'none', 'important');
-          if (_plan.link_type == 'eqLogic') {
+          if (_plan.link_type === 'eqLogic') {
             html.find('.widget-name').style('background-color', 'transparent', 'important');
           }
         } else {
@@ -969,18 +969,18 @@ function displayObject(_plan, _html, _noRender) {
         }
       }
       continue;
-    } else if (key == 'color') {
-      if (!isset(_plan.display) || !isset(_plan.display['color-defaut']) || _plan.display['color-defaut'] != 1) {
+    } else if (key === 'color') {
+      if (!isset(_plan.display) || !isset(_plan.display['color-defaut']) || _plan.display['color-defaut'] !== 1) {
         html.style(key, _plan.css[key], 'important');
-        if (_plan.link_type == 'eqLogic' || _plan.link_type == 'cmd' || _plan.link_type == 'summary') {
+        if (_plan.link_type === 'eqLogic' || _plan.link_type === 'cmd' || _plan.link_type === 'summary') {
           html.find('*').each(function () {
-            $(this).style(key, _plan.css[key], 'important')
+            $(this).style(key, _plan.css[key], 'important');
           });
         }
       }
       continue;
     }
-    if (key == 'opacity') {
+    if (key === 'opacity') {
       continue;
     }
     html.style(key, _plan.css[key], 'important');
@@ -988,11 +988,11 @@ function displayObject(_plan, _html, _noRender) {
   if (_plan.css['opacity'] && _plan.css['opacity'] !== '') {
     html.css('background-color', html.css('background-color').replace(')', ',' + _plan.css['opacity'] + ')').replace('rgb', 'rgba'));
   }
-  if (_plan.link_type == 'graph') {
+  if (_plan.link_type === 'graph') {
     $('.div_displayObject').append(html);
     if (isset(_plan.display) && isset(_plan.display.graph)) {
       for (var i in _plan.display.graph) {
-        if (init(_plan.display.graph[i].link_id) != '') {
+        if (init(_plan.display.graph[i].link_id) !== '') {
           nextdom.history.drawChart({
             cmd_id: _plan.display.graph[i].link_id,
             el: 'graph' + _plan.link_id,
@@ -1004,7 +1004,7 @@ function displayObject(_plan, _html, _noRender) {
             transparentBackground: init(_plan.display.transparentBackground, false),
             showNavigator: init(_plan.display.showNavigator, true),
             enableExport: false,
-            global: false,
+            global: false
           });
         }
       }

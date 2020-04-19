@@ -77,7 +77,7 @@ nextdom.changes = function() {
       setTimeout(nextdom.changes, 1);
     },
     error: function (_error) {
-      if (typeof (user_id) != 'undefined' && nextdom.connect == 100) {
+      if (typeof (user_id) !== 'undefined' && nextdom.connect === 100) {
         notify('{{Erreur de connexion}}', '{{Erreur lors de la connexion à NextDom}} : ' + _error.message);
         window.location.reload();
       }
@@ -123,23 +123,23 @@ nextdom.init = function() {
   });
 
   bodyContainer.on('ui::update', function (_event, _options) {
-    if (isset(_options.page) && _options.page != '') {
-      if (!$.mobile && getUrlVars('p') != _options.page) {
+    if (isset(_options.page) && _options.page !== '') {
+      if (!$.mobile && getUrlVars('p') !== _options.page) {
         return;
       }
-      if ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE != _options.page) {
+      if ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE !== _options.page) {
         return;
       }
     }
-    if (!isset(_options.container) || _options.container == '') {
+    if (!isset(_options.container) || _options.container === '') {
       _options.container = 'body';
     }
     $(_options.container).setValues(_options.data, _options.type);
   });
 
   bodyContainer.on('nextdom::gotoplan', function (_event, _plan_id) {
-    if (getUrlVars('p') == 'plan' && 'function' == typeof (displayPlan)) {
-      if (_plan_id != $('#sel_planHeader').attr('data-link_id')) {
+    if (getUrlVars('p') === 'plan' && 'function' === typeof (displayPlan)) {
+      if (_plan_id !== $('#sel_planHeader').attr('data-link_id')) {
         planHeader_id = _plan_id;
         displayPlan();
       }
@@ -147,17 +147,17 @@ nextdom.init = function() {
   });
 
   bodyContainer.on('nextdom::alert', function (_event, _options) {
-    if (!isset(_options.message) || $.trim(_options.message) == '') {
-      if (isset(_options.page) && _options.page != '') {
-        if (getUrlVars('p') == _options.page || ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE == _options.page)) {
+    if (!isset(_options.message) || $.trim(_options.message) === '') {
+      if (isset(_options.page) && _options.page !== '') {
+        if (getUrlVars('p') === _options.page || ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE === _options.page)) {
           $.hideAlert();
         }
       } else {
         $.hideAlert();
       }
     } else {
-      if (isset(_options.page) && _options.page != '') {
-        if (getUrlVars('p') == _options.page || ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE == _options.page)) {
+      if (isset(_options.page) && _options.page !== '') {
+        if (getUrlVars('p') === _options.page || ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE === _options.page)) {
           notify('Core', _options.message, _options.level);
         }
       } else {
@@ -281,14 +281,14 @@ nextdom.getCronSelectModal = function(_options, _callback) {
     });
   }
   $("#mod_insertCronValue").dialog('option', 'buttons', {
-    "{{Annuler}}": function () {
+    Annuler: function () {
       $(this).dialog("close");
     },
-    "{{Valider}}": function () {
+    Valider: function () {
       var retour = {};
       retour.cron = {};
       retour.value = mod_insertCron.getValue();
-      if ($.trim(retour) != '' && 'function' == typeof (_callback)) {
+      if ($.trim(retour) !== '' && 'function' === typeof (_callback)) {
         _callback(retour);
       }
       $(this).dialog('close');
@@ -320,14 +320,14 @@ nextdom.getSelectActionModal = function(_options, _callback) {
   }
   mod_insertAction.setOptions(_options);
   $("#mod_insertActionValue").dialog('option', 'buttons', {
-    "Annuler": function () {
+    Annuler: function () {
       $(this).dialog("close");
     },
-    "Valider": function () {
+    Valider: function () {
       var retour = {};
       retour.action = {};
       retour.human = mod_insertAction.getValue();
-      if ($.trim(retour) != '' && 'function' == typeof (_callback)) {
+      if ($.trim(retour) !== '' && 'function' === typeof (_callback)) {
         _callback(retour);
       }
       $(this).dialog('close');
@@ -394,4 +394,8 @@ nextdom.cleanFileSystemRight = function(queryParams) {
 
 nextdom.consistency = function(queryParams) {
   nextdom.private.ajax('NextDom', 'consistency', queryParams);
+};
+
+nextdom.version = function(queryParams) {
+  nextdom.private.ajax('NextDom', 'version', queryParams);
 };

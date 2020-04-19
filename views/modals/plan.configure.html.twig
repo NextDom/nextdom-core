@@ -89,9 +89,9 @@
         <div class="form-group link_type link_image display_mode display_mode_image">
             <label class="col-lg-4 control-label">{{ 'Image' }}</label>
             <div class="col-lg-8">
-      <span class="btn btn-default btn-file">
-        <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImagePlan" type="file" name="file" style="display: inline-block;">
-      </span>
+            <span class="btn btn-default btn-file">
+                <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImagePlan" type="file" name="file" style="display: inline-block;">
+            </span>
             </div>
         </div>
         <div class="form-group link_type link_image display_mode display_mode_camera" style="display:none;">
@@ -193,7 +193,7 @@
                 <div class="planAttr" data-l1key="display" data-l2key="icon"></div>
             </div>
             <div class="col-lg-2">
-                <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir une icône' }}</a>
+                <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ 'common.choose' | trans }}</span></a>
             </div>
         </div>
         <div class="form-group link_type link_plan link_view link_text link_summary">
@@ -447,7 +447,7 @@
     url: 'src/ajax.php?target=Plan&action=uploadImagePlan&id=' + id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
-      if (data.result.state != 'ok') {
+      if (data.result.state !== 'ok') {
         notify('Core', data.result.result, 'error');
         return;
       }
@@ -455,19 +455,19 @@
   });
 
   $('#fd_planConfigure').on('change', '.planAttr[data-l1key=display][data-l2key=background-transparent]', function () {
-    if ($(this).value() == 1) {
+    if ($(this).value() === 1) {
       $('.planAttr[data-l1key=display][data-l2key=background-defaut]').value(0);
     }
   });
 
   $('#fd_planConfigure').on('change', '.planAttr[data-l1key=css][data-l2key=background-color]', function () {
-    if ($(this).value() != '#000000') {
+    if ($(this).value() !== '#000000') {
       $('.planAttr[data-l1key=display][data-l2key=background-defaut]').value(0);
     }
   });
 
   $('#fd_planConfigure').on('change', '.planAttr[data-l1key=display][data-l2key=background-defaut]', function () {
-    if ($(this).value() == 1) {
+    if ($(this).value() === 1) {
       $('.planAttr[data-l1key=display][data-l2key=background-transparent]').value(0);
       $('.planAttr[data-l1key=css][data-l2key=background-color]').value('#000000');
     }
@@ -476,16 +476,29 @@
   editor = [];
 
   $('#bt_chooseIcon').on('click', function () {
-    chooseIcon(function (_icon) {
-      $('.planAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-    });
+    $('#bt_chooseIcon').addClass('disabled');
+    $('#bt_chooseIcon').find('.fa-refresh').show();
+    $('#bt_chooseIcon').find('.initial').hide();
+    var clazz = $('div[data-l2key="icon"] > i').attr('class');
+    setTimeout(function () {
+        chooseIcon(function (_icon) {
+            $('.planAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+        }, {
+            clazz: clazz,
+            finally: function() {
+                $('#bt_chooseIcon').removeClass('disabled');
+                $('#bt_chooseIcon').find('.fa-refresh').hide();
+                $('#bt_chooseIcon').find('.initial').show();
+            }
+        });
+    }, 50);
   });
 
   $('#bt_saveConfigurePlan').on('click', function () {
     save();
   });
 
-  if (isset(id) && id != '') {
+  if (isset(id) && id !== '') {
     $.ajax({
       type: "POST",
       url: "src/ajax.php",
@@ -499,7 +512,7 @@
         handleAjaxError(request, status, error);
       },
       success: function (data) {
-        if (data.state != 'ok') {
+        if (data.state !== 'ok') {
           notify('Core', data.result, 'error');
           return;
         }
@@ -520,9 +533,9 @@
             addActionPlanConfigure(data.result.configuration.action_other[i], 'other');
           }
         }
-        if (data.result.link_type == 'text') {
+        if (data.result.link_type === 'text') {
           var code = $('.planAttr[data-l1key=display][data-l2key=text]');
-          if (code.attr('id') == undefined) {
+          if (code.attr('id') === undefined) {
             code.uniqueId();
             var id = code.attr('id');
             setTimeout(function () {
@@ -540,9 +553,9 @@
 
   function save() {
     var plans = $('#fd_planConfigure').getValues('.planAttr');
-    if (plans[0].link_type == 'text') {
+    if (plans[0].link_type === 'text') {
       var id = $('.planAttr[data-l1key=display][data-l2key=text]').attr('id');
-      if (id != undefined && isset(editor[id])) {
+      if (id !== undefined && isset(editor[id])) {
         plans[0].display.text = editor[id].getValue();
       }
     }

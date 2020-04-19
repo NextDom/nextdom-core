@@ -94,7 +94,7 @@ nextdom.private.getParamsAJAX = function(queryParams, target, action) {
     },
     success: function (data) {
       data = queryParams.pre_success(data);
-      if (data.state != 'ok') {
+      if (data.state !== 'ok') {
         queryParams.error({
           type: 'PHP',
           message: data.result || 'Error - ' + no_result || '',
@@ -158,7 +158,7 @@ nextdom.private.checkParamValue = function(queryParams) {
   var regexp = queryParams.regexp;
   var name = queryParams.name || 'One parameter';
 
-  if (typeof(value)== 'object') {
+  if (typeof(value)=== 'object') {
     // appel récursif pour les Array et les Objets
     for (var i in value) {
       checkParamValue({
@@ -277,7 +277,7 @@ nextdom.private.checkAndGetParams = function(queryParams, queryParamsSpecifics, 
   // on json_encode tous les objets contenus dans les params
   for (var attr in params) {
     var param = params[attr];
-    params[attr] = (typeof(param)== 'object') ? json_encode(param) : param;
+    params[attr] = (typeof(param)=== 'object') ? json_encode(param) : param;
   }
 
   var ajaxParams = nextdom.private.getParamsAJAX(params);
@@ -292,7 +292,7 @@ nextdom.private.checkAndGetParams = function(queryParams, queryParamsSpecifics, 
  * Fonction générique qui permet de checker les valeurs des paramètres
  */
 nextdom.private.checkParamsValue = function(queryParams) {
-  if (Object.prototype.toString.call(queryParams) == '[object Object]') {
+  if (Object.prototype.toString.call(queryParams) === '[object Object]') {
     nextdom.private.checkParamValue(queryParams);
   } else {
     for (var i in queryParams) {

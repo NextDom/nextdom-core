@@ -114,7 +114,7 @@ function initEvents() {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
-                if (el.attr('data-state') == 1) {
+                if (el.attr('data-state') === 1) {
                     el.removeClass('btn-success').addClass('btn-danger').attr('data-state', 0);
                     el.empty().html('<i class="fas fa-times"></i>{{Désactiver le système cron}}');
                 } else {
@@ -170,7 +170,7 @@ function initEvents() {
 
     // Cron demon change
     $('#table_cron').delegate('.cronAttr[data-l1key=deamon]', 'change', function () {
-        if ($(this).value() == 1) {
+        if ($(this).value() === 1) {
             $(this).closest('tr').find('.cronAttr[data-l1key=deamonSleepTime]').show();
         } else {
             $(this).closest('tr').find('.cronAttr[data-l1key=deamonSleepTime]').hide();
@@ -221,20 +221,20 @@ function printListener() {
  */
 function addCron(_cron) {
     var disabled ='';
-    if(init(_cron.deamon) == 1){
+    if(init(_cron.deamon) === 1){
         disabled ='disabled';
     }
     var tr = '<tr id="' + init(_cron.id) + '">';
     tr += '<td class="option"><span class="cronAttr" data-l1key="id"></span></td>';
     tr += '<td>';
-    if(init(_cron.id) != ''){
+    if(init(_cron.id) !== ''){
         tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file no-spacing"></i></a> ';
     }
-    if(init(_cron.deamon) == 0){
-        if (init(_cron.state) == 'run') {
+    if(init(_cron.deamon) === 0){
+        if (init(_cron.state) === 'run') {
             tr += ' <a class="btn btn-danger btn-sm stop"><i class="fas fa-stop no-spacing"></i></a>';
         }
-        if (init(_cron.state) != '' && init(_cron.state) != 'starting' && init(_cron.state) != 'run' && init(_cron.state) != 'stoping') {
+        if (init(_cron.state) !== '' && init(_cron.state) !== 'starting' && init(_cron.state) !== 'run' && init(_cron.state) !== 'stoping') {
             tr += ' <a class="btn btn-success btn-sm start"><i class="fas fa-play no-spacing"></i></a>';
         }
     }
@@ -250,7 +250,7 @@ function addCron(_cron) {
     tr += '<input class="cronAttr form-control input-sm" data-l1key="deamonSleepTime" style="width : 50px; display : inline-block;" />';
     tr += '</td>';
     tr += '<td class="once">';
-    if(init(_cron.deamon) == 0){
+    if(init(_cron.deamon) === 0){
         tr += '<input type="checkbox" class="cronAttr" data-l1key="once" /></span> ';
     }
     tr += '</td>';
@@ -258,7 +258,7 @@ function addCron(_cron) {
     tr += '<td class="function"><input class="form-control cronAttr input-sm" data-l1key="function" '+disabled+' /></td>';
     tr += '<td class="schedule"><input class="cronAttr form-control input-sm" data-l1key="schedule" '+disabled+' /></td>';
     tr += '<td class="function">';
-    if(init(_cron.deamon) == 0){
+    if(init(_cron.deamon) === 0){
         tr += '<input class="form-control cronAttr input-sm" data-l1key="timeout" />';
     }
     tr += '</td>';
@@ -270,16 +270,16 @@ function addCron(_cron) {
     tr += '</td>';
     tr += '<td class="state">';
     var label = 'label label-info';
-    if (init(_cron.state) == 'run') {
+    if (init(_cron.state) === 'run') {
         label = 'label label-success';
     }
-    if (init(_cron.state) == 'stop') {
+    if (init(_cron.state) === 'stop') {
         label = 'label label-danger';
     }
-    if (init(_cron.state) == 'starting') {
+    if (init(_cron.state) === 'starting') {
         label = 'label label-warning';
     }
-    if (init(_cron.state) == 'stoping') {
+    if (init(_cron.state) === 'stoping') {
         label = 'label label-warning';
     }
     tr += '<span class="' + label + ' label-sticker">' + init(_cron.state) + '</span>';
@@ -295,6 +295,8 @@ function addCron(_cron) {
 
 /**
  * Add a Listener with default value
+ *
+ * @param _listener listener object
  */
 function addListener(_listener) {
     $.hideAlert();
@@ -302,7 +304,7 @@ function addListener(_listener) {
     var tr = '<tr id="' + init(_listener.id) + '">';
     tr += '<td class="option"><span class="listenerAttr" data-l1key="id"></span></td>';
     tr += '<td>';
-    if(init(_listener.id) != ''){
+    if(init(_listener.id) !== ''){
         tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file no-spacing"></i></a> ';
     }
     tr += '</td>';

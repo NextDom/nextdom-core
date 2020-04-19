@@ -55,10 +55,10 @@ nextdom.log.autoupdate = function(queryParams) {
   if (!queryParams['display'].is(':visible')) {
     return;
   }
-  if (queryParams.callCount > 0 && isset(queryParams['control']) && queryParams['control'].attr('data-state') != 1) {
+  if (queryParams.callCount > 0 && isset(queryParams['control']) && queryParams['control'].attr('data-state') !== 1) {
     return;
   }
-  if (queryParams.callCount > 0 && isset(nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')]) && nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')].log != queryParams.log) {
+  if (queryParams.callCount > 0 && isset(nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')]) && nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')].log !== queryParams.log) {
     return;
   }
   if (queryParams.callCount === 0) {
@@ -68,11 +68,11 @@ nextdom.log.autoupdate = function(queryParams) {
       queryParams['search'].value('');
     }
     queryParams.display.scrollTop(queryParams.display.innerHeight() + scrollTopToDown);
-    if (queryParams['control'].attr('data-state') == 0) {
+    if (queryParams['control'].attr('data-state') === 0) {
       queryParams['control'].attr('data-state', 1);
     }
     queryParams['control'].off('click').on('click', function () {
-      if ($(this).attr('data-state') == 1) {
+      if ($(this).attr('data-state') === 1) {
         $(this).attr('data-state', 0);
         $(this).removeClass('btn-warning').addClass('btn-success');
         $(this).html('<i class="fas fa-play spacing-right"></i>{{Reprendre}}');
@@ -86,7 +86,7 @@ nextdom.log.autoupdate = function(queryParams) {
     });
 
     queryParams['search'].off('keypress').on('keypress', function () {
-      if (queryParams['control'].attr('data-state') == 0) {
+      if (queryParams['control'].attr('data-state') === 0) {
         queryParams['control'].trigger('click');
       }
     });
@@ -95,7 +95,7 @@ nextdom.log.autoupdate = function(queryParams) {
   nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')] = {log: queryParams.log};
 
   if (queryParams.callCount > 0 && (queryParams.display.scrollTop() + queryParams.display.innerHeight() + 1) < queryParams.display[0].scrollHeight) {
-    if (queryParams['control'].attr('data-state') == 1) {
+    if (queryParams['control'].attr('data-state') === 1) {
       queryParams['control'].trigger('click');
     }
     return;
@@ -109,7 +109,7 @@ nextdom.log.autoupdate = function(queryParams) {
       var regex = /<br\s*[\/]?>/gi;
       if ($.isArray(result)) {
         for (var i in result.reverse()) {
-          if (!isset(queryParams['search']) || queryParams['search'].value() == '' || result[i].toLowerCase().indexOf(queryParams['search'].value().toLowerCase()) != -1) {
+          if (!isset(queryParams['search']) || queryParams['search'].value() === '' || result[i].toLowerCase().indexOf(queryParams['search'].value().toLowerCase()) !== -1) {
             log += $.trim(result[i]) + "\n";
           }
         }
@@ -120,16 +120,16 @@ nextdom.log.autoupdate = function(queryParams) {
         clearTimeout(nextdom.log.timeout);
       }
       nextdom.log.timeout = setTimeout(function () {
-        nextdom.log.autoupdate(queryParams)
+        nextdom.log.autoupdate(queryParams);
       }, 500);
     },
     error: function () {
       if (nextdom.log.timeout !== null) {
-        clearTimeout(jeedom.log.timeout);
+        clearTimeout(nextdom.log.timeout);
       }
       nextdom.log.timeout = setTimeout(function () {
-        nextdom.log.autoupdate(queryParams)
+        nextdom.log.autoupdate(queryParams);
       }, 500);
-    },
+    }
   });
 };

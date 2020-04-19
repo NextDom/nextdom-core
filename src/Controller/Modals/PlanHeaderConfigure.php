@@ -52,6 +52,7 @@ class PlanHeaderConfigure extends BaseAbstractModal
             'id' => $planHeader->getId(),
             'planHeader' => Utils::o2a($planHeader)
         ]);
+        $pageData['img'] = $planHeader->getImgLink();
 
         return Render::getInstance()->get('/modals/planHeader.configure.html.twig', $pageData);
     }

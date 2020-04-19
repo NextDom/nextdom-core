@@ -74,7 +74,7 @@ function fillTimelineContainer(timelineData)
 
     for(var i in timelineData){
         $.each( timelineData[i]['category'], function( key, value ) {
-            var category = (value == 1) ? key: false;
+            var category = (value === 1) ? key: false;
             switch (category ) {
                 case 'energy':
                     color = '#2eb04b';
@@ -100,7 +100,7 @@ function fillTimelineContainer(timelineData)
             }
         });
         if (i > 0) {
-            if (moment(timelineData[i].date).format('DD/MM/YYYY') != moment(timelineData[i-1].date).format('DD/MM/YYYY')) {
+            if (moment(timelineData[i].date).format('DD/MM/YYYY') !== moment(timelineData[i-1].date).format('DD/MM/YYYY')) {
                 tr += '<li class="time-label">';
                 tr += '<span>';
                 tr += moment(timelineData[i].date).format('DD/MM/YYYY');

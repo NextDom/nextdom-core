@@ -53,7 +53,7 @@ nextdom.scenario.toHtml = function(queryParams) {
   var paramsRequired = ['id', 'version'];
   var paramsSpecifics = {
     pre_success: function (data) {
-      if (queryParams.id == 'all' || $.isArray(queryParams.id)) {
+      if (queryParams.id === 'all' || $.isArray(queryParams.id)) {
         for (var i in data.result) {
           nextdom.scenario.cache.html[i] = data.result[i];
         }
@@ -194,7 +194,7 @@ nextdom.scenario.getSelectModal = function(_options, callback) {
       var retour = {};
       retour.human = mod_insertScenario.getValue();
       retour.id = mod_insertScenario.getId();
-      if ($.trim(retour) != '') {
+      if ($.trim(retour) !== '') {
         callback(retour);
       }
       $(this).dialog('close');

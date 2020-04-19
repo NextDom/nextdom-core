@@ -32,7 +32,7 @@ nextdom.plan3d.remove = function(queryParams) {
 nextdom.plan3d.save = function(queryParams) {
   var paramsRequired = ['plan3ds'];
   var paramsSpecifics = {
-    global: queryParams.global || true,
+    global: queryParams.global || true
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});

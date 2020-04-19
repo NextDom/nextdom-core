@@ -76,16 +76,17 @@
                     <div class="planHeaderAttr" data-l1key="configuration" data-l2key="icon"></div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
-                    <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir' }}</a>
+                    <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ 'common.choose' | trans }}</span></a>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-4 control-label">{{ 'Image' }}</label>
                 <div class="col-lg-8">
-                  <span class="btn btn-default btn-file">
-                    <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
-                </span>
-                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i> {{ 'Supprimer l\'image' }}</a>
+                    <img id="objectImg" src="{{ img }}" style="display:block;margin :10px;" width="240px" height="auto" />
+                    <span class="btn btn-default btn-file">
+                        <i class="fas fa-cloud-upload-alt"></i>{{ 'common.send' | trans }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
+                    </span>
+                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i> {{ 'common.remove' | trans }}</a>
                 </div>
             </div>
         </fieldset>
@@ -108,36 +109,47 @@
             <legend><i class="icon techno-fleches"></i> {{ 'Composant' }}</legend>
             <table class="table table-condensed table-bordered">
                 <thead>
-                <tr>
-                    <th>{{ 'ID' }}</th>
-                    <th>{{ 'Type' }}</th>
-                    <th>{{ 'ID du lien' }}</th>
-                    <th>{{ 'Action' }}</th>
-                </tr>
+                    <tr>
+                        <th>{{ 'ID' }}</th>
+                        <th>{{ 'Type' }}</th>
+                        <th>{{ 'ID du lien' }}</th>
+                        <th>{{ 'Action' }}</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {% for plan in plansList %}
-                <tr class="plan" data-id=" {{ plan.getId() }}">
-                    <td>
-                        {{ plan.getId() }}
-                    </td>
-                    <td>
-                        {{ plan.getLink_type() }}
-                    </td>
-                    <td>
-                        {{ plan.getLink_id() }}
-                    </td>
-                    <td>
-                        <a class="btn btn-danger btn-xs bt_removePlanComposant pull-right"><i class="fas fa-trash"></i> {{ 'Supprimer' }}</a>
-                    </td>
-                </tr>
-                {% endfor %}
+                    {% for plan in plansList %}
+                        <tr class="plan" data-id=" {{ plan.getId() }}">
+                            <td>
+                                {{ plan.getId() }}
+                            </td>
+                            <td>
+                                {{ plan.getLink_type() }}
+                            </td>
+                            <td>
+                                {{ plan.getLink_id() }}
+                            </td>
+                            <td>
+                                <a class="btn btn-danger btn-xs bt_removePlanComposant pull-right"><i class="fas fa-trash"></i> {{ 'Supprimer' }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </fieldset>
     </form>
 </div>
 <script>
+
+    function showImg(img) {
+        if (isset(img) && img.length > 0) {
+            $('#objectImg').attr('src', img);
+            $('#objectImg').show();
+        } else {
+            $('#objectImg').attr('src', '');
+            $('#objectImg').hide();
+        }
+    }
+
     $('.colorpick').colorpicker();
 
     $('.planHeaderAttr[data-l1key=configuration][data-l2key=icon]').on('dblclick', function () {
@@ -145,9 +157,22 @@
     });
 
     $('#bt_chooseIcon').on('click', function () {
-        chooseIcon(function (_icon) {
-            $('.planHeaderAttr[data-l1key=configuration][data-l2key=icon]').empty().append(_icon);
-        });
+        $('#bt_chooseIcon').addClass('disabled');
+        $('#bt_chooseIcon').find('.fa-refresh').show();
+        $('#bt_chooseIcon').find('.initial').hide();
+        var clazz = $('div[data-l2key="icon"] > i').attr('class');
+        setTimeout(function () {
+            chooseIcon(function (_icon) {
+                $('.planHeaderAttr[data-l1key=configuration][data-l2key=icon]').empty().append(_icon);
+            }, {
+                clazz: clazz,
+                finally: function () {
+                    $('#bt_chooseIcon').removeClass('disabled');
+                    $('#bt_chooseIcon').find('.fa-refresh').hide();
+                    $('#bt_chooseIcon').find('.initial').show();
+                }
+            });
+        }, 50);
     });
 
     $('#bt_uploadImage').fileupload({
@@ -155,7 +180,7 @@
         url: '/src/ajax.php?target=Plan&action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
         dataType: 'json',
         done: function (e, data) {
-            if (data.result.state != 'ok') {
+            if (data.result.state !== 'ok') {
                 notify("{{ 'Plan' }}", data.result.result, 'error');
                 return;
             }
@@ -171,7 +196,8 @@
             },
             success: function () {
                 notify("{{ 'Plan' }}", '{{ 'Image supprimée' }}', 'success');
-            },
+                showImg('');
+            }
         });
     });
 
@@ -184,14 +210,14 @@
             success: function () {
                 notify("{{ 'Plan' }}", '{{ 'Design sauvegardé' }}', 'success');
                 loadPage('index.php?v=d&p=plan&plan_id=' + planHeader_id);
-            },
+            }
         });
     });
 
-    $('.bt_removePlanComposant').off('click').on('click',function(){
+    $('.bt_removePlanComposant').off('click').on('click', function () {
         var tr = $(this).closest('tr');
         jeedom.plan.remove({
-            id : tr.attr('data-id'),
+            id: tr.attr('data-id'),
             error: function (error) {
                 notify("Erreur", error.message, 'error');
             },
@@ -202,7 +228,7 @@
         });
     });
 
-    if (isset(id) && id != '') {
+    if (isset(id) && id !== '') {
         $('#div_planHeaderConfigure').setValues(planHeader, '.planHeaderAttr');
     }
 </script>

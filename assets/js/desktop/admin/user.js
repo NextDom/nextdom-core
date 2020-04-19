@@ -75,8 +75,8 @@ function initEvents() {
 
     // Save new user button
     $("#bt_newUserSave").on('click', function (event) {
-        if ($('#in_newUserMdp').value() != '') {
-            if ($('#in_newUserMdp').value() == $('#in_newUserMdpConfirm').value()) {
+        if ($('#in_newUserMdp').value() !== '') {
+            if ($('#in_newUserMdp').value() === $('#in_newUserMdpConfirm').value()) {
                 var user = [{login: $('#in_newUserLogin').value(), password: $('#in_newUserMdp').value()}];
                 nextdom.user.save({
                     users: user,
@@ -151,8 +151,8 @@ function initEvents() {
 
     // Save new password button
     $("#bt_newPasswordSave").on('click', function (event) {
-        if ($('#in_newPassword').value() != '') {
-            if ($('#in_newPassword').value() == $('#in_newPasswordConfirm').value()) {
+        if ($('#in_newPassword').value() !== '') {
+            if ($('#in_newPassword').value() === $('#in_newPasswordConfirm').value()) {
                 var user = {id: $('#md_newPassword').attr("data-id"), login: $('#md_newPassword').attr("data-login"), password: $('#in_newPassword').value()};
                 nextdom.user.save({
                     users: [user],
@@ -283,7 +283,7 @@ function printUsers() {
             var tr = [];
             for (var i in data) {
                 var disable = '';
-                if(data[i].login == 'internal_report' || data[i].login == 'nextdom_support'){
+                if(data[i].login === 'internal_report' || data[i].login === 'nextdom_support'){
                     disable = 'disabled';
                 }
                 var ligne = '<tr><td class="login">';
@@ -293,7 +293,7 @@ function printUsers() {
                 ligne += '<td>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label><i class="spacing-right"></i>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="localOnly" '+disable+' />{{Local}}</label>';
-                if(data[i].profils == 'admin'){
+                if(data[i].profils === 'admin'){
                     ligne += '<br/><label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotRotateHash" '+disable+' />{{Ne pas faire de rotation clef api}}</label>';
                 }
                 ligne += '</td>';
@@ -308,10 +308,10 @@ function printUsers() {
                 ligne += '<input class="userAttr form-control input-sm" data-l1key="hash" disabled />';
                 ligne += '</td>';
                 ligne += '<td>';
-                if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret != ''){
+                if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification === 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret !== ''){
                     ligne += '<span class="label label-success label-sticker btn-action-bar">{{OK}}</span>';
                     ligne += ' <a class="btn btn-sm btn-danger bt_disableTwoFactorAuthentification pull-right btn-action-bar"><i class="fas fa-ban"></i>{{Désactiver}}</span>';
-                    if (isset(data[i].login) && data[i].login == currentUser){
+                    if (isset(data[i].login) && data[i].login === currentUser){
                         ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&p=profils#securitytab"><i class="fas fa-cog"></i>{{Configurer}}</span>';
                     }else{
                         ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>{{Se déconnecter}}</span>';
@@ -324,7 +324,7 @@ function printUsers() {
                ligne += '<span class="userAttr label label-config" data-l1key="options" data-l2key="lastConnection"></span>';
                ligne += '</td>';
                ligne += '<td>';
-               if(disable == ''){
+               if(disable === ''){
                    ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clé API}}"><i class="fas fa-refresh"></i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
                         ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash"></i>{{Supprimer}}</a>';

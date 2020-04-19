@@ -1,38 +1,38 @@
 /* This file is part of Jeedom.
-*
-* Jeedom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Jeedom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This file is part of NextDom.
-*
-* NextDom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* NextDom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
-*/
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Support <https://www.nextdom.org>
+ * @Email   <admin@nextdom.org>
+ * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+ */
 
 // Page init
 loadInformations();
@@ -42,11 +42,12 @@ initEvents();
  * Load informations in all forms of the page
  */
 function loadInformations() {
-    if (is_numeric(getUrlVars('id'))) {
-        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length !== 0) {
-            $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
+    var idFromUrl = getUrlVars('id');
+    if (idFromUrl) {
+        if ($('.objectDisplayCard[data-object_id=' + idFromUrl + ']').length !== 0) {
+            this.loadObjectConfiguration(idFromUrl);
         } else {
-            $('.objectDisplayCard:first').click();
+            notify("Erreur", 'Id ' + idFromUrl + ' not found', 'error');
         }
     }
     loadFromUrl();
@@ -71,11 +72,11 @@ function initEvents() {
 
     // Object links button
     $('#bt_graphObject').on('click', function () {
-        loadModal('modal', '{{Graphique des liens}}', 'graph.link&filter_type=object&filter_id='+$("#objectId").value());
+        loadModal('modal', '{{Graphique des liens}}', 'graph.link&filter_type=object&filter_id=' + $("#objectId").value());
     });
 
     // Object list go back button
-    $('#bt_returnToThumbnailDisplay').on('click',function(){
+    $('#bt_returnToThumbnailDisplay').on('click', function () {
         loadPage('index.php?v=d&p=object');
     });
 
@@ -103,8 +104,8 @@ function initEvents() {
         $('#bt_returnToThumbnailDisplay').show();
         var object = $(this).closest(".objectDisplayCard");
         loadObjectConfiguration(object.attr("data-object_id"));
-        $('.objectname_resume').empty().append(object.attr('data-object_icon')+'  '+object.attr('data-object_name'));
-        if(document.location.toString().split('#')[1] == '' || document.location.toString().split('#')[1] == undefined){
+        $('.objectname_resume').empty().append(object.attr('data-object_icon') + '  ' + object.attr('data-object_name'));
+        if (document.location.toString().split('#')[1] === '' || document.location.toString().split('#')[1] === undefined) {
             $('.nav-tabs a[href="#objecttab"]').click();
         }
         return false;
@@ -139,13 +140,14 @@ function initEvents() {
     // Object picture remove button
     $('#bt_removeBackgroundImage').off('click').on('click', function () {
         nextdom.object.removeImage({
-            view: $('.objectAttr[data-l1key=id]').value(),
+            id: $('.objectAttr[data-l1key=id]').value(),
             error: function (error) {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
                 notify('Info', '{{Image supprimée}}', 'success');
-            },
+                showImg('');
+            }
         });
     });
 
@@ -183,21 +185,34 @@ function initEvents() {
     });
 
     // Icon delete on double click
-    $('.objectAttr[data-l1key=display][data-l2key=icon]').on('dblclick',function(){
+    $('.objectAttr[data-l1key=display][data-l2key=icon]').on('dblclick', function () {
         $('.objectAttr[data-l1key=display][data-l2key=icon]').value('');
     });
 
     // Icon choose button
     $('#bt_chooseIcon').on('click', function () {
-        chooseIcon(function (_icon) {
-            $('.objectAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-        });
+        $('#bt_chooseIcon').addClass('disabled');
+        $('#bt_chooseIcon').find('.fa-refresh').show();
+        $('#bt_chooseIcon').find('.initial').hide();
+        var clazz = $('div[data-l2key="icon"] > i').attr('class');
+        setTimeout(function () {
+            chooseIcon(function (_icon) {
+                $('.objectAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+            }, {
+                clazz: clazz,
+                finally: function () {
+                    $('#bt_chooseIcon').removeClass('disabled');
+                    $('#bt_chooseIcon').find('.fa-refresh').hide();
+                    $('#bt_chooseIcon').find('.initial').show();
+                }
+            });
+        }, 50);
     });
 
     // Object summary add button
-    $('.addSummary').on('click',function(){
+    $('.addSummary').on('click', function () {
         var type = $(this).attr('data-type');
-        var el = $('.type'+type);
+        var el = $('.type' + type);
         addSummaryInfo(el);
     });
 
@@ -248,27 +263,28 @@ function initEvents() {
  *
  * @param _id object ID
  */
-function loadObjectConfiguration(_id){
+function loadObjectConfiguration(_id) {
     try {
         $('#bt_uploadImage').fileupload('destroy');
         $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt"></i>{{Envoyer}}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
-    }catch(error) {
+    } catch (error) {
     }
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: 'src/ajax.php?target=Object&action=uploadImage&id=' +_id,
+        url: 'src/ajax.php?target=Object&action=uploadImage&id=' + _id,
         formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
         dataType: 'json',
         done: function (e, data) {
-            if (data.result.state != 'ok') {
+            if (data.result.state !== 'ok') {
                 notify('Erreur', data.result.result, 'error');
                 return;
             }
             notify('Info', '{{Image ajoutée}}', 'success');
+            loadPage('index.php?v=d&p=object&id=' + _id);
         }
     });
     $(".objectDisplayCard").removeClass('active');
-    $('.objectDisplayCard[data-object_id='+_id+']').addClass('active');
+    $('.objectDisplayCard[data-object_id=' + _id + ']').addClass('active');
     $('#div_conf').show();
     $('#div_resumeObjectList').hide();
     $(this).addClass('active');
@@ -284,7 +300,7 @@ function loadObjectConfiguration(_id){
             $('.objectAttr[data-l1key=father_id] option').show();
             $('#summarytab input[type=checkbox]').value(0);
             $('.object').setValues(data, '.objectAttr');
-            if(!isset(data.display) || data.display.length === 0){
+            if (!isset(data.display) || data.display.length === 0) {
                 $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
                 $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
                 $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
@@ -299,16 +315,17 @@ function loadObjectConfiguration(_id){
             }
             $('.objectAttr[data-l1key=father_id] option[value=' + data.id + ']').hide();
             $('.div_summary').empty();
+            showImg(data.img);
             $('.tabnumber').empty();
             if (isset(data.configuration) && isset(data.configuration.summary)) {
-                for(var i in data.configuration.summary){
-                    var el = $('.type'+i);
-                    if(el != undefined){
-                        for(var j in data.configuration.summary[i]){
-                            addSummaryInfo(el,data.configuration.summary[i][j]);
+                for (var i in data.configuration.summary) {
+                    var el = $('.type' + i);
+                    if (el !== undefined) {
+                        for (var j in data.configuration.summary[i]) {
+                            addSummaryInfo(el, data.configuration.summary[i][j]);
                         }
-                        if (data.configuration.summary[i].length !== 0){
-                            $('.summarytabnumber'+i).append('(' + data.configuration.summary[i].length + ')');
+                        if (data.configuration.summary[i].length !== 0) {
+                            $('.summarytabnumber' + i).append('(' + data.configuration.summary[i].length + ')');
                         }
                     }
 
@@ -321,8 +338,7 @@ function loadObjectConfiguration(_id){
                 var updatedUrl = '';
                 if (hashIndex === -1) {
                     history.pushState({}, null, currentUrl + '&id=' + _id);
-                }
-                else {
+                } else {
                     updatedUrl = currentUrl.substr(0, hashIndex);
                     updatedUrl += '&id=' + scenarioId;
                     updatedUrl += currentUrl.substr(hashIndex);
@@ -333,6 +349,18 @@ function loadObjectConfiguration(_id){
             $(".bt_cancelModifs").hide();
         }
     });
+}
+
+function showImg(img) {
+    if (isset(img) && img.length > 0) {
+        $('#objectImg').attr('src', img);
+        $('#objectImg').show();
+        $('#bt_removeBackgroundImage').show();
+    } else {
+        $('#objectImg').attr('src', '');
+        $('#objectImg').hide();
+        $('#bt_removeBackgroundImage').hide();
+    }
 }
 
 /**
@@ -376,7 +404,7 @@ function addSummaryInfo(_el, _summary) {
 function loadFromUrl() {
     var objectIdFromUrl = getUrlVars('id');
     if (is_numeric(objectIdFromUrl)) {
-        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
+        if ($('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             loadObjectConfiguration(objectIdFromUrl);
         }

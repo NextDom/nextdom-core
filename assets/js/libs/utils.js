@@ -1,38 +1,38 @@
 /* This file is part of Jeedom.
-*
-* Jeedom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Jeedom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This file is part of NextDom.
-*
-* NextDom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* NextDom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
-*/
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Support <https://www.nextdom.org>
+ * @Email   <admin@nextdom.org>
+ * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+ */
 
 
 // ?
@@ -57,23 +57,23 @@ jQuery.fn.findAtDepth = function (selector, maxDepth) {
  * @param _class_name equivalent to the color of notification (success, warning, error, nextdom color)
  */
 function notify(_title, _text, _class_name) {
-    if (typeof (notify_status) != 'undefined' && isset(notify_status) && notify_status == 1) {
+    if (typeof (notify_status) !== 'undefined' && isset(notify_status) && notify_status === 1) {
         var _backgroundColor = '';
         var _icon = '';
 
-        if (_title == '') {
+        if (_title === '') {
             _title = 'Core';
         }
-        if (_text == '') {
+        if (_text === '') {
             _text = 'Erreur inconnue';
         }
-        if (_class_name == 'success') {
+        if (_class_name === 'success') {
             _backgroundColor = '#00a65a';
             _icon = 'far fa-check-circle fa-3x';
-        } else if (_class_name == 'warning') {
+        } else if (_class_name === 'warning') {
             _backgroundColor = '#f39c12';
             _icon = 'fas fa-exclamation-triangle fa-3x';
-        } else if (_class_name == 'error') {
+        } else if (_class_name === 'error') {
             _backgroundColor = '#dd4b39';
             _icon = 'fas fa-times fa-3x';
         } else {
@@ -146,31 +146,48 @@ function notify(_title, _text, _class_name) {
  *
  * @param callbackFunc Callback function who receive the icon code
  */
-function chooseIcon(callbackFunc) {
+function chooseIcon(callbackFunc, _params) {
     var chooseIconModal = $('#mod_selectIcon');
-    if (chooseIconModal.length === 0) {
-        $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
-        chooseIconModal = $('#mod_selectIcon');
+    $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
+    // Init choose icon modal
+    chooseIconModal.dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        height: (jQuery(window).height() - 150),
+        width: getModalWidth(),
+        open: function () {
+            $('body').css({overflow: 'hidden'});
+            $(this).dialog('option', 'position', {my: 'center', at: 'center', of: window});
+        },
+        beforeClose: function (event, ui) {
+            $('body').css({overflow: 'inherit'});
+        }
+    });
+    // Populate modal
+    var url = 'index.php?v=d&modal=icon.selector';
+    jQuery.ajaxSetup({async: false});
+    if (_params) {
         // Init choose icon modal
-        chooseIconModal.dialog({
-            closeText: '',
-            autoOpen: false,
-            modal: true,
-            height: (jQuery(window).height() - 150),
-            width: getModalWidth(),
-            open: function () {
-                $('body').css({overflow: 'hidden'});
-                $(this).dialog('option', 'position', {my: 'center', at: 'center', of: window});
-            },
-            beforeClose: function (event, ui) {
-                $('body').css({overflow: 'inherit'});
+        if (_params.finally) {
+             chooseIconModal.on('dialogbeforeclose', _params.finally);
+        }
+        if (_params.img && _params.img === true) {
+            url += '&showimg=1';
+        }
+        if (_params.clazz) {
+            var clazz = _params.clazz;
+            var color = clazz.substring(clazz.lastIndexOf(" ")+1, clazz.length);
+            if(color.startsWith('icon_')) {
+                url += '&colorIcon=' + color;
+                clazz = clazz.replace(color, '');
             }
-        });
-        // Populate modal
-        jQuery.ajaxSetup({async: false});
-        chooseIconModal.load('index.php?v=d&modal=icon.selector');
-        jQuery.ajaxSetup({async: true});
+            clazz = clazz.replace('icon ', '').trim().replace(' ', '_');
+            url += '&selectIcon=' + clazz;
+        }
     }
+    chooseIconModal.load(url);
+    jQuery.ajaxSetup({async: true});        
     chooseIconModal.dialog('option', 'buttons', {
         'Annuler': function () {
             $(this).dialog('close');
@@ -206,7 +223,7 @@ function sleep(milliseconds) {
  * @param _prefix ID prefix
  */
 function uniqId(_prefix) {
-    if (typeof (_prefix) == 'undefined') {
+    if (typeof (_prefix) === 'undefined') {
         _prefix = 'jee-uniq';
     }
     do {
@@ -224,7 +241,7 @@ function uniqId(_prefix) {
  * @param _scenario TRUE if it's a scenario widget
  */
 function positionEqLogic(_id, _preResize, _scenario) {
-    if (_id != undefined) {
+    if (_id !== undefined) {
         var eqLogic = $('.eqLogic-widget[data-eqlogic_id=' + _id + ']');
         var widget = (_scenario) ? $('.scenario-widget[data-scenario_id=' + _id + ']') : $('.eqLogic-widget[data-eqlogic_id=' + _id + ']');
         widget.css('margin', '0px').css('padding', '0px');
@@ -234,10 +251,10 @@ function positionEqLogic(_id, _preResize, _scenario) {
     } else {
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin', '0px').css('padding', '0px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
-            if ($(this).width() == 0) {
+            if ($(this).width() === 0) {
                 $(this).width('100px');
             }
-            if ($(this).height() == 0) {
+            if ($(this).height() === 0) {
                 $(this).height('100px');
             }
             $(this).trigger('resize');
@@ -252,7 +269,7 @@ function positionEqLogic(_id, _preResize, _scenario) {
  * Remove a Equipement context
  */
 function removeContextualFunction() {
-    printEqLogic = undefined
+    printEqLogic = undefined;
 }
 
 /**
@@ -267,7 +284,7 @@ function linkify(inputText) {
     var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
     var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
     var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
-    return replacedText
+    return replacedText;
 }
 
 /**
@@ -294,7 +311,7 @@ function resetConfigParamKey(keyElt) {
                     notify('Core', error.message, 'error');
                 },
                 success: function (dataLoad) {
-                    if (isset(dataLoad) && dataLoad != '') {
+                    if (isset(dataLoad) && dataLoad !== '') {
                         // Direct slider
                         keyElt.siblings('.slider').value(dataLoad);
                         // Or associate fields
@@ -307,7 +324,7 @@ function resetConfigParamKey(keyElt) {
                                 notify('Core', error.message, 'error');
                             },
                             success: function (dataSubLoad) {
-                                if (isset(dataSubLoad) && dataSubLoad != '') {
+                                if (isset(dataSubLoad) && dataSubLoad !== '') {
                                     defaultValue = dataSubLoad;
                                 } else {
                                     defaultValue = 0;
@@ -366,7 +383,7 @@ function passwordScore(password, progressbar = null, spanLevel = null) {
         } else if (score === 100) {
             textLevel = '{{Sécurité Trés Forte}}';
         }
-        spanLevel.html('<i class="fas fa-shield-alt"></i>' + textLevel)
+        spanLevel.html('<i class="fas fa-shield-alt"></i>' + textLevel);
     }
     return score;
 }
@@ -380,3 +397,42 @@ function decodeHtmlEntities(message) {
     temporaryTextArea.innerHTML = message;
     return temporaryTextArea.value;
 }
+
+/**
+ * TODO: Previous page
+ * @param _param
+ * @param _value
+ * @param _title
+ */
+function addOrUpdateUrl(_param, _value, _title) {
+    var url = new URL(window.location.href);
+    var query_string = url.search;
+    var searchParams = new URLSearchParams(query_string);
+    if (_value === null) {
+        searchParams.delete(_param);
+    } else {
+        searchParams.set(_param, _value);
+    }
+    url.search = searchParams.toString();
+    url = url.toString();
+    if (url !== window.location.href) {
+        if (url.indexOf('#') !== -1) {
+            url = url.substring(0, url.indexOf('#'));
+        }
+        /*
+         if (PREVIOUS_PAGE != 'index.php?' + window.location.href.split("index.php?")[1]) {
+         window.history.pushState('', '', window.location.href);
+         }
+         */
+        if (_title && _title !== '') {
+            document.title = _title;
+        }
+        window.history.pushState('', '', url.toString());
+        //PREVIOUS_PAGE = 'index.php?' + url.split("index.php?")[1];
+    } else {
+        if (_title && _title !== '') {
+            document.title = _title;
+        }
+    }
+}
+

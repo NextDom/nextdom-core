@@ -40,10 +40,10 @@ nextdom.view.all = function(queryParams) {
 };
 
 nextdom.view.toHtml = function(queryParams) {
-  if (queryParams.version == 'mobile') {
+  if (queryParams.version === 'mobile') {
     queryParams.version = 'mview';
   }
-  if (queryParams.version == 'dashboard') {
+  if (queryParams.version === 'dashboard') {
     queryParams.version = 'dview';
   }
   var paramsRequired = ['id', 'version'];
@@ -75,7 +75,7 @@ nextdom.view.handleViewAjax = function(queryParams) {
     result.html += '<legend class="div_viewZone" style="color : #716b7a" data-zone_id="' + viewZone.id + '">' + viewZone.name + '</legend>';
     var div_id = 'div_viewZone' + viewZone.id + Date.now();
     /*         * *****************viewZone widget***************** */
-    if (viewZone.type == 'widget') {
+    if (viewZone.type === 'widget') {
       result.html += '<div id="' + div_id + '" class="eqLogicZone" data-viewZone-id="' + viewZone.id + '">';
       for (var j in viewZone.viewData) {
         var viewData = viewZone.viewData[j];
@@ -83,7 +83,7 @@ nextdom.view.handleViewAjax = function(queryParams) {
         result[viewData.type].push(viewData.id);
       }
       result.html += '</div>';
-    } else if (viewZone.type == 'graph') {
+    } else if (viewZone.type === 'graph') {
       result.html += '<div id="' + div_id + '" class="chartContainer">';
       result.html += '<script>';
       for (var j in viewZone.viewData) {
@@ -93,7 +93,7 @@ nextdom.view.handleViewAjax = function(queryParams) {
       }
       result.html += '</script>';
       result.html += '</div>';
-    } else if (viewZone.type == 'table') {
+    } else if (viewZone.type === 'table') {
       result.html += viewZone.html;
     }
     result.html += '</div>';

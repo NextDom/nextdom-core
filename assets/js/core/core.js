@@ -18,7 +18,7 @@ $(function () {
 });
 
 function getTemplate(_folder, _version, _filename, _replace) {
-  if (_folder == 'core') {
+  if (_folder === 'core') {
     var path = _folder + '/template/' + _version + '/' + _filename;
   } else {
     var path = 'plugins/' + _folder + '/desktop/template/' + _version + '/' + _filename;
@@ -32,7 +32,7 @@ function getTemplate(_folder, _version, _filename, _replace) {
       handleAjaxError(request, status, error);
     },
     success: function (data) {
-      if (isset(_replace) && _replace != null) {
+      if (isset(_replace) && _replace !== null) {
         for (i in _replace) {
           var reg = new RegExp(i, "g");
           data = data.replace(reg, _replace[i]);
@@ -45,8 +45,8 @@ function getTemplate(_folder, _version, _filename, _replace) {
 }
 
 function handleAjaxError(_request, _status, _error) {
-  if (_request.status != '0') {
-    if (init(_request.responseText, '') != '') {
+  if (_request.status !== '0') {
+    if (init(_request.responseText, '') !== '') {
       notify('Erreur', _request.responseText, 'error');
     } else {
       notify('Erreur', _request.status + ' : ' + _error, 'error');
@@ -72,7 +72,7 @@ function getUrlVars(_key) {
       hash = hashes[i].split('=');
       nbVars++;
       vars[hash[0]] = hash[1];
-      if (isset(_key) && _key == hash[0]) {
+      if (isset(_key) && _key === hash[0]) {
         return hash[1];
       }
     }

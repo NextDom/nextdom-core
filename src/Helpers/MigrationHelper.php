@@ -30,10 +30,12 @@ use NextDom\Managers\ConsistencyManager;
 use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\Plan3dManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\Cron;
+use NextDom\Model\Entity\PlanHeader;
 
 /**
  * Class MigrationHelper
@@ -69,33 +71,31 @@ class MigrationHelper
             LogHelper::clear($logFile);
         }
 
+        //get current version
+        $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
+        $currentVersion = array_map('intval', $currentVersion);
+
         // get previous version
         if (ConfigManager::byKey('lastUpdateVersion') == null) {
             $migrate = true;
             $previousVersion = [0, 0, 0];
-
         } else {
             $previousVersion = explode('.', ConfigManager::byKey('lastUpdateVersion'));
+            //compare versions
+            if ($currentVersion !== null && $previousVersion !== null) {
+                 $migrate = self::compareDigit(count($currentVersion), count($previousVersion), $previousVersion, $currentVersion, 0);
+            }
         }
         $previousVersion = array_map('intval', $previousVersion);
         $message = 'Migration/Update process from --> ' . implode('.', $previousVersion);
         self::logMessage($logFile, $message);
 
-        //get current version
-        $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
-        $currentVersion = array_map('intval', $currentVersion);
         $message = 'Migration/Update process to --> ' . implode('.', $currentVersion);
         self::logMessage($logFile, $message);
 
-        //compare versions
-        if ($migrate === true) {
-            if ($currentVersion !== null && $previousVersion !== null) {
-                $migrate = self::compareDigit(count($currentVersion), count($previousVersion), $previousVersion, $currentVersion, 0);
-            }
-        }
-
         // call migrate functions
         if ($migrate === true) {
+            $previousVersion[2]++;
             while ($previousVersion[0] <= $currentVersion[0]) {
                 while ($previousVersion[1] <= 10) {
                     while ($previousVersion[2] <= 10) {
@@ -245,23 +245,15 @@ class MigrationHelper
             $interactDef->setEnable(1);
             $interactDef->save();
         }
+        self::logMessage($logFile, 'Interact definition update');
 
     }
     /***********************************************************************************************************************************************************/
 
-    /***************************************************************** 0.3.0 Migration process *****************************************************************/
-    /**
-     * 0.3.0 Migration process
-     * @param string $logFile log name file to display information
-     * @throws \Exception
-     */
-    private static function migrate_0_3_0($logFile = LogTarget::MIGRATION)
-    {
-        self::movePersonalFoldersAndFilesToData($logFile);
-    }
+    /***************************************************************** 0.7.1 Migration process *****************************************************************/
 
     /**
-     * Migration to pass during migrate_themes_to_data
+     * Migration to pass during migrate_themes_to_data (should be done in 0.3.0)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
@@ -319,7 +311,7 @@ class MigrationHelper
                 }
             }
         } catch (\Exception $exception) {
-            echo $exception;
+            self::logMessage($logFile, $exception.getMessage());
             throw(new CoreException());
         }
 
@@ -336,12 +328,12 @@ class MigrationHelper
                 if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan')) {
 
                     $fileToReplace = $fileInfo->getFilename();
-                    self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/custom/plans/');
-                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/plan/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/plan/');
                 }
             }
         } catch (\Exception $exception) {
-            echo $exception;
+            self::logMessage($logFile, $exception.getMessage());
             throw(new CoreException());
         }
 
@@ -357,19 +349,25 @@ class MigrationHelper
                 // Basic loop displaying different messages based on file or folder
                 foreach ($it as $fileInfo) {
                     if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan_')) {
-
                         $fileToReplace = $fileInfo->getFilename();
-                        self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/custom/plans/');
-                        self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/plan/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/plan/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'data/custom/plans/', 'data/plan/');
+                        self::logMessage($logFile, 'File' . NEXTDOM_DATA . '/data/custom/plans/' . $fileInfo->getFilename());
+                        $dirname = dirname(NEXTDOM_DATA . '/data/plan/' . $fileInfo->getFilename());
+                        if (!is_dir($dirname)) {
+                            mkdir($dirname, 0775, true);
+                        }
+                        FileSystemHelper::rcopy(NEXTDOM_DATA . '/data/custom/plans/' . $fileInfo->getFilename(), NEXTDOM_DATA . '/data/plan/' . $fileInfo->getFilename());
                     }
                 }
 
 
-                self::migratePlanPath($logFile, '', 'public/img/', 'data/custom/plans/');
-                self::migratePlanPath($logFile, '', 'core/img/', 'data/custom/plans/');
+                self::migratePlanPath($logFile, '', 'public/img/', 'data/plan/');
+                self::migratePlanPath($logFile, '', 'core/img/', 'data/plan/');
             }
         } catch (\Exception $exception) {
-            echo $exception;
+            self::logMessage($logFile, $exception.getMessage());
             throw(new CoreException());
         }
 
@@ -427,15 +425,13 @@ class MigrationHelper
             }
         }
     }
-    /***********************************************************************************************************************************************************/
 
-    /***************************************************************** 0.5.2 Migration process *****************************************************************/
     /**
-     * 0.5.2 Migration process
+     * Migration removing user.function.class.php (should be done in 0.5.2)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_5_2($logFile = LogTarget::MIGRATION)
+    private static function migrate_removeFunctionClass($logFile = LogTarget::MIGRATION)
     {
         if (is_dir(NEXTDOM_DATA . '/data/php')) {
             FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
@@ -444,19 +440,29 @@ class MigrationHelper
         self::logMessage($logFile, 'user.function files removed');
     }
 
-    /***************************************************************** 0.6.1 Migration process *****************************************************************/
     /**
-     * 0.6.1 Migration process
+     * Migration modifying swapiness (should be done in 0.6.1)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_6_1($logFile = LogTarget::MIGRATION)
+    private static function migrate_swapiness($logFile = LogTarget::MIGRATION)
     {
-        exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
-        exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+        try {
+            exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
+            exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+        } catch (\Exception $exception) {
+            self::logMessage($logFile, $exception.getMessage());
+            throw(new CoreException());
+        }
+        self::logMessage($logFile, 'Swapiness configuration update');
     }
 
-    private static function migrate_0_6_2($logFile = LogTarget::MIGRATION)
+    /**
+     * Migration adding icon field to message table (should be done in 0.6.2)
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_updateHash($logFile = LogTarget::MIGRATION)
     {
         foreach (UserManager::all() as $user) {
             if($user->getProfils() != 'admin' || $user->getOptions('doNotRotateHash',0) == 1){
@@ -476,20 +482,103 @@ class MigrationHelper
         foreach ($result as $value) {
             try {
                 DBHelper::exec(array_values($value)[0]);
-            } catch (\Exception $e) {
-
+            } catch (\Exception $exception) {
+                self::logMessage($logFile, $exception.getMessage());
+                throw(new CoreException());
             }
         }
     }
 
-    /***************************************************************** 0.7.0 Migration process *****************************************************************/
     /**
-     * 0.7.0 Migration process
+     * Migration adding icon field to message table (should be done in 0.7.0)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_7_0($logFile = LogTarget::MIGRATION)
+    private static function migrate_messageToAddIcon($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
+        try {
+            DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
+        } catch (\Exception $exception) {
+            self::logMessage($logFile, $exception.getMessage());
+            throw(new CoreException());
+        }
+    }
+
+    /**
+     * Migration changing engine of interactQuery table (should be done in 0.7.1)
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_interactQueryEngine($logFile = LogTarget::MIGRATION)
+    {
+        try {
+            DBHelper::exec("ALTER TABLE `interactQuery` ENGINE=InnoDB;"); //Peut-être fait plus tot.
+        } catch (\Exception $exception) {
+            self::logMessage($logFile, $exception.getMessage());
+            throw(new CoreException());
+        }
+    }
+
+    /**
+     * 0.7.1 Migration process (apply all migration process from 0.3.0 not done yet)
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_7_1($logFile = LogTarget::MIGRATION)
+    {
+        self::movePersonalFoldersAndFilesToData($logFile);
+        self::migrate_removeFunctionClass($logFile);
+        self::migrate_swapiness($logFile);
+        self::migrate_updateHash($logFile);
+        self::migrate_messageToAddIcon($logFile);
+        self::migrate_interactQueryEngine($logFile);
+    }
+
+    /***************************************************************** 0.8.0 Migration process *****************************************************************/
+    /**
+     * 0.8.0 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_8_0($logFile = LogTarget::MIGRATION)
+    {
+        $dir = NEXTDOM_DATA . '/';
+        $planHeaderList = PlanHeaderManager::all();
+        foreach ($planHeaderList as $planHeader) {
+            if (!is_file($dir.$planHeader->getImgLink()) && !empty($planHeader->getImage('data'))) {
+                $dirname = dirname($dir . $planHeader->getImgLink());
+                if (!is_dir($dirname)) {
+                    mkdir($dirname, 0775, true);
+                }
+                self::logMessage($logFile, "Create " . $planHeader->getImgLink());
+                file_put_contents($dir . $planHeader->getImgLink(), base64_decode($planHeader->getImage('data')));
+                $planHeader->setImage('data', '');
+                $planHeader->save();
+            }
+        }
+        self::logMessage($logFile, 'Create background plan, and delete data in DB.');
+        // delete /data/custom/plans/
+        $custom_plans = $dir . 'data/custom/plans/';
+        FileSystemHelper::rrmdir($custom_plans);
+
+        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
+        DBHelper::exec("ALTER TABLE `eqLogic` DROP `eqReal_id`;");
+        DBHelper::exec("DROP TABLE `eqReal`;");
+        
+        DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
+        DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
+        $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+              `type` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `subtype` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `template` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `display` text COLLATE utf8_unicode_ci,
+              `replace` text COLLATE utf8_unicode_ci,
+              `test` text COLLATE utf8_unicode_ci,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `unique` (`type`,`subtype`,`name`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+        DBHelper::exec($createWidget);
     }
 }

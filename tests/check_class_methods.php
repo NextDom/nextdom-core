@@ -18,9 +18,6 @@ $ignoredMethods = [
     'eqLogic' => [
         'cast' # Usage only static (in manager)
     ],
-    'eqReal' => [
-        'getClass' # Usage only static (in manager)
-    ],
     'event' => [
         'getFileDescriptorLock', # Usage only static (in manager)
         'cleanEvent',  # Usage only static (in manager)

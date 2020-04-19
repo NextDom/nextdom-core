@@ -172,14 +172,14 @@ nextdom.eqLogic.builSelectCmd = function(queryParams) {
     success: function (cmds) {
       var result = '';
       for (var i in cmds) {
-        if ((init(queryParams.filter.type, 'all') == 'all' || cmds[i].type == queryParams.filter.type) &&
-          (init(queryParams.filter.subType, 'all') == 'all' || cmds[i].subType == queryParams.filter.subType) &&
-          (init(queryParams.filter.isHistorized, 'all') == 'all' || cmds[i].isHistorized == queryParams.filter.isHistorized)
+        if ((init(queryParams.filter.type, 'all') === 'all' || cmds[i].type === queryParams.filter.type) &&
+          (init(queryParams.filter.subType, 'all') === 'all' || cmds[i].subType === queryParams.filter.subType) &&
+          (init(queryParams.filter.isHistorized, 'all') === 'all' || cmds[i].isHistorized === queryParams.filter.isHistorized)
         ) {
           result += '<option value="' + cmds[i].id + '" data-type="' + cmds[i].type + '"  data-subType="' + cmds[i].subType + '" >' + cmds[i].name + '</option>';
         }
       }
-      if ('function' == typeof (queryParams.success)) {
+      if ('function' === typeof (queryParams.success)) {
         queryParams.success(result);
       }
     }
@@ -213,7 +213,7 @@ nextdom.eqLogic.getSelectModal = function(_options, callback) {
       var retour = {};
       retour.human = mod_insertEqLogic.getValue();
       retour.id = mod_insertEqLogic.getId();
-      if ($.trim(retour) != '') {
+      if ($.trim(retour) !== '') {
         callback(retour);
       }
       $(this).dialog('close');
@@ -246,7 +246,7 @@ nextdom.eqLogic.refreshValue = function(queryParams) {
         var eqLogic = eqLogics[i].eqLogic;
         var visible = eqLogic.is(":visible");
         var uid = html.attr('data-eqLogic_uid');
-        if (uid != 'undefined') {
+        if (uid !== 'undefined') {
           eqLogic.attr('data-eqLogic_uid', uid);
         }
         eqLogic.empty().html(html.children());

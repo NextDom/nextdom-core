@@ -168,12 +168,13 @@
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label class="control-label">{{ 'Icône' }}</label>
                                 <div class="mix-group">
-                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'Choisir' }}</span></a>
+                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ 'common.choose' | trans }}</span></a>
                                     <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label class="control-label">{{ 'Image' }}</label>
+                                <img id="objectImg" src="{{ img }}" style="display:block;margin :10px;" width="240px" height="auto" />
                                 <div class="mix-group">
                                     <span class="btn btn-default btn-file">
                                         <i class="fas fa-cloud-upload-alt"></i>{{ 'common.send' | trans }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">

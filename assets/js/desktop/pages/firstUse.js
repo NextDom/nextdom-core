@@ -104,12 +104,12 @@ function initEvents() {
       var newPassword = $('#in_change_password').val();
       if (newPassword !== '') {
         if (newPassword === $('#in_change_password_confirm').val()) {
-          updateUserPassword(newPassword)
+          updateUserPassword(newPassword);
         } else {
-          notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error')
+          notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error');
         }
       } else {
-        notify('Erreur', '{{Veuillez saisir un mot de passe...}}', 'error')
+        notify('Erreur', '{{Veuillez saisir un mot de passe...}}', 'error');
       }
     });
 
@@ -147,7 +147,7 @@ function initEvents() {
 
     // Step 5 asked
     $('#toStep5').click(function () {
-        if (document.getElementById('nextdom-theme').value != '') {
+        if (document.getElementById('nextdom-theme').value !== '') {
             var config = $('.firstUse-Page').getValues('.configKey')[0];
             nextdom.config.save({
                 configuration: config,
@@ -165,7 +165,7 @@ function initEvents() {
 
     // Step 6 asked
     $('#toStep6').click(function () {
-        if (document.getElementById('widget-theme').value != '') {
+        if (document.getElementById('widget-theme').value !== '') {
             var profil = $('.firstUse-Page').getValues('.userAttr')[0];
             nextdom.user.saveProfils({
                 profils: profil,
@@ -362,5 +362,5 @@ $('#bt_uploadBackup').fileupload({
       $('#bt_uploadBackup').parent().removeClass('disabled');
       $('#bt_uploadBackup').parent().find('.fa-refresh').hide();
       $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').show();
-    },
+    }
 });

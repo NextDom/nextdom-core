@@ -67,20 +67,20 @@ nextdom.history.drawChart = function(queryParams) {
       handleAjaxError(request, status, error);
     },
     success: function (data) {
-      if (data.state != 'ok') {
+      if (data.state !== 'ok') {
         notify('Erreur', data.result, 'error');
         return;
       }
       if (data.result.data.length < 1) {
-        if (queryParams.option.displayAlert == false) {
+        if (queryParams.option.displayAlert === false) {
           return;
         }
         if (!queryParams.noError) {
           var message = '{{Il n\'existe encore aucun historique pour cette commande :}} ' + data.result.history_name;
-          if (init(data.result.dateStart) != '') {
-            message += (init(data.result.dateEnd) != '') ? ' {{du}} ' + data.result.dateStart + ' {{au}} ' + data.result.dateEnd : ' {{à partir de}} ' + data.result.dateStart;
+          if (init(data.result.dateStart) !== '') {
+            message += (init(data.result.dateEnd) !== '') ? ' {{du}} ' + data.result.dateStart + ' {{au}} ' + data.result.dateEnd : ' {{à partir de}} ' + data.result.dateStart;
           } else {
-            message += (init(data.result.dateEnd) != '') ? ' {{jusqu\'au}} ' + data.result.dateEnd : '';
+            message += (init(data.result.dateEnd) !== '') ? ' {{jusqu\'au}} ' + data.result.dateEnd : '';
           }
           notify('Erreur', message, 'error');
         }
@@ -90,33 +90,33 @@ nextdom.history.drawChart = function(queryParams) {
         nextdom.history.chart[queryParams.el].cmd[queryParams.cmd_id] = null;
       }
       queryParams.option.graphColor = (isset(nextdom.history.chart[queryParams.el])) ? init(queryParams.option.graphColor, Highcharts.getOptions().colors[init(nextdom.history.chart[queryParams.el].color, 0)]) : init(queryParams.option.graphColor, Highcharts.getOptions().colors[0]);
-      queryParams.option.graphStep = (queryParams.option.graphStep == '1');
+      queryParams.option.graphStep = (queryParams.option.graphStep === '1');
       if (isset(data.result.cmd)) {
-        if (init(queryParams.option.graphStep) == '') {
-          queryParams.option.graphStep = (data.result.cmd.subType == 'binary');
-          if (isset(data.result.cmd.display) && init(data.result.cmd.display.graphStep) != '') {
-            queryParams.option.graphStep = !(data.result.cmd.display.graphStep == '0');
+        if (init(queryParams.option.graphStep) === '') {
+          queryParams.option.graphStep = (data.result.cmd.subType === 'binary');
+          if (isset(data.result.cmd.display) && init(data.result.cmd.display.graphStep) !== '') {
+            queryParams.option.graphStep = !(data.result.cmd.display.graphStep === '0');
           }
         }
-        if (init(queryParams.option.graphType) == '') {
-          queryParams.option.graphType = (isset(data.result.cmd.display) && init(data.result.cmd.display.graphType) != '') ? data.result.cmd.display.graphType : 'line';
+        if (init(queryParams.option.graphType) === '') {
+          queryParams.option.graphType = (isset(data.result.cmd.display) && init(data.result.cmd.display.graphType) !== '') ? data.result.cmd.display.graphType : 'line';
         }
-        if (init(queryParams.option.groupingType) == '' && isset(data.result.cmd.display) && init(data.result.cmd.display.groupingType) != '') {
+        if (init(queryParams.option.groupingType) === '' && isset(data.result.cmd.display) && init(data.result.cmd.display.groupingType) !== '') {
           var split = data.result.cmd.display.groupingType.split('::');
           queryParams.option.groupingType = {function: split[0], time: split[1]};
         }
       }
-      var stacking = (queryParams.option.graphStack === undefined || queryParams.option.graphStack == null || queryParams.option.graphStack == 0) ? null : 'value';
-      queryParams.option.graphStack = (queryParams.option.graphStack === undefined || queryParams.option.graphStack == null || queryParams.option.graphStack == 0) ? Math.floor(Math.random() * 10000 + 2) : 1;
+      var stacking = (queryParams.option.graphStack === undefined || queryParams.option.graphStack === null || queryParams.option.graphStack === 0) ? null : 'value';
+      queryParams.option.graphStack = (queryParams.option.graphStack === undefined || queryParams.option.graphStack === null || queryParams.option.graphStack === 0) ? Math.floor(Math.random() * 10000 + 2) : 1;
       queryParams.option.graphScale = (queryParams.option.graphScale === undefined) ? 0 : parseInt(queryParams.option.graphScale);
-      queryParams.showLegend = init(queryParams.showLegend, true) && init(queryParams.showLegend, true) != '0';
-      queryParams.showTimeSelector = init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) != '0';
-      queryParams.showScrollbar = init(queryParams.showScrollbar, true) && init(queryParams.showScrollbar, true) != '0';
-      queryParams.showNavigator = init(queryParams.showNavigator, true) && init(queryParams.showNavigator, true) != '0';
+      queryParams.showLegend = init(queryParams.showLegend, true) && init(queryParams.showLegend, true) !== '0';
+      queryParams.showTimeSelector = init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) !== '0';
+      queryParams.showScrollbar = init(queryParams.showScrollbar, true) && init(queryParams.showScrollbar, true) !== '0';
+      queryParams.showNavigator = init(queryParams.showNavigator, true) && init(queryParams.showNavigator, true) !== '0';
 
       var legend = {borderColor: 'black', borderWidth: 2, shadow: true};
       legend.enabled = init(queryParams.showLegend, true);
-      if (isset(queryParams.newGraph) && queryParams.newGraph == true) {
+      if (isset(queryParams.newGraph) && queryParams.newGraph === true) {
         delete nextdom.history.chart[queryParams.el];
       }
       var charts = {
@@ -133,15 +133,15 @@ nextdom.history.drawChart = function(queryParams) {
         charts.height = null;
       }
 
-      if (isset(queryParams.transparentBackground) && queryParams.transparentBackground == '1') {
+      if (isset(queryParams.transparentBackground) && queryParams.transparentBackground === '1') {
         charts.backgroundColor = 'rgba(255, 255, 255, 0)';
       }
 
-      if (isset(nextdom.history.chart[queryParams.el]) && nextdom.history.chart[queryParams.el].type == 'pie') {
+      if (isset(nextdom.history.chart[queryParams.el]) && nextdom.history.chart[queryParams.el].type === 'pie') {
         queryParams.option.graphType = 'pie';
       }
 
-      if (queryParams.option.graphType == 'pie') {
+      if (queryParams.option.graphType === 'pie') {
         var series = {
           type: queryParams.option.graphType,
           id: queryParams.cmd_id,
@@ -152,7 +152,7 @@ nextdom.history.drawChart = function(queryParams) {
           }],
           color: queryParams.option.graphColor,
         };
-        if (!isset(nextdom.history.chart[queryParams.el]) || (isset(queryParams.newGraph) && queryParams.newGraph == true)) {
+        if (!isset(nextdom.history.chart[queryParams.el]) || (isset(queryParams.newGraph) && queryParams.newGraph === true)) {
           nextdom.history.chart[queryParams.el] = {};
           nextdom.history.chart[queryParams.el].cmd = new Array();
           nextdom.history.chart[queryParams.el].color = 0;
@@ -164,14 +164,14 @@ nextdom.history.drawChart = function(queryParams) {
             },
             credits: {
               text: '',
-              href: '',
+              href: ''
             },
             exporting: {
               enabled: queryParams.enableExport || true
             },
             tooltip: {
               pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
-              valueDecimals: 2,
+              valueDecimals: 2
             },
             plotOptions: {
               pie: {
@@ -200,7 +200,7 @@ nextdom.history.drawChart = function(queryParams) {
         var dataGrouping = {
           enabled: false
         };
-        if (isset(queryParams.option.groupingType) && jQuery.type(queryParams.option.groupingType) == 'string' && queryParams.option.groupingType != '') {
+        if (isset(queryParams.option.groupingType) && jQuery.type(queryParams.option.groupingType) === 'string' && queryParams.option.groupingType !== '') {
           var split = queryParams.option.groupingType.split('::');
           queryParams.option.groupingType = {function: split[0], time: split[1]};
         }
@@ -303,20 +303,20 @@ nextdom.history.drawChart = function(queryParams) {
           nextdom.history.chart[queryParams.el].color = 0;
           nextdom.history.chart[queryParams.el].nbTimeline = 1;
 
-          if (queryParams.dateRange == '30 min') {
-            var dateRange = 0
-          } else if (queryParams.dateRange == '1 hour') {
-            var dateRange = 1
-          } else if (queryParams.dateRange == '1 day') {
-            var dateRange = 2
-          } else if (queryParams.dateRange == '7 days') {
-            var dateRange = 3
-          } else if (queryParams.dateRange == '1 month') {
-            var dateRange = 4
-          } else if (queryParams.dateRange == '1 year') {
-            var dateRange = 5
-          } else if (queryParams.dateRange == 'all') {
-            var dateRange = 6
+          if (queryParams.dateRange === '30 min') {
+            var dateRange = 0;
+          } else if (queryParams.dateRange === '1 hour') {
+            var dateRange = 1;
+          } else if (queryParams.dateRange === '1 day') {
+            var dateRange = 2;
+          } else if (queryParams.dateRange === '7 days') {
+            var dateRange = 3;
+          } else if (queryParams.dateRange === '1 month') {
+            var dateRange = 4;
+          } else if (queryParams.dateRange === '1 year') {
+            var dateRange = 5;
+          } else if (queryParams.dateRange === 'all') {
+            var dateRange = 6;
           } else {
             var dateRange = 3;
           }
@@ -326,7 +326,7 @@ nextdom.history.drawChart = function(queryParams) {
             chart: charts,
             credits: {
               text: '',
-              href: '',
+              href: ''
             },
             navigator: {
               enabled: queryParams.showNavigator,
@@ -375,14 +375,14 @@ nextdom.history.drawChart = function(queryParams) {
             tooltip: {
               xDateFormat: '%Y-%m-%d %H:%M:%S',
               pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
-              valueDecimals: 2,
+              valueDecimals: 2
             },
             yAxis: [{
               format: '{value}',
               showEmpty: false,
               minPadding: 0.001,
               maxPadding: 0.001,
-              showLastLabel: true,
+              showLastLabel: true
             }, {
               opposite: false,
               format: '{value}',
@@ -434,7 +434,7 @@ nextdom.history.drawChart = function(queryParams) {
       for (var i in plotband) {
         nextdom.history.chart[queryParams.el].chart.xAxis[0].addPlotBand(plotband[i]);
       }
-      if (typeof (init(queryParams.success)) == 'function') {
+      if (typeof (init(queryParams.success)) === 'function') {
         queryParams.success(data.result);
       }
     }

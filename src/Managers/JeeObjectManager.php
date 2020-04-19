@@ -38,10 +38,12 @@ use NextDom\Enums\CmdType;
 use NextDom\Enums\Common;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\NextDomFolder;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\JeeObject;
@@ -564,6 +566,18 @@ class JeeObjectManager extends BaseManager
             }
             $cmd->setUnite($def[$key]['unit']);
             $cmd->save();
+        }
+    }
+
+    /**
+     * Clean plan images
+     *
+     * @param int $planHeaderId
+     */
+    public static function cleanPlanImageFolder(int $planHeaderId) {
+        $filesToClean = FileSystemHelper::ls(NextDomFolder::PLAN_IMAGE, NextDomObj::PLAN_HEADER . $planHeaderId . '*');
+        foreach ($filesToClean as $fileToClean) {
+            unlink(NextDomFolder::PLAN_IMAGE . $fileToClean);
         }
     }
 }

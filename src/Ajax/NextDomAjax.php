@@ -407,4 +407,11 @@ class NextDomAjax extends BaseAjax
         unlink(NEXTDOM_DATA . '/data/remove_history.json');
         $this->ajax->success();
     }
+
+    public function version()
+    {
+        $version['nextdom'] = NextDomHelper::getNextdomVersion();
+        $version['jeedom'] = NextDomHelper::getJeedomVersion();
+        $this->ajax->success($version);
+    }
 }

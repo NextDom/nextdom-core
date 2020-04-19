@@ -18,13 +18,13 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\NextDomFolder;
 use NextDom\Enums\Common;
 use NextDom\Enums\EqLogicViewType;
 use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
-use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
@@ -32,7 +32,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Model\Entity\EqLogic;
 use NextDom\Model\Entity\JeeObject;
-use NextDom\Model\Entity\Scenario;
+use NextDom\Model\DataClass\UploadedImage;
 
 /**
  * Class ObjectAjax
@@ -349,11 +349,56 @@ class ObjectAjax extends BaseAjax
         if (!is_object($resultObject)) {
             throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::initInt(AjaxParams::ID));
         }
-        $resultObject->setImage('data', '');
         $resultObject->setImage('sha512', '');
         $resultObject->save();
-        @rrmdir(NEXTDOM_ROOT . '/data/object/object');
+        @unlink(NEXTDOM_DATA . '/' . $resultObject->getImgLink());
         $this->ajax->success();
+    }
+
+    /**
+     * Get data of uploaded file
+     *
+     * @return UploadedImage
+     * @throws CoreException
+     */
+    private function getUploadedImageData()
+    {
+        $uploadedImageData = new UploadedImage();
+        if (!isset($_FILES['file'])) {
+            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
+        }
+        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
+        $uploadedImageData->setType(substr($extension, 1));
+        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
+            throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
+        }
+        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
+            throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
+        }
+        $uploadedImageData->setSize(getimagesize($_FILES['file']['tmp_name']));
+        $fileContent = file_get_contents($_FILES['file']['tmp_name']);
+        $uploadedImageData->setHash(Utils::sha512($fileContent));
+        $uploadedImageData->setPath($_FILES['file']['tmp_name']);
+        return $uploadedImageData;
+    }
+
+    /**
+     * Check file path and move file
+     *
+     * @param $uploadFile
+     * @param $targetPath
+     *
+     * @throws CoreException
+     */
+    private function checkAndMoveUploadImage($uploadFile, $targetPath)
+    {
+        // Check $targetPath don't go up
+        if (preg_match('/.*(\.\.\/)|(\/\.\.).*/', $targetPath) !== 0) {
+            throw new CoreException(__('Le répertoire de destination n\'est pas valide'));
+        }
+        if (!move_uploaded_file($uploadFile, $targetPath)) {
+            throw new CoreException(__('Impossible de sauvegarder l\'image'));
+        }
     }
 
     /**
@@ -366,38 +411,22 @@ class ObjectAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $resultObject = JeeObjectManager::byId(Utils::initInt(AjaxParams::ID));
+
+        if (!is_dir(NextDomFolder::PLAN_OBJECT)) {
+            mkdir(NextDomFolder::PLAN_OBJECT, 0755, true);
+        }
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        if (!isset($_FILES['file'])) {
-            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
-            throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
-        }
-        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $resultObject->getId() . '-*');
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                unlink(NEXTDOM_DATA . '/data/object/' . $file);
-            }
-        }
-        $resultObject->setImage('type', str_replace('.', '', $extension));
-        $resultObject->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
-        $resultObject->setImage('sha512', sha512($resultObject->getImage('data')));
-        $filename = 'object' . $resultObject->getId() . '-' . $resultObject->getImage('sha512') . '.' . $resultObject->getImage('type');
-        $dir = NEXTDOM_DATA . '/data/custom/object/';
-        if (!file_exists($dir)) {
-            mkdir($dir);
-        }
-        $filepath = $dir . $filename;
-        file_put_contents($filepath, file_get_contents($_FILES['file']['tmp_name']));
-        if (!file_exists($filepath)) {
-            throw new CoreException(__('Impossible de sauvegarder l\'image'));
-        }
+        $uploadedImageData = $this->getUploadedImageData();
+        JeeObjectManager::cleanPlanImageFolder($resultObject->getId());
+        $resultObject->setImage('type', $uploadedImageData->getType());
+        $resultObject->setImage('size', $uploadedImageData->getSize());
+        $resultObject->setImage('sha512', $uploadedImageData->getHash());
+        $destFilename = NextDomObj::PLAN_OBJECT . $resultObject->getId() . '-' . $uploadedImageData->getHash() . '.' . $uploadedImageData->getType();
+        $this->checkAndMoveUploadImage($uploadedImageData->getPath(), NextDomFolder::PLAN_OBJECT . $destFilename);
+        $resultObject->setConfiguration('desktopSizeX', $uploadedImageData->getSizeX());
+        $resultObject->setConfiguration('desktopSizeY', $uploadedImageData->getSizeY());
         $resultObject->save();
         $this->ajax->success();
     }

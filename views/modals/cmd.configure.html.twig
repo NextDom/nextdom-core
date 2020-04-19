@@ -53,15 +53,15 @@
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#cmd_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle"></i>{{ 'Informations' }}</a></li>
             <li role="presentation"><a href="#cmd_configuration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-wrench"></i>{{ 'Configuration' }}</a></li>
-            {% if cmdType == 'info' %}
+                    {% if cmdType == 'info' %}
                 <li role="presentation"><a href="#cmd_alert" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle"></i>{{ 'Alertes' }}</a></li>
-            {% endif %}
-            {% if cmdWidgetPossibilityCustom %}
+                    {% endif %}
+                    {% if cmdWidgetPossibilityCustom %}
                 <li role="presentation"><a href="#cmd_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop"></i>{{ 'Affichage' }}</a></li>
-            {% endif %}
-            {% if cmdWidgetPossibilityCustomHtmlCode %}
+                    {% endif %}
+                    {% if cmdWidgetPossibilityCustomHtmlCode %}
                 <li role="presentation"><a href="#cmd_html" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-code-fork"></i>{{ 'Code' }}</a></li>
-            {% endif %}
+                    {% endif %}
         </ul>
 
         <div class="tab-content" id="div_displayCmdConfigure">
@@ -177,10 +177,10 @@
                                 {% for usedByEqLogic in cmdUsedBy['eqLogic'] %}
                                     {% if usedByEqLogic.getIsEnable() != 1 %}
                                         <span class="label label-config-inactive cursor"><a href="{{ usedByEqLogic.getLinkToConfiguration() }}"><span>{{ usedByEqLogic.getHumanName() }}</span></a></span><br/>
-                                    {% else %}
+                                                {% else %}
                                         <span class="label label-config cursor"><a href="{{ usedByEqLogic.getLinkToConfiguration() }}"><span>{{ usedByEqLogic.getHumanName() }}</span></a></span><br/>
-                                    {% endif %}
-                                {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
                             </div>
                         </div>
                         <div class="form-group col-sm-6 col-xs-12 col-padding">
@@ -188,7 +188,7 @@
                             <div>
                                 {% for usedByCmd in cmdUsedBy['cmd'] %}
                                     <span class="label label-config cursor"><a href="{{ usedByCmd.getEqLogic().getLinkToConfiguration() }}"><span>{{ usedByCmd.getHumanName() }}</span></a></span><br/>
-                                {% endfor %}
+                                            {% endfor %}
                             </div>
                         </div>
                         <div class="form-group col-sm-6 col-xs-12 col-padding">
@@ -197,10 +197,10 @@
                                 {% for usedByScenario in cmdUsedBy['scenario'] %}
                                     {% if usedByScenario.getIsActive() != 1 %}
                                         <span class="label label-config-inactive cursor"><a href="{{ usedByScenario.getLinkToConfiguration() }}"><span>{{ usedByScenario.getHumanName() }}</span></a></span><br/>
-                                    {% else %}
+                                                {% else %}
                                         <span class="label label-config cursor"><a href="{{ usedByScenario.getLinkToConfiguration() }}"><span>{{ usedByScenario.getHumanName() }}</span></a></span><br/>
-                                    {% endif %}
-                                {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -252,175 +252,175 @@
                         </div>
                     {% endif %}
 
-                {% if cmdType == 'action' %}
-                    <legend><i class="fas fa-exclamation-triangle"></i>{{ 'Restriction de l\'action' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Confirmer l\'action' }}</label>
-                            <div>
-                                <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="actionConfirm"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Code d\'accès' }}</label>
-                            <div>
-                                <input type="password" class="cmdAttr form-control" data-l1key="configuration" data-l2key="actionCodeAccess" autocomplete="off"/>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% if cmdType == 'info' %}
-                    <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action sur la valeur' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Action sur valeur, si' }}</label>
-                            <div class="mix-group">
-                                <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdOperator">
-                                    <option value="==">{{ 'égal' }}</option>
-                                    <option value=">">{{ 'supérieur' }}</option>
-                                    <option value="<">{{ 'inférieur' }}</option>
-                                    <option value=" !=">{{ 'différent' }}</option>
-                                </select>
-                                <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTest"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'plus de' }}</label>
-                            <div class="input-group">
-                                <input type="number" class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTime"/>
-                                <span class="input-group-addon">{{ 'min' }}</span>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Action' }}</label>
-                            <div>
-                                <a class="btn btn-success" id="bt_addActionCheckCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
-                            </div>
-                        </div>
-                        <div id="div_actionCheckCmd"></div>
-                    </div>
-                {% endif %}
-
-                {% if cmdType == 'action' %}
-                    <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action avant exécution de la commande' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Action' }}</label>
-                            <div>
-                                <a class="btn btn-success" id="bt_addActionPreExecCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
-                            </div>
-                        </div>
-                        <div id="div_actionPreExecCmd"></div>
-                    </div>
-
-                    <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action après exécution de la commande' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Action' }}</label>
-                            <div>
-                                <a class="btn btn-success" id="bt_addActionPostExecCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
-                            </div>
-                        </div>
-                        <div id="div_actionPostExecCmd"></div>
-                    </div>
-                {% endif %}
-
-                {% if cmdType == 'info' and cmdTypeIsHistorized %}
-                    <legend><i class="fas fa-bar-chart-o"></i>{{ 'Historique' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Historiser' }}</label>
-                            <div>
-                                <input type="checkbox" class="cmdAttr" data-l1key="isHistorized"/>
-                            </div>
-                        </div>
-                        {% if cmdIsHistorizedCanBeSmooth %}
+                    {% if cmdType == 'action' %}
+                        <legend><i class="fas fa-exclamation-triangle"></i>{{ 'Restriction de l\'action' }}</legend>
+                        <div class="row">
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Mode de lissage' }}</label>
+                                <label class="control-label">{{ 'Confirmer l\'action' }}</label>
                                 <div>
-                                    <select class="form-control cmdAttr" data-l1key="configuration" data-l2key="historizeMode">
-                                        <option value="avg">{{ 'Moyenne' }}</option>
-                                        <option value="min">{{ 'Minimum' }}</option>
-                                        <option value="max">{{ 'Maximum' }}</option>
-                                        <option value="none">{{ 'Aucun' }}</option>
-                                    </select>
+                                    <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="actionConfirm"/>
                                 </div>
                             </div>
-                        {% endif %}
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Purger l\'historique' }}</label>
-                            <div class="input-group">
-                                <select class="form-control cmdAttr" data-l1key="configuration"
-                                        data-l2key="historyPurge">
-                                    <option value="">{{ 'Jamais' }}</option>
-                                    <option value="-1 day">{{ '1 jour' }}</option>
-                                    <option value="-7 days">{{ '7 jours' }}</option>
-                                    <option value="-1 month">{{ '1 mois' }}</option>
-                                    <option value="-3 month">{{ '3 mois' }}</option>
-                                    <option value="-6 month">{{ '6 mois' }}</option>
-                                    <option value="-1 year">{{ '1 an' }}</option>
-                                </select>
-                                <span class="input-group-addon">{{ 'si plus vieux que' }}</span>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Code d\'accès' }}</label>
+                                <div>
+                                    <input type="password" class="cmdAttr form-control" data-l1key="configuration" data-l2key="actionCodeAccess" autocomplete="off"/>
+                                </div>
                             </div>
                         </div>
-                        {% if cmdIsHistorized == 1 %}
+                    {% endif %}
+
+                    {% if cmdType == 'info' %}
+                        <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action sur la valeur' }}</legend>
+                        <div class="row">
                             <div class="form-group col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Copie' }}</label>
-                                <div>
-                                    <a class="btn btn-warning" id="bt_cmdConfigureCopyHistory"><i class="fas fa-clone"></i>{{ 'Copier l\'historique de cette commande sur une autre commande' }}</a>
+                                <label class="control-label">{{ 'Action sur valeur, si' }}</label>
+                                <div class="mix-group">
+                                    <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdOperator">
+                                        <option value="==">{{ 'égal' }}</option>
+                                        <option value=">">{{ 'supérieur' }}</option>
+                                        <option value="<">{{ 'inférieur' }}</option>
+                                        <option value=" !=">{{ 'différent' }}</option>
+                                    </select>
+                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTest"/>
                                 </div>
                             </div>
-                        {% endif %}
-                    </div>
-                {% endif %}
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'plus de' }}</label>
+                                <div class="input-group">
+                                    <input type="number" class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTime"/>
+                                    <span class="input-group-addon">{{ 'min' }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Action' }}</label>
+                                <div>
+                                    <a class="btn btn-success" id="bt_addActionCheckCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
+                                </div>
+                            </div>
+                            <div id="div_actionCheckCmd"></div>
+                        </div>
+                    {% endif %}
 
-                {% if cmdType == 'info' %}
-                    <legend><i class="fas fa-thermometer-three-quarters"></i>{{ 'Gestion des valeurs' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Valeurs interdites' }}</label>
-                            <div class="input-group">
-                                <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="denyValues"/>
-                                <span class="input-group-addon">{{ 'séparées par des ";"' }}</span>
+                    {% if cmdType == 'action' %}
+                        <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action avant exécution de la commande' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Action' }}</label>
+                                <div>
+                                    <a class="btn btn-success" id="bt_addActionPreExecCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
+                                </div>
                             </div>
+                            <div id="div_actionPreExecCmd"></div>
                         </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Valeur retour d\'état' }}</label>
-                            <div>
-                                <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateValue"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Durée avant retour d\'état' }}</label>
-                            <div class="input-group">
-                                <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateTime"/>
-                                <span class="input-group-addon">{{ 'min' }}</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <legend><i class="fas fa-plus"></i>{{ 'Autres' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Gestion de la répétition' }}</label>
-                            <div class="input-group">
-                                <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="repeatEventManagement">
-                                    <option value="auto">{{ 'Répéter automatiquement' }}</option>
-                                    <option value="always">{{ 'Toujours répéter' }}</option>
-                                    <option value="never">{{ 'Jamais répéter' }}</option>
-                                </select>
-                                <span class="input-group-addon">{{ 'les valeurs' }}</span>
+                        <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action après exécution de la commande' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Action' }}</label>
+                                <div>
+                                    <a class="btn btn-success" id="bt_addActionPostExecCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
+                                </div>
+                            </div>
+                            <div id="div_actionPostExecCmd"></div>
+                        </div>
+                    {% endif %}
+
+                    {% if cmdType == 'info' and cmdTypeIsHistorized %}
+                        <legend><i class="fas fa-bar-chart-o"></i>{{ 'Historique' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Historiser' }}</label>
+                                <div>
+                                    <input type="checkbox" class="cmdAttr" data-l1key="isHistorized"/>
+                                </div>
+                            </div>
+                            {% if cmdIsHistorizedCanBeSmooth %}
+                                <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                    <label class="control-label">{{ 'Mode de lissage' }}</label>
+                                    <div>
+                                        <select class="form-control cmdAttr" data-l1key="configuration" data-l2key="historizeMode">
+                                            <option value="avg">{{ 'Moyenne' }}</option>
+                                            <option value="min">{{ 'Minimum' }}</option>
+                                            <option value="max">{{ 'Maximum' }}</option>
+                                            <option value="none">{{ 'Aucun' }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Purger l\'historique' }}</label>
+                                <div class="input-group">
+                                    <select class="form-control cmdAttr" data-l1key="configuration"
+                                            data-l2key="historyPurge">
+                                        <option value="">{{ 'Jamais' }}</option>
+                                        <option value="-1 day">{{ '1 jour' }}</option>
+                                        <option value="-7 days">{{ '7 jours' }}</option>
+                                        <option value="-1 month">{{ '1 mois' }}</option>
+                                        <option value="-3 month">{{ '3 mois' }}</option>
+                                        <option value="-6 month">{{ '6 mois' }}</option>
+                                        <option value="-1 year">{{ '1 an' }}</option>
+                                    </select>
+                                    <span class="input-group-addon">{{ 'si plus vieux que' }}</span>
+                                </div>
+                            </div>
+                            {% if cmdIsHistorized == 1 %}
+                                <div class="form-group col-xs-12 col-padding">
+                                    <label class="control-label">{{ 'Copie' }}</label>
+                                    <div>
+                                        <a class="btn btn-warning" id="bt_cmdConfigureCopyHistory"><i class="fas fa-clone"></i>{{ 'Copier l\'historique de cette commande sur une autre commande' }}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if cmdType == 'info' %}
+                        <legend><i class="fas fa-thermometer-three-quarters"></i>{{ 'Gestion des valeurs' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Valeurs interdites' }}</label>
+                                <div class="input-group">
+                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="denyValues"/>
+                                    <span class="input-group-addon">{{ 'séparées par des ";"' }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Valeur retour d\'état' }}</label>
+                                <div>
+                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateValue"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Durée avant retour d\'état' }}</label>
+                                <div class="input-group">
+                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateTime"/>
+                                    <span class="input-group-addon">{{ 'min' }}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Push URL' }}</label>
-                            <div>
-                                <input class="cmdAttr form-control tooltips" data-l1key="configuration" data-l2key="nextdomPushUrl" title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur de la commande. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)' }}"/>
+
+                        <legend><i class="fas fa-plus"></i>{{ 'Autres' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Gestion de la répétition' }}</label>
+                                <div class="input-group">
+                                    <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="repeatEventManagement">
+                                        <option value="auto">{{ 'Répéter automatiquement' }}</option>
+                                        <option value="always">{{ 'Toujours répéter' }}</option>
+                                        <option value="never">{{ 'Jamais répéter' }}</option>
+                                    </select>
+                                    <span class="input-group-addon">{{ 'les valeurs' }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Push URL' }}</label>
+                                <div>
+                                    <input class="cmdAttr form-control tooltips" data-l1key="configuration" data-l2key="nextdomPushUrl" title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur de la commande. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)' }}"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
             </div>
 
             {% if cmdType == 'info' %}
@@ -457,12 +457,12 @@
                         <legend><i class="fas fa-tint"></i>{{ 'Widget' }}</legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
-                            <tr>
-                                <th></th>
-                                {% for displayTypevalue in eqLogicDisplayType %}
-                                    <th>{{ displayTypevalue['name'] }}</th>
-                                {% endfor %}
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                        {% for displayTypevalue in eqLogicDisplayType %}
+                                        <th>{{ displayTypevalue['name'] }}</th>
+                                        {% endfor %}
+                                </tr>
                             </thead>
                             <tbody>
                                 {% if cmdWidgetCanCustomWidget %}
@@ -471,14 +471,14 @@
                                         <td colspan="3">
                                             {% if cmdWidgetCanCustomWidgetDashboard %}
                                                 <select class="form-control cmdAttr" data-l1key="template" data-l2key="dashboard">
-                                                    <option value="default">defaut (core)</option>
+                                                    <option value="default">Défaut</option>
                                                     {% if cmdWidgetDashboard is defined %}
-                                                        {% for widget in cmdWidgetDashboard %}
-                                                            {% if widget['name'] != 'default' %}
-                                                                <option value="{{ widget['name'] }}">{{ widget['name'] }}
-                                                                    ({{ widget['location'] }})
-                                                                </option>
-                                                            {% endif %}
+                                                        {% for keyType, type in cmdWidgetDashboard %}
+                                                            <optgroup label="{{ keyType|capitalize }}">
+                                                                {% for widget in type %}
+                                                                    <option value="{{ widget['location'] }}::{{ widget['name'] }}">{{ widget['name']|capitalize }}</option>
+                                                                {% endfor %}
+                                                            </optgroup>
                                                         {% endfor %}
                                                     {% endif %}
                                                 </select>
@@ -557,11 +557,11 @@
                             <legend><i class="fas fa-pencil-alt"></i>{{ 'Paramètres optionnels widget' }}</legend>
                             <table class="table table-bordered table-condensed" id="table_widgetParametersCmd">
                                 <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Valeur</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Valeur</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {% if cmdDisplayParameters != '' %}
