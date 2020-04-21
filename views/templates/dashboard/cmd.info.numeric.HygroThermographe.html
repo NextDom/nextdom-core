@@ -3,6 +3,8 @@
   <span class="intNumTemp fontDigital value"></span>
   <span class="decNumTemp fontDigital value"></span>
   <span class="uniteTemp fontDigital">°C</span>
+  <span class="numTempMin fontDigital value"></span>
+  <span class="numTempMax fontDigital value"></span>
   <span class="intNumHumidity fontDigital value"></span>
   <span class="decNumHumidity fontDigital value"></span>
   <span class="uniteHumidity fontDigital">%</span>
@@ -19,7 +21,7 @@
     .widget-hygrothermographe span.fontDigital{
       font-family: "Digital-7";
       position: absolute;
-      color: 	#181818;
+      color: #e0e4ea;
     }
     .widget-hygrothermographe span.fontDigital.value{
       transform : scale(0.7,1);
@@ -33,53 +35,102 @@
     }
     .widget-hygrothermographe span.intNumTemp {
       font-size:80px;
-      letter-spacing: 6px;
+      letter-spacing: 4px;
       top: 80px;
-      right: 7px;
+      right: 80px;
     }
     .widget-hygrothermographe span.decNumTemp {
       font-size:50px;
       top: 90px;
-      right: -30px;
-    }
-    .widget-hygrothermographe span.uniteTemp {
-      font-size:20px;
-      font-weight: bold;
-      top: 55px;
-      right: 85px;
+      right: 76px;
     }
     .widget-hygrothermographe span.intNumHumidity {
-      font-size: 65px;
-      letter-spacing: 6px;
-      top: 143px;
-      right: 4px;
+      font-size: 60px;
+      letter-spacing: 3px;
+      top: 145px;
+      right: 80px;
     }
     .widget-hygrothermographe span.decNumHumidity {
       font-size:35px;
-      top: 154px;
-      right: -32px;
+      top: 153px;
+      right: 79px;
+    }
+    .widget-hygrothermographe span.uniteTemp {
+      top: 55px;
+      right: 90px;
     }
     .widget-hygrothermographe span.uniteHumidity {
-      display : none;
-      font-size:20px;
-      font-weight: bold;
       top: 130px;
-      right: 85px;
+      right: 88px;
+    }
+    .widget-hygrothermographe span.uniteTemp ,
+    .widget-hygrothermographe span.uniteHumidity {
+       display : none;
+       font-weight: bold;
+    }
+    .widget-hygrothermographe span.numTempMax ,
+    .widget-hygrothermographe span.numTempMin,
+    .widget-hygrothermographe span.uniteTemp ,
+    .widget-hygrothermographe span.uniteHumidity {
+         font-family: "roboto";
+         font-size:18px;
+     }
+
+    .widget-hygrothermographe span.numTempMax ,
+    .widget-hygrothermographe span.numTempMin {
+         right: 36px;
+     }
+    .widget-hygrothermographe span.numTempMax {
+      color: lawngreen;
+      top: 80px;
+    }
+    .widget-hygrothermographe span.numTempMin {
+      color: #dd8c1a;
+      top: 97px;
     }
   </style>
   <script>
+    function setTheme(theme){
+      var cmd = $('.cmd[data-cmd_id=#id#]');
+      if (theme === 'Light') {
+        cmd.find('.hygrothermographe-background').attr('src', 'core/template/dashboard/cmd.info.numeric.HygroThermographe/No.ext_100_Light.png');
+        $('.widget-hygrothermographe span.fontDigital').css('color', '#181818');
+        $('.widget-hygrothermographe span.numTempMin').css('color', 'red');
+        $('.widget-hygrothermographe span.numTempMax').css('color', 'green');
+      } else {
+        cmd.find('.hygrothermographe-background').attr('src', 'core/template/dashboard/cmd.info.numeric.HygroThermographe/No.ext_100_Dark.png');
+        $('.widget-hygrothermographe span.fontDigital').css('color', '#e0e4ea');
+        $('.widget-hygrothermographe span.numTempMin').css('color', '#dd8c1a');
+        $('.widget-hygrothermographe span.numTempMax').css('color', 'lawngreen');
+      }
+    }
+
     nextdom.cmd.update['#id#'] = function(_options){
       var widget = $('.cmd[data-cmd_id=#id#]').closest('.eqLogic').find('.widget-hygrothermographe:first');
-      if('#generic_type#' === 'TEMPERATURE'){
-        var n = parseFloat(_options.display_value).toFixed(1);
-        var _int = n.split('.')[0];
-        var _dec = n.split('.')[1];
-        widget.find('.intNumTemp').text(_int+".").attr('title','Valeur du '+_options.valueDate+', collectée le '+_options.collectDate);
-        widget.find('.decNumTemp').text(_dec);
-      }else if('#generic_type#' === 'HUMIDITY'){
-        widget.find('.uniteHumidity').show();
-        widget.find('.intNumHumidity').text(Math.floor(_options.display_value)+".").attr('title','Valeur du '+_options.valueDate+', collectée le '+_options.collectDate);
-        widget.find('.decNumHumidity').text(Math.round((_options.display_value - Math.floor(_options.display_value)) * 10));
+      switch ('#generic_type#') {
+        case 'TEMPERATURE' :
+        case 'WEATHER_TEMPERATURE' :
+          var n = parseFloat(_options.display_value).toFixed(1);
+          var _int = n.split('.')[0];
+          var _dec = n.split('.')[1];
+          widget.find('.intNumTemp').text(_int+".").attr('title','Valeur du '+_options.valueDate+', collectée le '+_options.collectDate);
+          widget.find('.decNumTemp').text(_dec);
+          widget.find('.uniteTemp').show();
+          widget.find('.uniteTemp').text('#unite#');
+          break;
+        case 'HUMIDITY' :
+        case 'WEATHER_HUMIDITY' :
+          widget.find('.intNumHumidity').text(Math.floor(_options.display_value)+".").attr('title','Valeur du '+_options.valueDate+', collectée le '+_options.collectDate);
+          widget.find('.decNumHumidity').text(Math.round((_options.display_value - Math.floor(_options.display_value)) * 10));
+          widget.find('.uniteHumidity').show();
+          widget.find('.uniteHumidity').text('#unite#');
+          break;
+        case 'WEATHER_TEMPERATURE_MAX' :
+          widget.find('.numTempMax').text(parseFloat(_options.display_value).toFixed(1) + "°").attr('title','Valeur du '+_options.valueDate+', collectée le '+_options.collectDate);
+          break;
+        case 'WEATHER_TEMPERATURE_MIN' :
+          widget.find('.numTempMin').text(parseFloat(_options.display_value).toFixed(1) + "°").attr('title','Valeur du '+_options.valueDate+', collectée le '+_options.collectDate);
+          break;
       }
     };
     nextdom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#'});
@@ -89,49 +140,63 @@
         $('.cmd[data-cmd_id=#id#]').closest('.eqLogic').find('.widget-hygrothermographe:not(:first)').hide();
       }
     },100);
+    setTheme('#theme#');
 
     if('#scale#' !== '') {
       let cmd = $('.cmd[data-cmd_id=#id#]').closest('.eqLogic').find('.widget-hygrothermographe').first();
       if (cmd.attr('scaled') !== '1' && '#scale#' > 0) {
+        var margeTop = 0;
+         if ('#scale#' < 50) {
+          margeTop = 3;
+        } else if ('#scale#' < 60) {
+          margeTop = 2;
+        } else if ('#scale#' < 70) {
+          margeTop = 1;
+        }
         cmd.attr('scaled', '1');
         cmd.width(cmd.width()*'#scale#');
         cmd.height(cmd.height()*'#scale#');
         cmd.find('.hygrothermographe-background').width(cmd.find('.hygrothermographe-background').width()*'#scale#');
         cmd.find('.hygrothermographe-background').height(cmd.find('.hygrothermographe-background').height()*'#scale#');
         cmd.find('.intNumTemp').css('font-size',(cmd.find('.intNumTemp').css('font-size').replace(/px/i, '')*'#scale#')+'px')
-        .css('top',(cmd.find('.intNumTemp').css('top').replace(/px/i, '')*'#scale#')+'px')
-        .css('right',(cmd.find('.intNumTemp').css('right').replace(/px/i, '')*'#scale#')+'px');
+        .css('top',(cmd.find('.intNumTemp').css('top').replace(/px/i, '')*'#scale#'-margeTop)+'px')
+        .css('right',(cmd.find('.intNumTemp').css('right').replace(/px/i, '')*'#scale#')+'px')
+        .css('letter-spacing',(cmd.find('.intNumTemp').css('letter-spacing').replace(/px/i, '')*'#scale#')+'px');
         cmd.find('.decNumTemp').css('font-size',(cmd.find('.decNumTemp').css('font-size').replace(/px/i, '')*'#scale#')+'px')
-        .css('top',(cmd.find('.decNumTemp').css('top').replace(/px/i, '')*'#scale#')+'px')
+        .css('top',(cmd.find('.decNumTemp').css('top').replace(/px/i, '')*'#scale#'-margeTop)+'px')
         .css('right',(cmd.find('.decNumTemp').css('right').replace(/px/i, '')*'#scale#')+'px');
         cmd.find('.uniteTemp').css('font-size',(cmd.find('.uniteTemp').css('font-size').replace(/px/i, '')*'#scale#')+'px')
-        .css('top',(cmd.find('.uniteTemp').css('top').replace(/px/i, '')*'#scale#')+'px')
+        .css('top',(cmd.find('.uniteTemp').css('top').replace(/px/i, '')*'#scale#'-margeTop)+'px')
         .css('right',(cmd.find('.uniteTemp').css('right').replace(/px/i, '')*'#scale#')+'px');
         cmd.find('.intNumHumidity').css('font-size',(cmd.find('.intNumHumidity').css('font-size').replace(/px/i, '')*'#scale#')+'px')
         .css('top',(cmd.find('.intNumHumidity').css('top').replace(/px/i, '')*'#scale#')+'px')
-        .css('right',(cmd.find('.intNumHumidity').css('right').replace(/px/i, '')*'#scale#')+'px');
+        .css('right',(cmd.find('.intNumHumidity').css('right').replace(/px/i, '')*'#scale#')+'px')
+        .css('letter-spacing',(cmd.find('.intNumHumidity').css('letter-spacing').replace(/px/i, '')*'#scale#')+'px');
         cmd.find('.decNumHumidity').css('font-size',(cmd.find('.decNumHumidity').css('font-size').replace(/px/i, '')*'#scale#')+'px')
         .css('top',(cmd.find('.decNumHumidity').css('top').replace(/px/i, '')*'#scale#')+'px')
         .css('right',(cmd.find('.decNumHumidity').css('right').replace(/px/i, '')*'#scale#')+'px');
         cmd.find('.uniteHumidity').css('font-size',(cmd.find('.uniteHumidity').css('font-size').replace(/px/i, '')*'#scale#')+'px')
         .css('top',(cmd.find('.uniteHumidity').css('top').replace(/px/i, '')*'#scale#')+'px')
         .css('right',(cmd.find('.uniteHumidity').css('right').replace(/px/i, '')*'#scale#')+'px');
+        cmd.find('.numTempMin').css('font-size',(cmd.find('.numTempMin').css('font-size').replace(/px/i, '')*'#scale#')+'px')
+        .css('top',(cmd.find('.numTempMin').css('top').replace(/px/i, '')*'#scale#')+'px')
+        .css('right',(cmd.find('.numTempMin').css('right').replace(/px/i, '')*'#scale#')+'px');
+        cmd.find('.numTempMax').css('font-size',(cmd.find('.numTempMax').css('font-size').replace(/px/i, '')*'#scale#')+'px')
+        .css('top',(cmd.find('.numTempMax').css('top').replace(/px/i, '')*'#scale#')+'px')
+        .css('right',(cmd.find('.numTempMax').css('right').replace(/px/i, '')*'#scale#')+'px');
       }
     }
 
     if ($('body')[0].hasAttribute('data-theme')) {
+       var theme = 'Dark';
       if ($('body').attr('data-theme').endsWith('Light')) {
-        $('.cmd[data-cmd_id=#id#]').find('.hygrothermographe-background').attr('src', 'core/template/dashboard/cmd.info.numeric.HygroThermographe/No.ext_100_Light.png');
+          theme = 'Light';
       }
+      setTheme(theme);
     }
 
     $('body').on('changeThemeEvent', function (event, theme) {
-      var cmd = $('.cmd[data-cmd_id=#id#]');
-      if (theme === 'Light') {
-        cmd.find('.hygrothermographe-background').attr('src', 'core/template/dashboard/cmd.info.numeric.HygroThermographe/No.ext_100_Light.png');
-      } else {
-        cmd.find('.hygrothermographe-background').attr('src', 'core/template/dashboard/cmd.info.numeric.HygroThermographe/No.ext_100_Dark.png');
-      }
+        setTheme(theme);
     });
   </script>
 </div>
