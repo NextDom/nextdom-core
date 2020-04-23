@@ -38,6 +38,7 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Managers\ImageManager;
 use NextDom\Model\Entity\Listener;
 
 /**
@@ -413,5 +414,14 @@ class NextDomAjax extends BaseAjax
         $version['nextdom'] = NextDomHelper::getNextdomVersion();
         $version['jeedom'] = NextDomHelper::getJeedomVersion();
         $this->ajax->success($version);
+    }
+
+    public function uploadImageIcon()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        $this->ajax->checkToken();
+        $imageDir = ImageManager::getDirectory();
+        Utils::readUploadedFile($_FILES, "file", $imageDir, 1000, ['.jpg', '.png','.gif']);
+        $this->ajax->success('data/img/' . $_FILES['file']['name']);
     }
 }

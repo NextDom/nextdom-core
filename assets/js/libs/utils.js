@@ -145,10 +145,14 @@ function notify(_title, _text, _class_name) {
  * Opening a icone selector modal to choose one
  *
  * @param callbackFunc Callback function who receive the icon code
+ * @param _params Parameters
  */
 function chooseIcon(callbackFunc, _params) {
     var chooseIconModal = $('#mod_selectIcon');
-    $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
+    if (chooseIconModal.length === 0) {
+        $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
+        chooseIconModal = $('#mod_selectIcon');
+    }
     // Init choose icon modal
     chooseIconModal.dialog({
         closeText: '',
@@ -177,13 +181,18 @@ function chooseIcon(callbackFunc, _params) {
         }
         if (_params.clazz) {
             var clazz = _params.clazz;
-            var color = clazz.substring(clazz.lastIndexOf(" ")+1, clazz.length);
-            if(color.startsWith('icon_')) {
-                url += '&colorIcon=' + color;
-                clazz = clazz.replace(color, '');
+            if(clazz.startsWith('<img src=')) {
+                clazz = clazz.replace('<img src=\'', '').trim().replace('\'>', '');
+                url += '&selectImg=' + clazz;
+            } else {
+                var color = clazz.substring(clazz.lastIndexOf(" ")+1, clazz.length);
+                if(color.startsWith('icon_')) {
+                    url += '&colorIcon=' + color;
+                    clazz = clazz.replace(color, '');
+                }
+                clazz = clazz.replace('icon ', '').trim().replace(' ', '_');
+                url += '&selectIcon=' + clazz;
             }
-            clazz = clazz.replace('icon ', '').trim().replace(' ', '_');
-            url += '&selectIcon=' + clazz;
         }
     }
     chooseIconModal.load(url);

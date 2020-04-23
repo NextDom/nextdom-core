@@ -42,11 +42,15 @@ class IconSelector extends BaseAbstractModal
     {
         $iconsStylePath = 'public/icons/';
         $pageData = [];
-        $pageData['tabimg'] = Utils::init('tabimg', false);
+        $pageData['tabimg'] = Utils::init('showimg', false);
+        if($pageData['tabimg']) {
+            $pageData['imgList'] = FileSystemHelper::ls('data/img/', '*');
+        }
         $pageData['selectIcon'] = Utils::init('selectIcon', false);
+        $pageData['selectImg'] = Utils::init('selectImg', false);
         $pageData['colorIcon'] = Utils::init('colorIcon', '');
         $pageData['colorList'] = [
-            ['id' => '', 'label' => 'Aucune'],
+            ['id' => '', 'label' => 'Couleur par défaut'],
             ['id' => 'icon_blue', 'label' => 'Blue'],
             ['id' => 'icon_yellow', 'label' => 'Jaune'],
             ['id' => 'icon_orange', 'label' => 'Orange'],
