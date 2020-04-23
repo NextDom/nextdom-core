@@ -56,7 +56,7 @@ for (var i in planHeader) {
     }
   };
 }
-if (user_isAdmin === 1) {
+if (user_isAdmin === '1') {
   $.contextMenu({
     selector: '#div_pageContainer',
     zIndex: 9999,
@@ -763,7 +763,7 @@ function displayPlan(_code) {
   if (planHeader_id === -1) {
     return;
   }
-  if (typeof(_code)=== 'undefined') {
+  if (typeof(_code) === undefined) {
     _code = null;
   }
   if (getUrlVars('fullscreen') === 1) {
