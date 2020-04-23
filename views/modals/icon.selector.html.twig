@@ -34,47 +34,75 @@
 #}
 <section class="content-header">
     <div class="action-bar scroll-shadow">
-        <div class="action-group">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#tabicon" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-icons"></i> {{ 'Icône' }}</a></li>
+                {% if tabimg %}
+                <li role="presentation" ><a href="#tabimg" aria-controls="home" role="tab" data-toggle="tab"><i class="far fa-images"></i> {{ 'Image' }}</a></li>
+                {% endif %}
+        </ul>
+        <div class="navbar-form navbar-right">
+            <select class="form-control roundedLeft" style="width : 200px;" id="sel_colorIcon">
+                {% for color in colorList %}
+                    <option value="{{ color['id'] }}"{% if colorIcon == color['id'] %} selected {% endif %}>{{ color['label'] }}</option>
+                {% endfor %}
+            </select>
+            <label id="uploadImageIcon" for="bt_uploadImageIcon" class="btn btn-action btn-action-bar"><i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImageIcon" type="file" name="file" style="display:none;"></label>
             <div class="input-group">
-                <select class="form-control roundedLeft" style="width : 200px;" id="sel_colorIcon">
-                    {% for color in colorList %}
-                        <option value="{{ color['id'] }}"{% if colorIcon == color['id'] %} selected {% endif %}>{{ color['label'] }}</option>
-                    {% endfor %}
-                </select>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="in_iconSelectorSearch" placeholder="{{ 'Rechercher une icône...' }}">
-                    <span class="input-group-addon cursor" id="bt_iconReset"><i class="fas fa-times"></i></span>
-                </div>
+                <input type="text" class="form-control" id="in_iconSelectorSearch" placeholder="{{ 'Rechercher ...' }}">
+                <span class="input-group-addon cursor" id="bt_iconReset"><i class="fas fa-times"></i></span>
             </div>
-        </div>
-        <div class="action-group">
-            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_iconCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
-            <a class="btn btn-action btn-action-bar pull-right" id="bt_iconUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
+            <a class="btn btn-action btn-action-bar" id="bt_iconCollapse" style="display:none;"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
+            <a class="btn btn-action btn-action-bar" id="bt_iconUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
         </div>
     </div>
 </section>
 
-<section class="content">
-    {% for icons in iconsList %}
-        {% set iconCounter = 0 %}
-        <div class="panel box box-primary" style="position: inherit">
-            <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ icons['name'] }}">
-                <h3 class="box-title">
-                    <span>{{ icons['name']|upper }}</span>
-                </h3>
-            </a>
-            <div id="config_{{ icons['name'] }}" class="panel-collapse collapse in">
+<section class="content" style="height:calc(100% - 81px);">
+
+    {% if tabimg %}
+        <div role="tabpanel" class="tab-pane" id="tabimg" style="overflow-y:scroll; position:relative;height: 100%">
+            <div class="panel box box-primary">
+                <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_img">
+                    <h3 class="box-title">
+                        <span>{{ 'Mes images' }}</span>
+                    </h3>
+                </a>
                 <div class="box-body">
-                    {% for icon in icons['list'] %}
-                        <a class="btn btn-selector{% if selectIcon|trim|replace({'_':' '}) == icon|trim |replace({'_':' '}) %} iconSelected {% endif %}">
-                            <div class="iconSel"><i class="icon {{icon}} {{colorIcon}}"></i></div>
-                            <span>{{ icon|split('-',2)|last }}</span>
+                    <div id="config_img" class="panel-collapse collapse in">
+                        {% for img in imgList %}
+                        <a class="btn btn-selector{% if selectImg == "data/img/"~img %} iconSelected {% endif %}" style="height:auto;">
+                            <div class="iconSel"><img src="data/img/{{img}}" /></div>
+                            <span>{{ img }}</span>
                         </a>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
+
+    <div role="tabpanel" class="tab-pane active" id="tabicon" style="overflow-y:scroll; position:relative;height: 100%;">
+        {% for icons in iconsList %}
+            {% set iconCounter = 0 %}
+            <div class="panel box box-primary">
+                <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ icons['name'] }}">
+                    <h3 class="box-title">
+                        <span>{{ icons['name']|capitalize }}</span>
+                    </h3>
+                </a>
+                <div id="config_{{ icons['name'] }}" class="panel-collapse collapse in">
+                    <div class="box-body">
+                        {% for icon in icons['list'] %}
+                            <a class="btn btn-selector{% if selectIcon|trim|replace({'_':' ', 'jeedom': "nextdom"}) == icon|trim |replace({'_':' ', 'jeedom': "nextdom"}) %} iconSelected {% endif %}">
+                                <div class="iconSel"><i class="icon {{icon}} {{colorIcon}}"></i></div>
+                                <span>{{ icon|split('-',2)|last }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </section>
 
 <script src="/public/js/modals/icon.selector.js"></script>

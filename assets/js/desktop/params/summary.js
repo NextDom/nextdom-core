@@ -43,7 +43,8 @@ initEvents();
  */
 function initEvents() {
     // Param changed : page leaving lock by msgbox
-    $('#summary').delegate('.objectSummaryAttr', 'change', function () {
+    var summary = $('#summary');
+    summary.delegate('.objectSummaryAttr', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
             $(".bt_cancelModifs").show();
@@ -66,21 +67,22 @@ function initEvents() {
     });
 
     // Delete handlers on delete summary
-    $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
+    summary.undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
         var objectSummary = $(this).closest('.objectSummary');
-        objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]').addClass('disabled');
-        objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]').find('.fa-refresh').show();
-        objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]').find('.initial').hide();
-        var clazz = $('.objectSummaryAttr[data-l1key=icon] > i').attr('class');
+        var objectChooseIcon = objectSummary.find('.objectSummaryAction[data-l1key=chooseIcon]');
+        objectChooseIcon.addClass('disabled');
+        objectChooseIcon.find('.fa-refresh').show();
+        objectChooseIcon.find('.initial').hide();
+        var clazz = objectSummary.find('.objectSummaryAttr[data-l1key=icon] > i').attr('class');
         setTimeout(function () {
             chooseIcon(function (_icon) {
                 objectSummary.find('.objectSummaryAttr[data-l1key=icon]').empty().append(_icon);
             }, {
                 clazz: clazz,
                 finally: function() {
-                    $('.objectSummaryAction[data-l1key=chooseIcon]').removeClass('disabled');
-                    $('.objectSummaryAction[data-l1key=chooseIcon]').find('.fa-refresh').hide();
-                    $('.objectSummaryAction[data-l1key=chooseIcon]').find('.initial').show();
+                    objectChooseIcon.removeClass('disabled');
+                    objectChooseIcon.find('.fa-refresh').hide();
+                    objectChooseIcon.find('.initial').show();
                 }
             });
         }, 50);
@@ -88,13 +90,13 @@ function initEvents() {
         $(".bt_cancelModifs").show();
     });
 
-    $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click', function () {
+    summary.undelegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click', function () {
         $(this).closest('.objectSummary').remove();
         modifyWithoutSave = true;
         $(".bt_cancelModifs").show();
     });
 
-    $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
+    summary.undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
         var objectSummary = $(this).closest('.objectSummary');
         $.ajax({
             type: "POST",
@@ -109,7 +111,7 @@ function initEvents() {
                 handleAjaxError(request, status, error);
             },
             success: function (data) {
-                if (data.state != 'ok') {
+                if (data.state !== 'ok') {
                     notify('Erreur', data.result, 'error');
                     return;
                 }
@@ -139,13 +141,13 @@ function printObjectSummary() {
             handleAjaxError(request, status, error);
         },
         success: function (data) {
-            if (data.state != 'ok') {
+            if (data.state !== 'ok') {
                 notify('Erreur', data.result, 'error');
                 return;
             }
             $('#table_objectSummary tbody').empty();
             for (var i in data.result) {
-              if(isset(data.result[i].key) && data.result[i].key == ''){
+              if(isset(data.result[i].key) && data.result[i].key === ''){
                 continue;
               }
               if(!isset(data.result[i].name)){
@@ -183,7 +185,7 @@ function addObjectSummary(_summary) {
     tr += '</select>';
     tr += '</td>';
     tr += '<td class="col-xs-1 input-group">';
-    tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
+    tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-icons initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
     tr += '<span class="label label-icon objectSummaryAttr" data-l1key="icon"></span>';
     tr += '</td>';
     tr += '<td>';
@@ -199,7 +201,7 @@ function addObjectSummary(_summary) {
     tr += '<input type="checkbox" class="objectSummaryAttr" data-l1key="allowDisplayZero"/>';
     tr += '</td>';
     tr += '<td>';
-    if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
+    if(isset(_summary) && isset(_summary.key) && _summary.key !== ''){
         tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece"></i>{{summary.create_virtual}}</a>';
     }
     tr += '</td>';
@@ -211,7 +213,7 @@ function addObjectSummary(_summary) {
     if (isset(_summary)){
         $('#table_objectSummary tbody tr:last').setValues(_summary, '.objectSummaryAttr');
     }
-    if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
+    if(isset(_summary) && isset(_summary.key) && _summary.key !== ''){
         $('#table_objectSummary tbody tr:last .objectSummaryAttr[data-l1key=key]').attr('disabled','disabled');
     }
     modifyWithoutSave = true;
@@ -226,10 +228,10 @@ function saveObjectSummary() {
     temp = $('#table_objectSummary tbody tr').getValues('.objectSummaryAttr');
     for(var i in temp){
         temp[i].key = temp[i].key.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '');
-        if(temp[i].key == ''){
-            temp[i].key = temp[i].name.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '')
+        if(temp[i].key === ''){
+            temp[i].key = temp[i].name.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '');
         }
-        summary[temp[i].key] = temp[i]
+        summary[temp[i].key] = temp[i];
     }
     value = {'object:summary' : summary};
     $.ajax({
@@ -245,7 +247,7 @@ function saveObjectSummary() {
             handleAjaxError(request, status, error);
         },
         success: function (data) {
-            if (data.state != 'ok') {
+            if (data.state !== 'ok') {
                 notify('Erreur', data.result, 'error');
                 return;
             }

@@ -32,13 +32,28 @@
 
 $(function() {
     setTimeout(function () {
-        elem = $('#mod_selectIcon .iconSelected');
-        if (elem.length === 1) {
-            var positionElem = elem.position();
-            if (positionElem) {
-                container = $('#mod_selectIcon');
-                var pos = positionElem.top + container.scrollTop() - container.position().top;
-                container.animate({scrollTop: pos});
+        container = $('#mod_selectIcon');
+
+        elemIcon = $('#tabicon .iconSelected');
+        elemImg = $('#tabimg .iconSelected');
+        if(elemImg.length === 0 && elemIcon.length === 0) {
+            $('#mod_selectIcon ul li a[href="#tabicon"]').click();
+        } else {
+            if (elemIcon.length === 1) {
+                $('#mod_selectIcon ul li a[href="#tabicon"]').click();
+                var positionElem = elemIcon.position();
+                if (positionElem) {
+                    var pos = positionElem.top + elemIcon.parent().parent().parent().position().top - container.scrollTop();
+                    $('#tabicon').animate({scrollTop: pos});
+                }
+            }
+            if (elemImg.length === 1) {
+                $('#mod_selectIcon ul li a[href="#tabimg"]').click();
+                var positionElem = elemImg.position();
+                if (positionElem) {
+                    var pos = positionElem.top + elemImg.parent().parent().parent().position().top - container.scrollTop();
+                    $('#tabimg').animate({scrollTop: pos});
+                }
             }
         }
     }, 250);
@@ -89,7 +104,34 @@ $('.btn-selector').on('click', function () {
 
 $('.btn-selector').on('dblclick', function () {
     this.click();
-    $('#mod_selectIcon').dialog("option", "buttons")['Valider'].apply($('#mod_selectIcon'));
+    var mod_selectIcon = $('#mod_selectIcon');
+    mod_selectIcon.dialog("option", "buttons")['Valider'].apply(mod_selectIcon);
+});
+
+$('#mod_selectIcon ul li a[href="#tabicon"]').click(function(e) {
+    $('#sel_colorIcon').show();
+    $('#uploadImageIcon').hide();
+    $('#tabicon').show();
+    $('#tabimg').hide();
+});
+$('#mod_selectIcon ul li a[href="#tabimg"]').click(function(e) {
+    $('#uploadImageIcon').show();
+    $('#sel_colorIcon').hide();
+    $('#tabimg').show();
+    $('#tabicon').hide();
+});
+
+$('#bt_uploadImageIcon').fileupload({
+    replaceFileInput: false,
+    url: 'core/ajax/nextdom.ajax.php?action=uploadImageIcon&nextdom_token='+NEXTDOM_AJAX_TOKEN,
+    dataType: 'json',
+    done: function (e, data) {
+        if (data.result.state !== 'ok') {
+            $('#div_iconSelectorAlert').showAlert({message: data.result.result, level: 'danger'});
+            return;
+        }
+        $('#mod_selectIcon').empty().load('index.php?v=d&modal=icon.selector&showimg=1&selectImg=' + data.result.result);
+    }
 });
 
 //*                                         */

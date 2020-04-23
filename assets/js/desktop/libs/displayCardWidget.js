@@ -415,7 +415,7 @@ class DisplayCardWidget extends DisplayCardPageA {
         div += '<div class="input-group">';
         div += '<input type="text" class="testAttr form-control roundedLeft" data-l1key="state_light" placeholder="Résultat si test ok (light)"/>';
         div += '<span class="input-group-btn">';
-        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
+        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-icons initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
         div += '</span>';
         div += '</div>';
         div += '</div>';
@@ -423,7 +423,7 @@ class DisplayCardWidget extends DisplayCardPageA {
         div += '<div class="input-group">';
         div += '<input type="text" class="testAttr form-control roundedLeft" data-l1key="state_dark" placeholder="Résultat si test ok (dark)"/>';
         div += '<span class="input-group-btn">';
-        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
+        div += '<a class="btn btn-sm chooseIcon roundedRight"><i class="fas fa-icons initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i></a>';
         div += '</span>';
         div += '</div>';
         div += '</div>';
@@ -456,8 +456,8 @@ class DisplayCardWidget extends DisplayCardPageA {
                         }
                         replace += '<div class="mix-group">';
                         if (data.replace[i].indexOf('icon_') !== -1 || data.replace[i].indexOf('img_') !== -1) {
-                            replace += '<a class="btn btn-action chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ Choisir }}</span></a>';
-                            replace += '<div class="label label-icon attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"></div>';
+                            replace += '<a class="btn btn-action chooseIcon" style="height:35px;"><i class="fas fa-icons initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ Choisir }}</span></a>';
+                            replace += '<span class="attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"></span>';
                         } else {
                             var type;
                             if ($this.widget_parameters_opt[data.replace[i]]) {
@@ -465,7 +465,7 @@ class DisplayCardWidget extends DisplayCardPageA {
                             } else {
                                 type = "text";
                             }
-                            replace += '<input id="' + data.replace[i] + 'type="' + type + '" class="form-control attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"/>';
+                            replace += '<input id="' + data.replace[i] + '" type="' + type + '" class="form-control attr" data-l1key="replace" data-l2key="#_' + data.replace[i] + '_#"/>';
                         }
                         replace += '</div>';
                         replace += '</div>';
