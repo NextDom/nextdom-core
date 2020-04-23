@@ -87,11 +87,7 @@ if (user_isAdmin === '1') {
         name: "{{Plein écran}}",
         icon: 'fa-desktop',
         callback: function (key, opt) {
-          if (this.data('fullscreen') === undefined) {
-            this.data('fullscreen', 1);
-          }
-          fullScreen(this.data('fullscreen'));
-          this.data('fullscreen', !this.data('fullscreen'));
+          fullScreen(!editOption.fullscreen);
         }
       },
       sep1: "---------",
@@ -669,7 +665,8 @@ $('.graphDataOption[data-l1key=configuration][data-l2key=graphColor]').off('chan
   setColorSelect($(this).closest('select'));
 });
 
-function fullScreen(_mode) {
+function fullScreen(_mode = true) {
+  editOption.fullscreen = _mode;
   if (_mode) {
     $('.wrapper').addClass('fullscreen');
     $('#wrap').css('margin-bottom', '0px');
@@ -766,9 +763,7 @@ function displayPlan(_code) {
   if (typeof(_code) === undefined) {
     _code = null;
   }
-  if (getUrlVars('fullscreen') === 1) {
-    fullScreen(true);
-  }
+  fullScreen(getUrlVars('fullscreen') === '1');
   nextdom.plan.getHeader({
     id: planHeader_id,
     code: _code,
@@ -956,8 +951,8 @@ function displayObject(_plan, _html, _noRender) {
       continue;
     }
     if (key === 'background-color') {
-      if (isset(_plan.display) && (!isset(_plan.display['background-defaut']) || _plan.display['background-defaut'] !== 1)) {
-        if (isset(_plan.display['background-transparent']) && _plan.display['background-transparent'] === 1) {
+      if (isset(_plan.display) && (!isset(_plan.display['background-defaut']) || _plan.display['background-defaut'] !== '1')) {
+        if (isset(_plan.display['background-transparent']) && _plan.display['background-transparent'] === '1') {
           html.style('background-color', 'transparent', 'important');
           html.style('border-radius', '0px', 'important');
           html.style('box-shadow', 'none', 'important');
@@ -970,7 +965,7 @@ function displayObject(_plan, _html, _noRender) {
       }
       continue;
     } else if (key === 'color') {
-      if (!isset(_plan.display) || !isset(_plan.display['color-defaut']) || _plan.display['color-defaut'] !== 1) {
+      if (!isset(_plan.display) || !isset(_plan.display['color-defaut']) || _plan.display['color-defaut'] !== '1') {
         html.style(key, _plan.css[key], 'important');
         if (_plan.link_type === 'eqLogic' || _plan.link_type === 'cmd' || _plan.link_type === 'summary') {
           html.find('*').each(function () {
