@@ -449,11 +449,25 @@ function initEvents() {
         }).dialog('open');
     });
 
-    $('#bt_cmdConfigureChooseIcon').on('click', function () {
-        var iconeGeneric = $(this).closest('.iconeGeneric');
-        chooseIcon(function (_icon) {
-            iconeGeneric.find('.cmdAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-        });
+    var btn = $('#bt_cmdConfigureChooseIcon');
+    btn.on('click', function () {
+        btn.addClass('disabled');
+        btn.find('.fa-refresh').show();
+        btn.find('.initial').hide();
+        var clazz = $('.cmdAttr[data-l1key=display][data-l2key=icon] > i').attr('class');
+        setTimeout(function () {
+            chooseIcon(function (_icon) {
+                $('.cmdAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+            }, {
+                clazz: clazz,
+                finally: function() {
+                    var btn = $('#bt_cmdConfigureChooseIcon');
+                    btn.removeClass('disabled');
+                    btn.find('.fa-refresh').hide();
+                    btn.find('.initial').show();
+                }
+            });
+        }, 50);
     });
 
     $('body').undelegate('.cmdAttr[data-l1key=display][data-l2key=icon]', 'click').delegate('.cmdAttr[data-l1key=display][data-l2key=icon]', 'click', function () {
