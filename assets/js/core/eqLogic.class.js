@@ -332,3 +332,7 @@ nextdom.eqLogic.htmlAlert = function(queryParams) {
 nextdom.eqLogic.htmlBattery = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'htmlBattery', queryParams, ['version']);
 };
+
+nextdom.eqLogic.getUseBeforeRemove = function(queryParams) {
+  nextdom.private.ajax('EqLogic', 'getUseBeforeRemove', queryParams, ['id']);
+};

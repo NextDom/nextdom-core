@@ -96,8 +96,7 @@ class NextDomAjax extends BaseAjax
         }
         if ($documentationUrl !== '') {
             $this->ajax->success($documentationUrl);
-        }
-        else {
+        } else {
             $this->ajax->error(__('Aucune documentation'));
         }
     }
@@ -298,8 +297,7 @@ class NextDomAjax extends BaseAjax
             $info = null;
             if ($event['type'] === NextDomObj::CMD) {
                 $info = CmdManager::timelineDisplay($event);
-            }
-            elseif ($event['type'] === NextDomObj::SCENARIO) {
+            } elseif ($event['type'] === NextDomObj::SCENARIO) {
                 $info = ScenarioManager::timelineDisplay($event);
             }
             if ($info != null) {
@@ -422,5 +420,57 @@ class NextDomAjax extends BaseAjax
         $imageDir = ImageManager::getDirectory();
         Utils::readUploadedFile($_FILES, "file", $imageDir, 1000, ['.jpg', '.png','.gif']);
         $this->ajax->success('data/img/' . $_FILES['file']['name']);
+    }
+
+    public function removeImageIcon() {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        $this->ajax->checkToken();
+        $filepath = ImageManager::getDirectory() . Utils::initFilename('filename');
+        if(!file_exists($filepath)){
+            throw new CoreException(__('Fichier introuvable, impossible de le supprimer'));
+        }
+        unlink($filepath);
+        if(file_exists($filepath)){
+            throw new CoreException(__('Impossible de supprimer le fichier'));
+        }
+        $this->ajax->success();
+    }
+
+    public function cleanDatabase()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        NextDomHelper::cleanDatabase();
+        $this->ajax->success();
+    }
+
+    public function massEditSave()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        $this->ajax->checkToken();
+        $type = Utils::init('type');
+        if ($type === 'widgets') {
+            $type = 'widget';
+        }
+        $type = ucfirst($type);
+        if (!class_exists($type)) {
+            throw new CoreException(__('Type non trouvé : ') . $type);
+        }
+        $datas = is_json(Utils::init('objects'), []);
+        if (count($datas) > 0) {
+            foreach ($datas as $data) {
+                $manager = $type . 'Manager';
+                $object = $manager::byId($data['id']);
+                if (!is_object($object)) {
+                    continue;
+                }
+                Utils::a2o($objectToSave, $data);
+                try {
+                    $objectToSave->save(true);
+                } catch (\Exception $e) {
+                    var_dump($e);
+                }
+            }
+        }
+        $this->ajax->success();
     }
 }

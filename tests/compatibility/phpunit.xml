@@ -29,7 +29,7 @@
             <directory>../compatibility</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../compatibility/AjaxWidgetTest.php</directory>
+            <directory>../compatibility/AjaxEqLogicTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -61,6 +61,7 @@ if ($argc > 2) {
         }
     } else {
         echo "La classe $className n'existe pas.\n";
+        $error = true;
     }
 } else {
     $error = true;

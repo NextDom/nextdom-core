@@ -438,4 +438,60 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertStringContainsString('"result":{"nextdom":', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
+
+    public function testCleanDatabaseAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'cleanDatabase']);
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testCleanDatabaseAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'cleanDatabase']);
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testUploadImageIconAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadImageIcon']);
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testUploadImageIconAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadImageIcon']);
+        $this->assertStringContainsString('Aucun fichier trouvé', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testRemoveImageIconAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeImageIcon']);
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testRemoveImageIconAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeImageIcon']);
+        $this->assertStringContainsString('Impossible de supprimer le fichier', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testMassEditSaveAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'massEditSave']);
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testMassEditSaveAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'massEditSave']);
+        $this->assertStringContainsString('Type non trouvé', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
 }

@@ -119,4 +119,17 @@ class AjaxWidgetTest extends AjaxBase
         $this->assertEquals(200, $result->getStatusCode());
     }
 
+    public function testGetTemplateConfigurationAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getTemplateConfiguration']);
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testGetTemplateConfigurationAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getTemplateConfiguration']);
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
 }

@@ -24,6 +24,10 @@ nextdom.cache.flush = function(queryParams) {
   nextdom.private.ajax('Cache', 'flush', queryParams);
 };
 
+nextdom.cache.flushWidget = function(queryParams) {
+  nextdom.private.ajax('Cache', 'flushWidget', queryParams);
+};
+
 nextdom.cache.stats = function(queryParams) {
   nextdom.private.ajax('Cache', 'stats', queryParams);
 };

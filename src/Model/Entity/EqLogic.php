@@ -522,7 +522,7 @@ class EqLogic extends BaseEntity
      * @param string|null $visible Filter only visible commands
      * @param string|bool $multiple Get multiple commands
      *
-     * @return Cmd|Cmd[]
+     * @return Cmd[]|Cmd
      *
      * @throws \Exception
      */

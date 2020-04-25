@@ -85,4 +85,18 @@ class AjaxCacheTest extends AjaxBase
         // TODO : Change
         $this->assertEquals(200, $result->getStatusCode());
     }
+
+    public function testFlushWidgetAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'flushWidget']);
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testFlushWidgetAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'flushWidget']);
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
 }

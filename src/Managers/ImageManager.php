@@ -35,6 +35,9 @@
 namespace NextDom\Managers;
 
 
+use NextDom\Exceptions\CoreException;
+use NextDom\Model\DataClass\WidgetTheme;
+
 /**
  * Class CacheManager
  * @package NextDom\ImageManager
@@ -44,7 +47,8 @@ class ImageManager
     /**
      * Get all widget themes
      *
-     * @return WidgetTheme[]
+     * @return string
+     * @throws CoreException
      */
     public static function getDirectory() {
         $dir = "data/img/";

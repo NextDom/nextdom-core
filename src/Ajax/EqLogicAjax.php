@@ -28,6 +28,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Model\Entity\Cmd;
 
 /**
  * Class EqLogicAjax
@@ -440,5 +441,43 @@ class EqLogicAjax extends BaseAjax
             $alerts[] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
         }
         $this->ajax->success($alerts);
+    }
+
+    public function getUseBeforeRemove()
+    {
+        $eqLogic = EqLogicManager::byId(Utils::init('id'));
+        if (!is_object($eqLogic)) {
+            $this->ajax->error(__('ID de l\'objet manquant.'));
+        } else {
+            $data = ['node' => [], 'link' => []];
+            $data = $eqLogic->getLinkData($data, 0, 2);
+            $used = $data['node'];
+            $eqLogicCode = 'eqLogic' . $eqLogic->getId();
+            if (isset($used[$eqLogicCode])) {
+                unset($used[$eqLogicCode]);
+            }
+            /** @var Cmd $cmd */
+            foreach ($eqLogic->getCmd() as $cmd) {
+                $cmdCode = 'cmd' . $cmd->getId();
+                if (isset($used[$cmdCode])) {
+                    unset($used[$cmdCode]);
+                }
+                $cmdData = ['node' => [], 'link' => []];
+                $cmdData = $cmd->getLinkData($cmdData, 0, 2);
+                if (isset($cmdData['node'][$eqLogicCode])) {
+                    unset($cmdData['node'][$eqLogicCode]);
+                }
+                if (isset($cmdData['node'][$cmdCode])) {
+                    unset($cmdData['node'][$cmdCode]);
+                }
+                if (count($cmdData['node']) > 0) {
+                    foreach ($cmdData['node'] as $name => $data) {
+                        $data['sourceName'] = $cmd->getName();
+                        $used[$name . $cmd->getName()] = $data;
+                    }
+                }
+            }
+            $this->ajax->success($used);
+        }
     }
 }
