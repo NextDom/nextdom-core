@@ -5,7 +5,7 @@
 import re
 import sys
 import os
-from tests.libs.tests_funcs import *
+from pylibs.tests_funcs import *
 
 AJAX_PATH = '/tmp/jeedom-core/core/ajax/'
 CLASS_PATH = '/tmp/jeedom-core/core/class/'

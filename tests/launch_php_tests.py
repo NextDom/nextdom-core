@@ -4,7 +4,7 @@
 """Launch NextDom GUI tests
 """
 import sys
-from tests.libs.tests_funcs import *
+from pylibs.tests_funcs import *
 
 NEXTDOM_URL = 'http://127.0.0.1:8765'
 NEXTDOM_LOGIN = 'admin'
