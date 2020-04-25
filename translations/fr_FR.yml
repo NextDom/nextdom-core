@@ -699,7 +699,6 @@ sidebar:
   objects-list: Liste Objets & Résumés
   offline: Offline
   online: Online
-  plan3d: Plan(s) 3D
   panel: Panel(s)
   plugins: Plugins
   plugins-markets: Gestion & Markets
@@ -1006,7 +1005,6 @@ widget:
 "Aucun groupement": "Aucun groupement"
 "Aucun module en Alerte pour le moment": "Aucun module en Alerte pour le moment"
 "Aucun objet racine trouvé. Pour en créer un, allez dans Outils": "Aucun objet racine trouvé. Pour en créer un, allez dans Outils"
-"Aucun plan3d correspondant": "Aucun plan3d correspondant"
 "Aucun plan correspondant": "Aucun plan correspondant"
 "Aucun point ne correspond pour l'historique :": "Aucun point ne correspond pour l'historique :"
 "Aucun script ne correspond à votre type de Linux :": "Aucun script ne correspond à votre type de Linux :"
@@ -1196,7 +1194,6 @@ widget:
 "Configuration des formules de calcul": "Configuration des formules de calcul"
 "Configuration des Scénarios": "Configuration des Scénarios"
 "Configuration du design": "Configuration du design"
-"Configuration du plan 3D": "Configuration du plan 3D"
 "Configuration du plugin": "Configuration du plugin"
 "Configuration du widget": "Configuration du widget"
 "Configuration démon": "Configuration démon"
@@ -2160,9 +2157,7 @@ widget:
 "Phrase(s)": "Phrase(s)"
 "PID": "PID"
 "Plan": "Plan"
-"plan3d header inconnu verifiez l'id :": "plan3d header inconnu vérifiez l'id :"
 "Plan header inconnu. Vérifiez l'ID": "Plan header inconnu. Vérifiez l'ID"
-"Plan(s) 3D": "Plan(s) 3D"
 "Plein écran": "Plein écran"
 "Plugin": "Plugin"
 "Plugin installé": "Plugin installé"

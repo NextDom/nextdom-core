@@ -73,7 +73,6 @@ class NextDomAjax extends BaseAjax
             $noDocPages = ['connection', 'firstUse', 'note'];
             $redirectPage = ['view_edit' => 'view',
                 'plan' => 'design',
-                'plan3d' => 'design3d',
                 'scenarioAssist' => 'scenario',
                 'users' => 'user',
                 'timeline' => 'history',

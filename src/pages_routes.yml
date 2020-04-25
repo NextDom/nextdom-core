@@ -113,10 +113,6 @@ plan:
   path: 'plan'
   controller: NextDom\Controller\Pages\PlanController::get
   condition: 'user'
-plan3d:
-  path: 'plan3d'
-  controller: NextDom\Controller\Pages\Plan3DController::get
-  condition: 'user'
 plugin:
   path: 'plugin'
   controller: NextDom\Controller\Tools\PluginListController::get

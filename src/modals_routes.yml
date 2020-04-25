@@ -114,14 +114,6 @@ planHeader.configure:
   path: 'planHeader.configure'
   controller: NextDom\Controller\Modals\PlanHeaderConfigure::get
   condition: 'admin'
-plan3d.configure:
-  path: 'plan3d.configure'
-  controller: NextDom\Controller\Modals\Plan3dConfigure::get
-  condition: 'admin'
-plan3dHeader.configure:
-  path: 'plan3dHeader.configure'
-  controller: NextDom\Controller\Modals\Plan3dHeaderConfigure::get
-  condition: 'admin'
 plugin.deamon:
   path: 'plugin.deamon'
   controller: NextDom\Controller\Modals\PluginDaemon::get

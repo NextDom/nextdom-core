@@ -699,7 +699,6 @@ sidebar:
   objects-list: List Objects & Summaries
   offline: Offline
   online: Online
-  plan3d: Map(s) 3D
   panel: Panel(s)
   plugins: plugins
   plugins-markets: Management & Markets
@@ -964,7 +963,6 @@ widget:
 "Plugins": "Plugins"
 "Autre": "Other"
 "Déconnexion": "Disconnect"
-"Plan 3D": "3D plan"
 "3d": "3d"
 "Nom": "Name"
 "Status": "Status"
@@ -1083,8 +1081,6 @@ widget:
 "Confort": "Comfort"
 "Redémarrer": "Restart"
 "Eteindre": "Turn off"
-"Plan 3d": "3d map"
-"Plan 3d inconnu. Verifier l\\'id": "Unknown 3d plane. Check the id"
 "Design 3D": "3D design"
 "Note": "Grade"
 "NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.": "NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé."
@@ -2334,7 +2330,6 @@ widget:
 "Type de source": "Source type"
 "ID logique du plugin": "Logical ID of plugin"
 "Envoyer un plugin": "Send a plugin"
-"Configuration du plan 3D": "3D plan configuration"
 "Equipement liée": "Linked equipment"
 "Type de lien": "Link type"
 "Spécificité": "Specificity"
@@ -2369,12 +2364,7 @@ widget:
 "Couleur fermée": "Couleur fermée"
 "Masquer quand le volet est ouvert": "Masquer quand le volet est ouvert"
 "Couleur fermé": "Couleur fermé"
-"plan3d header inconnu verifiez l\\'id : ": "plan3d header unknown check the id:"
 "Chemin d\\'accès": "Access path"
-"Fichier OBJ": "OBJ file"
-"Fichier MTL": "MTL file"
-"Plan 3d sauvegardé": "Saved 3d map"
-"Model 3D": "3D Model"
 "Chargement réussi merci de recharger la page pour voir le résultat": "Successful loading thank you to reload the page to see the result"
 "EqLogic inconnu, vérifiez l\\'id : ": "Unknown eqLogic, check the id:"
 "Formule de calcul": "Algorithm"

@@ -67,17 +67,6 @@
                     {% endfor %}
                 </ul>
             </li>
-            {# Plan 3D désactivé
-            <li class="treeview" id="side4">
-                <a href="#"><i class="fas fa-building spacing-right"></i><span>{{ 'sidebar.plan3d'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=plan3d"><i class="fas fa-bullseye spacing-right"></i>{{ 'sidebar.show-all'|trans }}</a></li>
-                    {% for plan3d in MENU_PLANS3D_LIST %}
-                        <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }}<i class="spacing-right"></i>{{ plan3d.getName() }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
-            #}
             {% if PANEL_MENU is defined and PANEL_MENU is not empty %}
                 <li class="treeview" id="side5">
                     <a href="#"><i class="fas fa-th-large spacing-right"></i><span>{{ 'sidebar.panel'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
