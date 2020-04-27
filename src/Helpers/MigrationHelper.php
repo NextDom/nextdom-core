@@ -29,7 +29,6 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\ConsistencyManager;
 use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\UpdateManager;
@@ -376,7 +375,7 @@ class MigrationHelper
 
 
     /**
-     * Update plan and plan3d table to change path given in parameter
+     * Update plan table to change path given in parameter
      * @param string $logFile
      * @param string $fileToReplace
      * @param string $oldReferencePath
@@ -408,22 +407,6 @@ class MigrationHelper
             }
         }
 
-        foreach (Plan3dManager::all() as $plan3d) {
-
-            foreach (PlanDisplayType::getValues() as $displayType) {
-
-                $html = $plan3d->getDisplay($displayType);
-                if ($html !== null) {
-                    if ($displayType == PlanDisplayType::PATH) {
-                        $html = str_replace($oldReferencePath . $fileToReplace, $newReferencePath . $fileToReplace, $html);
-                    } else {
-                        $html = str_replace('"' . $oldReferencePath . $fileToReplace, '"' . $newReferencePath . $fileToReplace, $html);
-                    }
-                    $plan3d->setDisplay($displayType, $html);
-                    $plan3d->save();
-                }
-            }
-        }
     }
 
     /**
@@ -564,7 +547,13 @@ class MigrationHelper
         DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
         DBHelper::exec("ALTER TABLE `eqLogic` DROP `eqReal_id`;");
         DBHelper::exec("DROP TABLE `eqReal`;");
-        
+
+        DBHelper::exec("ALTER TABLE planHeader ADD `order` int(11) DEFAULT NULL;");
+        DBHelper::exec("ALTER TABLE planHeader ADD KEY `order` (`order`)");
+
+        DBHelper::exec("DROP TABLE `plan3d`");
+        DBHelper::exec("DROP TABLE `plan3dHeader`");
+
         DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
         $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (

@@ -43,6 +43,7 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Scenario;
+use NextDom\Enums\LogTarget;
 
 /**
  * Class ScenarioManager
@@ -373,7 +374,7 @@ class ScenarioManager extends BaseManager
      * @param string $groupName Filtrer sur un groupe
      * @param string $type Filtrer sur un type
      *
-     * @return  Scenario[] Liste des objets scenario
+     * @return Scenario[] Liste des objets scenario
      * @throws \Exception
      */
     public static function all($groupName = '', $type = null): array

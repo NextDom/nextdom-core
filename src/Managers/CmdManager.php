@@ -214,6 +214,32 @@ class CmdManager extends BaseManager {
         }
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
+    
+    public static function searchDisplay($_display, $_eqType = null) {
+        if (!is_array($_display)) {
+            $values = array(
+                'display' => '%' . $_display . '%',
+            );
+            $sql = static::getBaseSQL() . '
+            WHERE display LIKE :display';
+        } else {
+            $values = array(
+                'display' => '%' . $_display[0] . '%',
+            );
+            $sql = static::getBaseSQL() . '
+                        WHERE display LIKE :display';
+            for ($i = 1; $i < count($_display); $i++) {
+                $values['display' . $i] = '%' . $_display[$i] . '%';
+                $sql .= ' OR display LIKE :display' . $i;
+            }
+        }
+        if ($_eqType !== null) {
+            $values['eqType'] = $_eqType;
+            $sql .= ' AND eqType=:eqType ';
+        }
+        $sql .= ' ORDER BY name';
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
+    }
 
     /**
      * Search in commands configuration

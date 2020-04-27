@@ -41,8 +41,9 @@ def get_class_methods():
     :rtype:  dict
     """
     result = {}
+    ignored_files = ('plan3d.class.php', 'eqReal.class.php', 'plan3dHeader.class.php')
     for class_file in os.listdir(CLASS_PATH):
-        if class_file not in ('.', '..'):
+        if class_file not in ('.', '..') and class_file not in ignored_files:
             class_methods = get_class_methods_from_file(class_file)
             if class_methods:
                 result[class_file] = class_methods
@@ -75,13 +76,15 @@ def check_ajax_file(file_to_check, actions_list):
     if test_name == 'Jeedom':
         test_name = 'NextDom'
     # Ignore migration functionnality
-    if test_name == 'Migrate':
+    if test_name in ('Migrate', 'Plan3d'):
         return True
     # Special names
     if test_name == 'Datastore':
         test_name = 'DataStore'
     if test_name == 'Eqlogic':
         test_name = 'EqLogic'
+    if test_name == 'Widgets':
+        test_name = 'Widget'
     test_file = TESTS_PATH + 'Ajax' + test_name + 'Test.php'
     if os.path.isfile(test_file):
         with open(test_file, 'r', encoding="utf-8") as test_file_content:
@@ -90,7 +93,7 @@ def check_ajax_file(file_to_check, actions_list):
             for action in actions_list:
                 if test_content.find('test' + action.lower()) == -1:
                     # Skip removed functions
-                    if test_name == 'NextDom' and action == 'saveCustom':
+                    if test_name == 'NextDom' and action in ('saveCustom', 'systemCorrectPackage'):
                         continue
                     if test_name == 'Repo' and action == 'pullInstall':
                         continue
@@ -149,7 +152,7 @@ def check_class_methods_file(file_to_check, methods_list):
                      ' '.join(methods_list)) != 0:
             result = False
     else:
-        print('Class ' + file_to_check + ' not found.')
+        print('Class ' + file_to_check.replace('.class.php', '') + ' not found.')
         result = False
     return result
 
@@ -190,7 +193,7 @@ def checkout_jeedom():
     """Checkout or update jeedom-core
     """
     checkout_cmd = "git clone https://github.com/jeedom/core /tmp/jeedom-core > /dev/null 2>&1"
-    branch_cmd = "cd /tmp/jeedom-core && git checkout master -f > /dev/null 2>&1"
+    branch_cmd = "cd /tmp/jeedom-core && git checkout V4-stable -f > /dev/null 2>&1"
     update_cmd = "cd /tmp/jeedom-core && git fetch -apt > /dev/null 2>&1 && git pull -f origin master > /dev/null 2>&1" #pylint: disable=line-too-long
     if os.path.exists("/tmp/jeedom-core"):
         print_info("updating jeedom-core in /tmp/jeedom-core")

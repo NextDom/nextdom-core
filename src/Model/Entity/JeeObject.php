@@ -588,4 +588,15 @@ class JeeObject extends BaseEntity {
         return true;
     }
 
+    public function cleanSummary(){
+        $def = ConfigManager::byKey('object:summary');
+        $summaries = $this->getConfiguration('summary');
+        foreach ($summaries as $summaryKey => $value) {
+            if(!isset($def[$summaryKey])){
+                unset($summaries[$summaryKey]);
+            }
+        }
+        $this->setConfiguration('summary', $summaries);
+        $this->save();
+    }
 }

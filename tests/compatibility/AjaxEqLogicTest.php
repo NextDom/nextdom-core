@@ -215,6 +215,19 @@ class AjaxEqLogicTest extends AjaxBase
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getAlert']);
         $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
-        // Todo : Bizarre
+    }
+
+    public function testGetUseBeforeRemoveAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getUseBeforeRemove']);
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testGetUseBeforeRemoveAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getUseBeforeRemove']);
+        $this->assertStringContainsString('ID de l\'objet manquant', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
     }
 }

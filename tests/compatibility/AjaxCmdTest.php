@@ -215,4 +215,39 @@ class AjaxCmdTest extends AjaxBase
         $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
+
+    public function testSetOrderAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setOrder']);
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testSetIsVisiblesAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setIsVisibles']);
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testSetIsVisiblesAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setIsVisibles']);
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testGetDeadCmdAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getDeadCmd']);
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testGetDeadCmdAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getDeadCmd']);
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
 }

@@ -141,8 +141,8 @@ class Update extends BaseEntity
         if ($this->isType(Common::CORE)) {
             NextDomHelper::update(['core' => 1]);
         } else {
-            $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
-            if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
+            $repoClass = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
+            if (class_exists($repoClass) && method_exists($repoClass, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $this->preInstallUpdate();
                 $cibDir = NextDomHelper::getTmpFolder(Common::MARKET) . '/' . $this->getLogicalId();
                 if (file_exists($cibDir)) {
@@ -153,7 +153,7 @@ class Update extends BaseEntity
                     throw new CoreException(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?'));
                 }
                 LogHelper::addAlert(LogTarget::UPDATE, __('Téléchargement du plugin...'));
-                $info = $class::downloadObject($this);
+                $info = $repoClass::downloadObject($this);
                 if ($info['path'] !== false) {
                     $tmp = $info['path'];
                     LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));

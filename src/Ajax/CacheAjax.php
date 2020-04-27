@@ -41,6 +41,16 @@ class CacheAjax extends BaseAjax
     }
 
     /**
+     * Flush the cache
+     *
+     */
+    public function flushWidget()
+    {
+        CacheManager::flushWidget();
+        $this->ajax->success();
+    }
+
+    /**
      * Clean the cache
      *
      * @throws \Exception

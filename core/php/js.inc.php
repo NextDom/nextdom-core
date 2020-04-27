@@ -36,7 +36,6 @@ include_file('core', 'interact', 'class.js');
 include_file('core', 'widget', 'class.js');
 include_file('core', 'update', 'class.js');
 include_file('core', 'plan', 'class.js');
-include_file('core', 'plan3d', 'class.js');
 include_file('core', 'log', 'class.js');
 include_file('core', 'repo', 'class.js');
 include_file('core', 'network', 'class.js');

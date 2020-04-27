@@ -77,4 +77,30 @@ class system
     {
         return SystemHelper::getWWWGid();
     }
+    
+    public static function getArch()
+    {
+        return SystemHelper::getArch();
+    }
+    
+    public static function getInstallPackage($_type) {
+        return SystemHelper::getInstalledPackages($_type);
+    }
+
+    public static function checkAndInstall($_packages, $_fix = false, $_foreground = false) {
+        return SystemHelper::checkAndInstall($_packages, $_fix, $_foreground);
+    }
+
+    public static function launchScriptPackage() {
+        SystemHelper::launchScriptPackage();
+    }
+
+    public static function installPackage($_type, $_package) {
+        return SystemHelper::installPackage($_type, $_package);
+    }
+
+    public static function checkInstallationLog() {
+        return SystemHelper::checkInstallationLog();
+    }
+
 }

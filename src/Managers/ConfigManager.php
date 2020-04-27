@@ -35,6 +35,8 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\DnsHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -323,10 +325,10 @@ class ConfigManager
     /**
      * Get enabled plugins
      *
-     * @deprecated Use getEnabledPlugins
-     *
      * @return array List of enabled plugins
      * @throws \Exception
+     * @deprecated Use getEnabledPlugins
+     *
      */
     public static function getPluginEnable()
     {
@@ -382,14 +384,42 @@ class ConfigManager
     public static function postConfig_market_allowDNS($newValue)
     {
         if ($newValue == 1) {
-            if (!NetworkHelper::dnsRun()) {
-                NetworkHelper::dnsStart();
+            if (!DnsHelper::dnsRun()) {
+                DnsHelper::dnsStart();
             }
         } else {
-            if (NetworkHelper::dnsRun()) {
-                NetworkHelper::dnsStop();
+            if (DnsHelper::dnsRun()) {
+                DnsHelper::dnsStop();
             }
         }
+    }
+
+    public static function postConfig_interface_advance_vertCentering($_value){
+        CacheManager::flushWidget();
+    }
+
+    public static function postConfig_object_summary($_value){
+        try {
+            foreach (JeeObjectManager::all() as $object) {
+                $object->cleanSummary();
+            }
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public static function checkValueBetween($_value, $_min = null, $_max = null)
+    {
+        if ($_min !== null && $_value < $_min) {
+            return $_min;
+        }
+        if ($_max !== null && $_value > $_max) {
+            return $_max;
+        }
+        if (is_nan($_value) || $_value === '') {
+            return ($_min !== 0) ? $_min : 0;
+        }
+        return $_value;
     }
 
     /**
@@ -407,19 +437,55 @@ class ConfigManager
         return $newValue;
     }
 
-    /**
-     * @param $_value
-     * @return string|string[]
-     */
-    public static function preConfig_info_latitude($_value){
-        return str_replace(',','.',$_value);
+    public static function preConfig_widget_margin($_value)
+    {
+        return self::checkValueBetween($_value, 0);
     }
 
-    /**
-     * @param $_value
-     * @return string|string[]
-     */
-    public static function preConfig_info_longitude($_value){
-        return str_replace(',','.',$_value);
+    public static function preConfig_widget_step_width($_value)
+    {
+        return self::checkValueBetween($_value, 1);
+    }
+
+    public static function preConfig_widget_step_height($_value)
+    {
+        return self::checkValueBetween($_value, 1);
+    }
+
+    public static function preConfig_css_background_opacity($_value)
+    {
+        return self::checkValueBetween($_value, 0, 1);
+    }
+
+    public static function preConfig_css_border_radius($_value)
+    {
+        return self::checkValueBetween($_value, 0, 1);
+    }
+
+    public static function preConfig_name($_value)
+    {
+        return str_replace(array('\\', '/', "'", '"'), '', $_value);
+    }
+
+    public static function preConfig_info_latitude($_value)
+    {
+        return str_replace(',', '.', $_value);
+    }
+
+    public static function preConfig_info_longitude($_value)
+    {
+        return str_replace(',', '.', $_value);
+    }
+
+    public static function preConfig_tts_engine($_value)
+    {
+        try {
+            if ($_value != ConfigManager::byKey('tts::engine')) {
+                FileSystemHelper::rrmdir(NextDomHelper::getTmpFolder('tts'));
+            }
+        } catch (\Exception $e) {
+
+        }
+        return $_value;
     }
 }

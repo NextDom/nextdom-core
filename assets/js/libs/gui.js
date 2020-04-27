@@ -84,7 +84,7 @@ function adjustNextDomTheme() {
   }
 
   // containers adjustement
-  var needContent = pageContainer.children("section").length === 0 && pageContainer.children().children("section").length === 0 && (getUrlVars('p') !== 'plan') && (getUrlVars('p') !== 'view') && (getUrlVars('p') !== 'plan3d');
+  var needContent = pageContainer.children("section").length === 0 && pageContainer.children().children("section").length === 0 && (getUrlVars('p') !== 'plan') && (getUrlVars('p') !== 'view');
   if (needContent) {
     if (!pageContainer.hasClass('content')) {
       pageContainer.addClass('content');

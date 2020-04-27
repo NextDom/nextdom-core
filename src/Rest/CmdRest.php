@@ -148,7 +148,7 @@ class CmdRest
     }
 
     /**
-     * Execute command\n
+     * Execute command
      * Options must be stored in $_POST of the request.
      *
      * @param Request $request Query data

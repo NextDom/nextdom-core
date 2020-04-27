@@ -29,7 +29,6 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ThemeManager;
@@ -61,7 +60,6 @@ class ProfilsController extends BaseController
             'core::dashboard' => __('Dashboard'),
             'core::view' => __('Vue'),
             'core::plan' => __('Design'),
-            'core::plan3d' => __('Design 3D'),
         ];
         $pluginManagerList = PluginManager::listPlugin();
         foreach ($pluginManagerList as $pluginList) {
@@ -116,7 +114,6 @@ class ProfilsController extends BaseController
         $pageData['profilsJeeObjects'] = JeeObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();
         $pageData['profilsPlans'] = PlanHeaderManager::all();
-        $pageData['profilsPlans3d'] = Plan3dHeaderManager::all();
         $pageData['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $themesBases = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');

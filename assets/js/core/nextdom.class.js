@@ -399,3 +399,7 @@ nextdom.consistency = function(queryParams) {
 nextdom.version = function(queryParams) {
   nextdom.private.ajax('NextDom', 'version', queryParams);
 };
+
+nextdom.cleanDatabase = function(queryParams) {
+  nextdom.private.ajax('NextDom', 'cleanDatabase', queryParams);
+};

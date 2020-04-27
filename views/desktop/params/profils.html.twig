@@ -226,18 +226,6 @@
                                 {% endfor %}
                             </select>
                         </div>
-
-                        {# Plan 3D désactivé
-                        <legend>{{ 'Design 3D par défaut' }}</legend>
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Design 3D par défaut' }}</label>
-                            <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
-                                {% for plan in profilsPlans3d %}
-                                    <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        #}
                     </div>
 
                     <legend>{{ 'Options des Designs et Vues' }}</legend>
@@ -249,15 +237,6 @@
                                 <label for="defaultPlanFullScreen" class="control-label label-check">{{ 'Activer' }}</label>
                             </div>
                         </div>
-                        {# Plan 3D désactivé
-                        <div class="form-group col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Design 3D en plein écran' }}</label>
-                            <div>
-                                <input id="defaultPlan3dFullScreen" type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
-                                <label for="defaultPlan3dFullScreen" class="control-label label-check">{{ 'Activer' }}</label>
-                            </div>
-                        </div>
-                        #}
                         <div class="form-group col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Déplier le panneau des Vues' }}</label>
                             <div>

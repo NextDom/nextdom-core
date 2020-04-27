@@ -40,8 +40,6 @@ class NextDomObj extends Enum
     const OBJECT = 'object';
     const PLAN = 'plan';
     const PLAN_HEADER = 'planHeader';
-    const PLAN3D = 'plan3d';
-    const PLAN3D_HEADER = 'plan3dHeader';
     const PLAN_OBJECT = 'planObject';
     const PLUGIN = 'plugin';
     const SCENARIO = 'scenario';

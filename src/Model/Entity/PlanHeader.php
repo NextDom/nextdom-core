@@ -31,6 +31,7 @@ use NextDom\Model\Entity\Parents\BaseEntity;
 use NextDom\Model\Entity\Parents\ConfigurationEntity;
 use NextDom\Model\Entity\Parents\NameEntity;
 use NextDom\Model\Entity\Parents\ImageEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
 
 /**
  * Planheader
@@ -43,7 +44,7 @@ class PlanHeader extends BaseEntity
     const TABLE_NAME = NextDomObj::PLAN_HEADER;
     const IMG_DIR_NAME = NextDomObj::PLAN;
 
-    use NameEntity, ImageEntity, AccessCodeConfigurationEntity;
+    use NameEntity, ImageEntity, AccessCodeConfigurationEntity, OrderEntity;
 
     /**
      * @param string $_format

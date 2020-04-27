@@ -432,167 +432,6 @@ class NetworkHelper
         return $_string;
     }
 
-    public static function dnsStart()
-    {
-        if (ConfigManager::byKey('dns::token') == '') {
-            return;
-        }
-        if (ConfigManager::byKey('market::allowDNS') != 1) {
-            return;
-        }
-        $openvpn = self::dnsCreate();
-        /** @var Cmd $cmd */
-        $cmd = $openvpn->getCmd('action', 'start');
-        if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de démarrage du DNS est introuvable'));
-        }
-        $cmd->execCmd();
-        $interface = $openvpn->getInterfaceName();
-        if ($interface !== null && $interface != '' && $interface !== false) {
-            shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port 80 -j ACCEPT');
-            if (ConfigManager::byKey('dns::openport') != '') {
-                foreach (explode(',', ConfigManager::byKey('dns::openport')) as $port) {
-                    if (is_nan($port)) {
-                        continue;
-                    }
-                    try {
-                        shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port ' . $port . ' -j ACCEPT');
-                    } catch (\Exception $e) {
-
-                    }
-                }
-            }
-            shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -j DROP');
-        }
-    }
-
-    /**
-     * @return array|mixed|\openvpn
-     * @throws CoreException
-     * @throws \Throwable
-     */
-    public static function dnsCreate()
-    {
-        if (ConfigManager::byKey('dns::token') == '') {
-            return null;
-        }
-        try {
-            $plugin = PluginManager::byId('openvpn');
-            if (!is_object($plugin)) {
-                $update = UpdateManager::byLogicalId('openvpn');
-                if (!is_object($update)) {
-                    $update = new Update();
-                }
-                $update->setLogicalId('openvpn');
-                $update->setSource('market');
-                $update->setConfiguration('version', 'stable');
-                $update->save();
-                $update->doUpdate();
-                $plugin = PluginManager::byId('openvpn');
-            }
-        } catch (\Exception $e) {
-            $update = UpdateManager::byLogicalId('openvpn');
-            if (!is_object($update)) {
-                $update = new Update();
-            }
-            $update->setLogicalId('openvpn');
-            $update->setSource('market');
-            $update->setConfiguration('version', 'stable');
-            $update->save();
-            $update->doUpdate();
-            $plugin = PluginManager::byId('openvpn');
-        }
-        if (!is_object($plugin)) {
-            throw new CoreException(__('Le plugin OpenVPN doit être installé'));
-        }
-        if (!$plugin->isActive()) {
-            $plugin->setIsEnable(1);
-            $plugin->dependancy_install();
-        }
-        if (!$plugin->isActive()) {
-            throw new CoreException(__('Le plugin OpenVPN doit être actif'));
-        }
-        $openvpn = EqLogicManager::byLogicalId('dnsnextdom', 'openvpn');
-        if (!is_object($openvpn)) {
-            /** @noinspection PhpUndefinedClassInspection */
-            $openvpn = new \openvpn();
-            $openvpn->setName('DNS NextDom');
-        }
-        $openvpn->setIsEnable(1);
-        $openvpn->setLogicalId('dnsnextdom');
-        $openvpn->setEqType_name('openvpn');
-        $openvpn->setConfiguration('dev', 'tun');
-        $openvpn->setConfiguration('proto', 'udp');
-        if (ConfigManager::byKey('dns::vpnurl') != '') {
-            $openvpn->setConfiguration('remote_host', ConfigManager::byKey('dns::vpnurl'));
-        } else {
-            $openvpn->setConfiguration('remote_host', 'vpn.dns' . ConfigManager::byKey('dns::number', 'core', 1) . '.jeedom.com');
-        }
-        $openvpn->setConfiguration('username', NextDomHelper::getHardwareKey());
-        $openvpn->setConfiguration('password', ConfigManager::byKey('dns::token'));
-        $openvpn->setConfiguration('compression', 'comp-lzo');
-        $openvpn->setConfiguration('remote_port', ConfigManager::byKey('vpn::port', 'core', 1194));
-        $openvpn->setConfiguration('auth_mode', 'password');
-        if (ConfigManager::byKey('connection::4g') == 1) {
-            $openvpn->setConfiguration('optionsAfterStart', 'sudo ip link set dev #interface# mtu 1300');
-        } else {
-            $openvpn->setConfiguration('optionsAfterStart', '');
-        }
-        $openvpn->save(true);
-        if (!file_exists(NEXTDOM_ROOT . '/plugins/openvpn/data')) {
-            shell_exec('mkdir -p ' . NEXTDOM_ROOT . '/plugins/openvpn/data');
-        }
-        $path_ca = NEXTDOM_ROOT . '/plugins/openvpn/data/ca_' . $openvpn->getConfiguration('key') . '.crt';
-        if (file_exists($path_ca)) {
-            unlink($path_ca);
-        }
-        copy(NEXTDOM_ROOT . '/script/ca_dns.crt', $path_ca);
-        if (!file_exists($path_ca)) {
-            throw new CoreException(__('Impossible de créer le fichier  : ') . $path_ca);
-        }
-        return $openvpn;
-    }
-
-    /**
-     * @return bool
-     * @throws CoreException
-     * @throws \Throwable
-     */
-    public static function dnsRun()
-    {
-        if (ConfigManager::byKey('dns::token') == '') {
-            return false;
-        }
-        if (ConfigManager::byKey('market::allowDNS') != 1) {
-            return false;
-        }
-        try {
-            $openvpn = self::dnsCreate();
-        } catch (\Exception $e) {
-            return false;
-        }
-        /** @var Cmd $cmd */
-        $cmd = $openvpn->getCmd('info', 'state');
-        if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de statut du DNS est introuvable'));
-        }
-        return $cmd->execCmd();
-    }
-
-    public static function dnsStop()
-    {
-        if (ConfigManager::byKey('dns::token') == '') {
-            return;
-        }
-        $openvpn = self::dnsCreate();
-        /** @var Cmd $cmd */
-        $cmd = $openvpn->getCmd('action', 'stop');
-        if (!is_object($cmd)) {
-            throw new CoreException(__('La commande d\'arrêt du DNS est introuvable'));
-        }
-        $cmd->execCmd();
-    }
-
     /**
      * @param $_interface
      * @return bool|string
@@ -643,4 +482,14 @@ class NetworkHelper
         LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
     }
+
+    public static function checkOpenPort($targetHost, $targetPort) {
+        $fp = @fsockopen($targetHost, $targetPort, $errno, $errstr, 0.1);
+        if (!is_resource($fp)) {
+            return false;
+        }
+        fclose($fp);
+        return true;
+    }
+
 }

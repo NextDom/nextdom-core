@@ -13,10 +13,21 @@ $ignoredMethods = [
         'setField',          # private
         'buildQuery',        # private
         'getField',          # private
-        'getReflectionClass' # private
+        'getReflectionClass',# private
+        'compareDatabase',
+        'compareTable',
+        'prepareIndexCompare',
+        'compareField',
+        'compareIndex',
+        'buildDefinitionField',
+        'buildDefinitionIndex'
     ],
     'eqLogic' => [
-        'cast' # Usage only static (in manager)
+        'cast', # Usage only static (in manager)
+        'byEqRealId',
+        'getEqReal_id',
+        'getEqReal',
+        'setEqReal_id'
     ],
     'event' => [
         'getFileDescriptorLock', # Usage only static (in manager)
@@ -27,7 +38,11 @@ $ignoredMethods = [
     'nextdom' => [
         'getThemeConfig', # No usage
         'saveCustom', # Removed
-        'checkValueInconfiguration' # Usage only static and private (in manager)
+        'checkValueInconfiguration', # Usage only static and private (in manager)
+        'mimify' #Useless for us
+    ],
+    'message' => [
+        'getOccurrences' # Not used
     ]
 ];
 $error = false;
@@ -46,6 +61,7 @@ if ($argc > 2) {
         }
     } else {
         echo "La classe $className n'existe pas.\n";
+        $error = true;
     }
 } else {
     $error = true;

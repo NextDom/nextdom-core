@@ -25,6 +25,7 @@ use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
+use NextDom\Helpers\DnsHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -282,6 +283,12 @@ class RepoMarket implements BaseRepo
         return $return;
     }
 
+    /**
+     * @param $_logicalId
+     * @param string $_type
+     * @return array|RepoMarket
+     * @throws CoreException
+     */
     public static function byLogicalIdAndType($_logicalId, $_type = '')
     {
         $market = self::getJsonRpc();
@@ -878,6 +885,15 @@ class RepoMarket implements BaseRepo
         }
     }
 
+    public static function sendTunnelClientId($_client_id) {
+        $market = self::getJsonRpc();
+        if ($market->sendRequest('service::tunnel::setClientId',array('client_id' => $_client_id))) {
+            return $market->getResult();
+        } else {
+            throw new CoreException($market->getError(), $market->getErrorCode());
+        }
+    }
+
     public static function cron5()
     {
         try {
@@ -1117,7 +1133,7 @@ class RepoMarket implements BaseRepo
                 self::monitoring_stop();
             }
             if ($restart_dns && ConfigManager::byKey('market::allowDNS') == 1) {
-                NetworkHelper::dnsStart();
+                DnsHelper::dnsStart();
             }
             if (ConfigManager::byKey('market::allowDNS') == 1 && isset($_result['NextDomHelper::url']) && ConfigManager::byKey('NextDomHelper::url') != $_result['NextDomHelper::url']) {
                 ConfigManager::save('NextDomHelper::url', $_result['NextDomHelper::url']);

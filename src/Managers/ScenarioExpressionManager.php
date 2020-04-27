@@ -865,6 +865,35 @@ class ScenarioExpressionManager extends BaseManager
         return $values[round(count($values) / 2) - 1];
     }
 
+    public static function avg()
+    {
+        $args = func_get_args();
+        $values = [];
+        foreach ($args as $arg) {
+            if (is_numeric($arg)) {
+                $values[] = $arg;
+            } else {
+                $value = CmdManager::cmdToValue($arg);
+                if (is_numeric($value)) {
+                    $values[] = $value;
+                } else {
+                    try {
+                        $values[] = evaluate($value);
+                    } catch (\Exception $ex) {
+
+                    }
+                }
+            }
+        }
+        if (count($values) < 1) {
+            return 0;
+        }
+        if (count($values) == 1) {
+            return $values[0];
+        }
+        return array_sum($values) / count($values);
+    }
+
     /**
      * Renvoie une tendance @TODO de ?
      *
@@ -1114,7 +1143,7 @@ class ScenarioExpressionManager extends BaseManager
         $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
         $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistic = $cmd->getStatistique($startDate, $endDate);
-        if(!isset($historyStatistic['last']) || $historyStatistic['last'] === ''){
+        if (!isset($historyStatistic['last']) || $historyStatistic['last'] === '') {
             return '';
         }
         return round($historyStatistic['last'], 1);

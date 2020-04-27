@@ -18,6 +18,7 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
+use NextDom\Helpers\DnsHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Managers\ConfigManager;
 
@@ -34,14 +35,14 @@ class NetworkAjax extends BaseAjax
     public function restartDns()
     {
         ConfigManager::save('market::allowDNS', 1);
-        NetworkHelper::dnsStart();
+        DnsHelper::dnsStart();
         $this->ajax->success();
     }
 
     public function stopDns()
     {
         ConfigManager::save('market::allowDNS', 0);
-        NetworkHelper::dnsStop();
+        DnsHelper::dnsStop();
         $this->ajax->success();
     }
 

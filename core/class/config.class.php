@@ -65,15 +65,66 @@ class config {
         ConfigManager::postConfig_market_allowDNS($_value);
     }
 
-    public static function preConfig_market_password($_value) {
-        return ConfigManager::preConfig_market_password($_value);
+    public static function postConfig_interface_advance_vertCentering($_value){
+        ConfigManager::postConfig_interface_advance_vertCentering($_value);
     }
 
-    public static function preConfig_info_latitude($_value) {
-        ConfigManager::preConfig_info_latitude($_value);
+    public static function postConfig_object_summary($_value){
+        ConfigManager::postConfig_object_summary($_value);
     }
 
-    public static function preConfig_info_longitude($_value) {
+    public static function checkValueBetween($_value, $_min = null, $_max = null)
+    {
+        return ConfigManager::checkValueBetween($_value, $_min, $_max);
+    }
+
+    public static function preConfig_market_password($newValue)
+    {
+        return ConfigManager::preConfig_market_password($newValue);
+    }
+
+    public static function preConfig_widget_margin($_value)
+    {
+        return ConfigManager::preConfig_widget_margin($_value);
+    }
+
+    public static function preConfig_widget_step_width($_value)
+    {
+        return ConfigManager::preConfig_widget_step_width($_value);
+    }
+
+    public static function preConfig_widget_step_height($_value)
+    {
+        return ConfigManager::preConfig_widget_step_width($_value);
+    }
+
+    public static function preConfig_css_background_opacity($_value)
+    {
+        return ConfigManager::preConfig_css_background_opacity($_value);
+    }
+
+    public static function preConfig_css_border_radius($_value)
+    {
+        return ConfigManager::preConfig_css_background_opacity($_value);
+    }
+
+    public static function preConfig_name($_value)
+    {
+        return ConfigManager::preConfig_name($_value);
+    }
+
+    public static function preConfig_info_latitude($_value)
+    {
+        return ConfigManager::preConfig_info_latitude($_value);
+    }
+
+    public static function preConfig_info_longitude($_value)
+    {
         return ConfigManager::preConfig_info_longitude($_value);
+    }
+
+    public static function preConfig_tts_engine($_value)
+    {
+        return ConfigManager::preConfig_tts_engine($_value);
     }
 }

@@ -63,4 +63,8 @@ class listener extends NextDom\Model\Entity\Listener {
     public static function backgroundCalculDependencyCmd($_event) {
         ListenerManager::backgroundCalculDependencyCmd($_event);
     }
+    
+    public static function clean() {
+        ListenerManager::clean();
+    }
 }

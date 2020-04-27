@@ -34,12 +34,19 @@
 
 namespace NextDom\Managers;
 
+use Exception;
 use NextDom\Enums\Common;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Listener;
+use ReflectionException;
+use const NEXTDOM_ROOT;
+use function GuzzleHttp\json_encode;
 
 /**
  * Class ListenerManager
@@ -54,8 +61,8 @@ class ListenerManager extends BaseManager
 
     /**
      * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
+     * @throws CoreException
+     * @throws ReflectionException
      */
     public static function all()
     {
@@ -65,8 +72,8 @@ class ListenerManager extends BaseManager
     /**
      * @param $_class
      * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
+     * @throws CoreException
+     * @throws ReflectionException
      */
     public static function byClass($_class)
     {
@@ -78,8 +85,8 @@ class ListenerManager extends BaseManager
      * @param $_function
      * @param string $_option
      * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
+     * @throws CoreException
+     * @throws ReflectionException
      */
     public static function byClassAndFunction($_class, $_function, $_option = '')
     {
@@ -99,8 +106,8 @@ class ListenerManager extends BaseManager
      * @param $_function
      * @param string $_option
      * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
+     * @throws CoreException
+     * @throws ReflectionException
      */
     public static function searchClassFunctionOption($_class, $_function, $_option = '')
     {
@@ -121,8 +128,8 @@ class ListenerManager extends BaseManager
      * @param $_function
      * @param $_event
      * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
+     * @throws CoreException
+     * @throws ReflectionException
      */
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
     {
@@ -138,7 +145,7 @@ class ListenerManager extends BaseManager
      * @param $_function
      * @param $_event
      * @param string $_option
-     * @throws \NextDom\Exceptions\CoreException
+     * @throws CoreException
      */
     public static function removeByClassFunctionAndEvent($_class, $_function, $_event, $_option = '')
     {
@@ -163,7 +170,7 @@ class ListenerManager extends BaseManager
      * @param $_event
      * @param $_value
      * @param $_datetime
-     * @throws \Exception
+     * @throws Exception
      */
     public static function check($_event, $_value, $_datetime = null)
     {
@@ -178,7 +185,7 @@ class ListenerManager extends BaseManager
     /**
      * @param $_event
      * @return Listener[]|null
-     * @throws \Exception
+     * @throws Exception
      */
     public static function searchEvent($_event)
     {
@@ -192,7 +199,7 @@ class ListenerManager extends BaseManager
 
     /**
      * @param $_event
-     * @throws \Exception
+     * @throws Exception
      */
     public static function backgroundCalculDependencyCmd($_event)
     {
@@ -202,5 +209,27 @@ class ListenerManager extends BaseManager
         $cmd = NEXTDOM_ROOT . '/src/Api/start_listener.php';
         $cmd .= ' event_id=' . $_event;
         SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');
+    }
+    
+    public static function clean()
+    {
+        foreach (self::all() as $listener) {
+            $events = $listener->getEvent();
+            if(count($events) > 0){
+                $listener->emptyEvent();
+                foreach ($events as $event) {
+                    $cmd = CmdManager::byId(str_replace('#','',$event));
+                    if(is_object($cmd)){
+                        $listener->addEvent($cmd->getId());
+                    }
+                }
+                $listener->save();
+                $events = $listener->getEvent();
+            }
+            else {
+                LogHelper::add('listener','debug','Remove listener : '.json_encode(Utils::o2a($listener)));
+                $listener->remove();
+            }
+        }
     }
 }
