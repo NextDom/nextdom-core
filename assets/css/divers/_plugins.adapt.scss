@@ -1,0 +1,78 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+
+/**
+ *       All Lunarok's Plugins
+ * Fix: @Lunarok, The `.fa-tachometer` icon does not exist. You must use `.fa-tachometer-alt` !
+ ************************/
+.fa-tachometer {
+	font-family: FontAwesome;
+	content: "\f3fd";
+}
+
+/**
+ *       Plugin Camera
+ ************************/
+.eqLogic[data-eqtype='camera'] .btn-default {
+    background: #745cb0aa;
+    margin-top:2px;
+}
+
+/**
+ *       Plugin Jeexplorer
+ ************************/
+.elfinder {
+    .ui-widget-content {
+        background-color: #546e7a !important;
+    }
+    .elfinder-dialog .ui-dialog-titlebar {
+        background-color: rgb(85,85,85) !important;
+    }
+    .elfinder-button {
+        width: 20px;
+    }
+    .elfinder-button:hover {
+        background: rgb(85, 85, 85);
+    }
+    .ui-helper-hidden-accessible {
+        padding: 0 !important;
+        width: 0 !important;
+    }
+    .elfinder-button-search input {
+        border: 0 !important;
+    }
+}
