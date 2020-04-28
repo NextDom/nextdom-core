@@ -18,6 +18,7 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
@@ -54,11 +55,11 @@ class ListenerAjax extends BaseAjax
     {
         $listeners = Utils::o2a(ListenerManager::all());
         foreach ($listeners as &$listener) {
-            $listener['event_str'] = '';
-            foreach ($listener['event'] as $event) {
-                $listener['event_str'] .= $event . ',';
+            $listener[AjaxParams::EVENT_STR] = '';
+            foreach ($listener[Common::EVENT] as $event) {
+                $listener[AjaxParams::EVENT_STR] .= $event . ',';
             }
-            $listener['event_str'] = NextDomHelper::toHumanReadable(trim($listener['event_str'], ','));
+            $listener[AjaxParams::EVENT_STR] = NextDomHelper::toHumanReadable(trim($listener[AjaxParams::EVENT_STR], ','));
         }
         $this->ajax->success($listeners);
     }

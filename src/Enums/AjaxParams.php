@@ -40,6 +40,7 @@ class AjaxParams extends Enum
     const ENABLE = 'enable';
     const EQLOGIC_NAME = 'eqLogic_name';
     const EQTYPE_NAME = 'eqType_name';
+    const EVENT_STR = 'event_str';
     const EXPRESSION = 'expression';
     const FILTER = 'filter';
     const FORCE_RESTART = 'forceRestart';

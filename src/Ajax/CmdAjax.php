@@ -19,6 +19,7 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\ActionRight;
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\CmdConfigKey;
 use NextDom\Enums\CmdType;
 use NextDom\Enums\CmdViewType;
 use NextDom\Enums\Common;
@@ -57,7 +58,6 @@ class CmdAjax extends BaseAjax
      * Get one or more command(s) HTML render
      *
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function toHtml()
     {
@@ -71,7 +71,7 @@ class CmdAjax extends BaseAjax
                 }
                 $result[$cmd->getId()] = [
                     'html' => $cmd->toHtml($value[Common::VERSION]),
-                    'id' => $cmd->getId(),
+                    AjaxParams::ID => $cmd->getId(),
                 ];
             }
             $this->ajax->success($result);
@@ -79,10 +79,10 @@ class CmdAjax extends BaseAjax
             // Render one command
             $cmd = CmdManager::byId(Utils::init(AjaxParams::ID));
             if (!is_object($cmd)) {
-                throw new CoreException(__('Commande inconnue - Vérifiez l\'id'));
+                throw new CoreException(__('Commande inconnue - Vérifiez l\'ID'));
             }
             $result = [];
-            $result['id'] = $cmd->getId();
+            $result[AjaxParams::ID] = $cmd->getId();
             $result['html'] = $cmd->toHtml(Utils::init(AjaxParams::VERSION), Utils::init(AjaxParams::OPTION), Utils::init('cmdColor', null));
             $this->ajax->success($result);
         }
@@ -92,7 +92,6 @@ class CmdAjax extends BaseAjax
      * Execute a command
      *
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function execCmd()
     {
@@ -306,7 +305,7 @@ class CmdAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $cmdAjaxData = NextDomHelper::fromHumanReadable(json_decode(Utils::init(NextDomObj::CMD), true));
-        $cmd = CmdManager::byId($cmdAjaxData['id']);
+        $cmd = CmdManager::byId($cmdAjaxData[AjaxParams::ID]);
         if (!is_object($cmd)) {
             $cmd = new Cmd();
         }
@@ -326,7 +325,7 @@ class CmdAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $cmds = json_decode(Utils::init(NextDomObj::CMD), true);
         foreach ($cmds as $cmdAjaxData) {
-            $cmd = CmdManager::byId($cmdAjaxData['id']);
+            $cmd = CmdManager::byId($cmdAjaxData[AjaxParams::ID]);
             if (!is_object($cmd)) {
                 continue;
             }
@@ -419,8 +418,8 @@ class CmdAjax extends BaseAjax
         if ($dateStart !== '') {
             $dateStart = Utils::init(AjaxParams::DATE_START, date(DateFormat::FULL_DAY, strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date(DateFormat::FULL_DAY))));
         }
-        $result['maxValue'] = '';
-        $result['minValue'] = '';
+        $result[CmdConfigKey::MAX_VALUE] = '';
+        $result[CmdConfigKey::MIN_VALUE] = '';
         if ($dateStart === null) {
             $result['dateStart'] = '';
         } else {
@@ -482,11 +481,11 @@ class CmdAjax extends BaseAjax
                 }
                 $infoHistory[] = $value;
                 if (!$NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][Common::TYPE][Common::INFO][Common::SUBTYPE][$cmd->getSubType()][Common::IS_HISTORIZED][Common::TIMELINE_ONLY]) {
-                    if (($value !== null && $value > $result['maxValue']) || $result['maxValue'] == '') {
-                        $result['maxValue'] = round($value, 1);
+                    if (($value !== null && $value > $result[CmdConfigKey::MAX_VALUE]) || $result[CmdConfigKey::MAX_VALUE] == '') {
+                        $result[CmdConfigKey::MAX_VALUE] = round($value, 1);
                     }
-                    if (($value !== null && $value < $result['minValue']) || $result['minValue'] == '') {
-                        $result['minValue'] = round($value, 1);
+                    if (($value !== null && $value < $result[CmdConfigKey::MIN_VALUE]) || $result[CmdConfigKey::MIN_VALUE] == '') {
+                        $result[CmdConfigKey::MIN_VALUE] = round($value, 1);
                     }
                 }
                 $data[] = $infoHistory;
@@ -498,18 +497,18 @@ class CmdAjax extends BaseAjax
                     $infoHistory = [];
                     $infoHistory[] = floatval($datetime) * 1000;
                     $infoHistory[] = ($value === null) ? null : floatval($value);
-                    if ($value > $result['maxValue'] || $result['maxValue'] == '') {
-                        $result['maxValue'] = round($value, 1);
+                    if ($value > $result[CmdConfigKey::MAX_VALUE] || $result[CmdConfigKey::MAX_VALUE] == '') {
+                        $result[CmdConfigKey::MAX_VALUE] = round($value, 1);
                     }
-                    if ($value < $result['minValue'] || $result['minValue'] == '') {
-                        $result['minValue'] = round($value, 1);
+                    if ($value < $result[CmdConfigKey::MIN_VALUE] || $result[CmdConfigKey::MIN_VALUE] == '') {
+                        $result[CmdConfigKey::MIN_VALUE] = round($value, 1);
                     }
                     $data[] = $infoHistory;
                 }
             }
             $result['cmd_name'] = $cmdId;
             $result['history_name'] = $cmdId;
-            $result['unite'] = Utils::init('unite');
+            $result[Common::UNITE] = Utils::init(Common::UNITE);
         }
         $result['data'] = $data;
         $this->ajax->success($result);
@@ -544,10 +543,10 @@ class CmdAjax extends BaseAjax
         $cmds = json_decode(Utils::init('cmds'), true);
         $eqLogics = [];
         foreach ($cmds as $cmdJsonData) {
-            if (!isset($cmdJsonData['id']) || trim($cmdJsonData['id']) == '') {
+            if (!isset($cmdJsonData[AjaxParams::ID]) || trim($cmdJsonData[AjaxParams::ID]) == '') {
                 continue;
             }
-            $cmd = CmdManager::byId($cmdJsonData['id']);
+            $cmd = CmdManager::byId($cmdJsonData[AjaxParams::ID]);
             if (!is_object($cmd)) {
                 continue;
             }
@@ -555,16 +554,16 @@ class CmdAjax extends BaseAjax
                 $cmd->setOrder($cmdJsonData['order']);
                 $cmd->save();
             }
-            if (isset($cmdJsonData['line']) && isset($cmdJsonData['column'])) {
+            if (isset($cmdJsonData['line']) && isset($cmdJsonData[Common::COLUMN])) {
                 $renderVersion = Utils::init(AjaxParams::VERSION, CmdViewType::DASHBOARD);
                 if (!isset($eqLogics[$cmd->getEqLogic_id()])) {
                     $eqLogics[$cmd->getEqLogic_id()] = [NextDomObj::EQLOGIC => $cmd->getEqLogic(), Common::CHANGED => false];
                 }
                 $layoutDisplay = 'layout::' . $renderVersion . '::table::cmd::' . $cmd->getId();
                 if ($eqLogics[$cmd->getEqLogic_id()][NextDomObj::EQLOGIC]->getDisplay($layoutDisplay . '::line') != $cmdJsonData['line']
-                    || $eqLogics[$cmd->getEqLogic_id()][NextDomObj::EQLOGIC]->getDisplay($layoutDisplay . '::column') != $cmdJsonData['column']) {
+                    || $eqLogics[$cmd->getEqLogic_id()][NextDomObj::EQLOGIC]->getDisplay($layoutDisplay . '::column') != $cmdJsonData[Common::COLUMN]) {
                     $eqLogics[$cmd->getEqLogic_id()][NextDomObj::EQLOGIC]->setDisplay($layoutDisplay . '::line', $cmdJsonData['line']);
-                    $eqLogics[$cmd->getEqLogic_id()][NextDomObj::EQLOGIC]->setDisplay($layoutDisplay . '::column', $cmdJsonData['column']);
+                    $eqLogics[$cmd->getEqLogic_id()][NextDomObj::EQLOGIC]->setDisplay($layoutDisplay . '::column', $cmdJsonData[Common::COLUMN]);
                     $eqLogics[$cmd->getEqLogic_id()][Common::CHANGED] = true;
                 }
             }

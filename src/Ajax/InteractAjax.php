@@ -18,6 +18,8 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\SQLField;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
@@ -42,18 +44,18 @@ class InteractAjax extends BaseAjax
         $results = Utils::o2a(InteractDefManager::all());
         foreach ($results as &$result) {
             // @TODO TOus sélectionnés dans tous les cas
-            $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
-            $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
-            if ($result['link_type'] == 'cmd' && $result['link_id'] != '') {
-                $link_id = '';
-                foreach (explode('&&', $result['link_id']) as $cmd_id) {
+            $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result[AjaxParams::ID]));
+            $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result[AjaxParams::ID]));
+            if ($result[SQLField::LINK_TYPE] == 'cmd' && $result[SQLField::LINK_ID] != '') {
+                $linkId = '';
+                foreach (explode('&&', $result[SQLField::LINK_ID]) as $cmd_id) {
                     $cmd = CmdManager::byId($cmd_id);
                     if (is_object($cmd)) {
-                        $link_id .= CmdManager::cmdToHumanReadable('#' . $cmd->getId() . '# && ');
+                        $linkId .= CmdManager::cmdToHumanReadable('#' . $cmd->getId() . '# && ');
                     }
 
                 }
-                $result['link_id'] = trim(trim($link_id), '&&');
+                $result[SQLField::LINK_ID] = trim(trim($linkId), '&&');
             }
         }
         $this->ajax->success($results);
@@ -62,16 +64,16 @@ class InteractAjax extends BaseAjax
     public function byId()
     {
         $result = Utils::o2a(InteractDefManager::byId(Utils::init(AjaxParams::ID)));
-        $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
-        $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
+        $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result[AjaxParams::ID]));
+        $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result[AjaxParams::ID]));
         $this->ajax->success(NextDomHelper::toHumanReadable($result));
     }
 
     public function save()
     {
         $interact_json = NextDomHelper::fromHumanReadable(json_decode(Utils::init('interact'), true));
-        if (isset($interact_json['id'])) {
-            $interact = InteractDefManager::byId($interact_json['id']);
+        if (isset($interact_json[AjaxParams::ID])) {
+            $interact = InteractDefManager::byId($interact_json[AjaxParams::ID]);
         }
         if (!isset($interact) || !is_object($interact)) {
             $interact = new InteractDef();

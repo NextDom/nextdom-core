@@ -36,6 +36,7 @@ class Common extends Enum
     const CMD_ID = 'cmd_id';
     const CMD_PARAMETERS = 'cmd_parameters';
     const COLOR = 'color';
+    const COLUMN = 'column';
     const CONFIGURATION = 'configuration';
     const CORE = 'core';
     const CUSTOM = 'custom';
