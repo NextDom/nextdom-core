@@ -525,6 +525,16 @@ class MigrationHelper
      */
     private static function migrate_0_8_0($logFile = LogTarget::MIGRATION)
     {
+        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
+        DBHelper::exec("ALTER TABLE `eqLogic` DROP `eqReal_id`;");
+        DBHelper::exec("DROP TABLE `eqReal`;");
+
+        DBHelper::exec("ALTER TABLE planHeader ADD `order` int(11) DEFAULT NULL;");
+        DBHelper::exec("ALTER TABLE planHeader ADD KEY `order` (`order`)");
+
+        DBHelper::exec("DROP TABLE `plan3d`");
+        DBHelper::exec("DROP TABLE `plan3dHeader`");
+
         $dir = NEXTDOM_DATA . '/';
         $planHeaderList = PlanHeaderManager::all();
         foreach ($planHeaderList as $planHeader) {
@@ -543,16 +553,6 @@ class MigrationHelper
         // delete /data/custom/plans/
         $custom_plans = $dir . 'data/custom/plans/';
         FileSystemHelper::rrmdir($custom_plans);
-
-        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
-        DBHelper::exec("ALTER TABLE `eqLogic` DROP `eqReal_id`;");
-        DBHelper::exec("DROP TABLE `eqReal`;");
-
-        DBHelper::exec("ALTER TABLE planHeader ADD `order` int(11) DEFAULT NULL;");
-        DBHelper::exec("ALTER TABLE planHeader ADD KEY `order` (`order`)");
-
-        DBHelper::exec("DROP TABLE `plan3d`");
-        DBHelper::exec("DROP TABLE `plan3dHeader`");
 
         DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
