@@ -211,12 +211,7 @@ class PlanAjax extends BaseAjax
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
         $uploadedImageData->setType(substr($extension, 1));
-        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
-            throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
-        }
+        $this->checkSizeAndExtension($extension);
         $uploadedImageData->setSize(getimagesize($_FILES['file']['tmp_name']));
         $fileContent = file_get_contents($_FILES['file']['tmp_name']);
         $uploadedImageData->setHash(Utils::sha512($fileContent));
@@ -297,4 +292,6 @@ class PlanAjax extends BaseAjax
         $plan->save();
         $this->ajax->success();
     }
+
+
 }

@@ -303,15 +303,7 @@ class HistoryManager extends BaseManager
      */
     public static function removes($_cmd_id, $_startTime = null, $_endTime = null)
     {
-        $values = [
-            'cmd_id' => $_cmd_id,
-        ];
-        if ($_startTime !== null) {
-            $values['startTime'] = $_startTime;
-        }
-        if ($_endTime !== null) {
-            $values['endTime'] = $_endTime;
-        }
+        $values = self::timeValues($_cmd_id, $_startTime, $_endTime);
 
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
             WHERE `cmd_id` = :cmd_id ';
@@ -349,15 +341,7 @@ class HistoryManager extends BaseManager
      */
     public static function getPlurality($_cmd_id, $_startTime = null, $_endTime = null, $_period = 'day', $_offset = 0)
     {
-        $values = [
-            'cmd_id' => $_cmd_id,
-        ];
-        if ($_startTime !== null) {
-            $values['startTime'] = $_startTime;
-        }
-        if ($_endTime !== null) {
-            $values['endTime'] = $_endTime;
-        }
+        $values = self::timeValues($_cmd_id, $_startTime, $_endTime);
         switch ($_period) {
             case 'day':
                 if ($_offset == 0) {
@@ -467,15 +451,7 @@ class HistoryManager extends BaseManager
      */
     public static function all($_cmd_id, $_startTime = null, $_endTime = null)
     {
-        $values = [
-            'cmd_id' => $_cmd_id,
-        ];
-        if ($_startTime !== null) {
-            $values['startTime'] = $_startTime;
-        }
-        if ($_endTime !== null) {
-            $values['endTime'] = $_endTime;
-        }
+        $values = self::timeValues($_cmd_id, $_startTime, $_endTime);
 
         $sql = static::getBaseSQL() . '
                 WHERE `cmd_id` = :cmd_id ';
@@ -651,8 +627,7 @@ class HistoryManager extends BaseManager
         if ($cmd->getIsHistorized() != 1) {
             return -2;
         }
-        $_value = str_replace(',', '.', $_value);
-        $_value = trim($_value);
+        $_value = trim(str_replace(',', '.', $_value));
         $_decimal = strlen(substr(strrchr($_value, '.'), 1));
         $histories = array_reverse(self::all($_cmd_id));
         $c = count($histories);
@@ -719,8 +694,7 @@ class HistoryManager extends BaseManager
         if ($cmd->getIsHistorized() != 1) {
             return -2;
         }
-        $_value = str_replace(',', '.', $_value);
-        $_value = trim($_value);
+        $_value = trim(str_replace(',', '.', $_value));
         $_decimal = strlen(substr(strrchr($_value, '.'), 1));
         $histories = array_reverse(self::all($_cmd_id));
         $c = count($histories);
@@ -943,5 +917,25 @@ class HistoryManager extends BaseManager
             ksort($value);
         }
         return $value;
+    }
+
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     */
+    private static function timeValues($_cmd_id, $_startTime, $_endTime): array
+    {
+        $values = [
+            'cmd_id' => $_cmd_id,
+        ];
+        if ($_startTime !== null) {
+            $values['startTime'] = $_startTime;
+        }
+        if ($_endTime !== null) {
+            $values['endTime'] = $_endTime;
+        }
+        return $values;
     }
 }

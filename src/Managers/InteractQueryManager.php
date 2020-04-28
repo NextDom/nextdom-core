@@ -107,14 +107,14 @@ class InteractQueryManager extends BaseManager
     }
 
     /**
-     * @param $_interactDef_id
+     * @param $interactDefId
      * @return array|mixed|null
      * @throws \NextDom\Exceptions\CoreException
      */
-    public static function removeByInteractDefId($_interactDef_id)
+    public static function removeByInteractDefId($interactDefId)
     {
         $values = [
-            'interactDef_id' => $_interactDef_id,
+            'interactDef_id' => $interactDefId,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                 WHERE `interactDef_id` = :interactDef_id';
@@ -134,7 +134,6 @@ class InteractQueryManager extends BaseManager
     /**
      * @param $_options
      * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
      */
     public static function warnMeExecute($_options)
     {
@@ -302,9 +301,7 @@ class InteractQueryManager extends BaseManager
             $current = array_merge($current, self::findInQuery(Common::SUMMARY, $current[Common::QUERY], $current));
         }
 
-        $data = self::findInQuery(NextDomObj::OBJECT, $_query);
-        $data = array_merge($data, self::findInQuery(NextDomObj::EQLOGIC, $data[Common::QUERY], $data));
-        $data = array_merge($data, self::findInQuery(NextDomObj::CMD, $data[Common::QUERY], $data));
+        $data = self::mergeData($_query);
         if (isset($data[NextDomObj::OBJECT]) && is_object($current[NextDomObj::OBJECT])) {
             $humanName = self::replaceForContextual($current[NextDomObj::OBJECT]->getName(), $data[NextDomObj::OBJECT]->getName(), $humanName);
         }
@@ -628,9 +625,7 @@ class InteractQueryManager extends BaseManager
         $listener = new Listener();
         $listener->setClass(NextDomObj::INTERACT_QUERY);
         $listener->setFunction('warnMeExecute');
-        $data = self::findInQuery(NextDomObj::OBJECT, $_query);
-        $data = array_merge($data, self::findInQuery(NextDomObj::EQLOGIC, $data[Common::QUERY], $data));
-        $data = array_merge($data, self::findInQuery(NextDomObj::CMD, $data[Common::QUERY], $data));
+        $data = self::mergeData($_query);
         if (!isset($data[NextDomObj::CMD]) || !is_object($data[NextDomObj::CMD])) {
             return null;
         } else {
@@ -889,5 +884,18 @@ class InteractQueryManager extends BaseManager
         }
         $_params['execNow'] = 1;
         $interactQuery->executeAndReply($_params);
+    }
+
+    /**
+     * @param $query
+     * @return array
+     * @throws \Exception
+     */
+    private static function mergeData($query): array
+    {
+        $data = self::findInQuery(NextDomObj::OBJECT, $query);
+        $data = array_merge($data, self::findInQuery(NextDomObj::EQLOGIC, $data[Common::QUERY], $data));
+        $data = array_merge($data, self::findInQuery(NextDomObj::CMD, $data[Common::QUERY], $data));
+        return $data;
     }
 }

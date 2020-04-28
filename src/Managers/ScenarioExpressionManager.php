@@ -962,11 +962,11 @@ class ScenarioExpressionManager extends BaseManager
      */
     public static function stateChanges($cmdId, $value = null, $period = '1 hour')
     {
+        $cmd = CmdManager::byId(str_replace('#', '', $cmdId));
         if (!is_numeric(str_replace('#', '', $cmdId))) {
             $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($cmdId)));
-        } else {
-            $cmd = CmdManager::byId(str_replace('#', '', $cmdId));
         }
+
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }

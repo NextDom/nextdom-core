@@ -130,4 +130,18 @@ abstract class BaseAjax
         }
         return false;
     }
+
+    /**
+     * @param string $extension
+     * @throws CoreException
+     */
+    protected function checkSizeAndExtension(string $extension)
+    {
+        if (!in_array($extension, [ '.jpg', '.jpeg', '.png' ])) {
+            throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
+        }
+        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
+            throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
+        }
+    }
 }

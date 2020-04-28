@@ -39,8 +39,17 @@ use NextDom\Model\Entity\Scenario;
  */
 class ScenarioAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
     /**
@@ -79,6 +88,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function listScenarioHtml()
     {
         $return = [];
@@ -90,6 +102,10 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function setOrder()
     {
         $scenarios = json_decode(Utils::init(AjaxParams::SCENARIOS), true);
@@ -107,6 +123,10 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function testExpression()
     {
         $result = [];
@@ -120,6 +140,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success($result);
     }
 
+    /**
+     *
+     */
     public function getTemplate()
     {
         $this->ajax->success(ScenarioManager::getTemplate());
@@ -150,6 +173,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     *
+     */
     public function removeTemplate()
     {
         $templateFile = FoldersAndFilesReferential::SCENARIO_TEMPLATE_FORLDER . Utils::initFilename(AjaxParams::TEMPLATE);
@@ -159,6 +185,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function loadTemplateDiff()
     {
         $templateFile = FoldersAndFilesReferential::SCENARIO_TEMPLATE_FORLDER . Utils::initFilename(AjaxParams::TEMPLATE);
@@ -206,6 +235,10 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success($result);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function applyTemplate()
     {
         $templateFile = FoldersAndFilesReferential::SCENARIO_TEMPLATE_FORLDER . Utils::initFilename(AjaxParams::TEMPLATE);
@@ -253,6 +286,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $scenarios = ScenarioManager::all();
@@ -265,6 +301,10 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success($result);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function saveAll()
     {
         $scenarios = json_decode(Utils::init(AjaxParams::SCENARIOS), true);
@@ -281,6 +321,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function autoCompleteGroup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -291,6 +334,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success($result);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function toHtml()
     {
         $target = Utils::init(AjaxParams::ID);
@@ -318,6 +364,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -332,6 +381,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function emptyLog()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -348,6 +400,10 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -358,6 +414,10 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success(Utils::o2a($scenario->copy(Utils::init(Common::NAME))));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function get()
     {
         $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
@@ -454,6 +514,9 @@ class ScenarioAjax extends BaseAjax
         $this->ajax->success(Utils::o2a($targetScenario));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function actionToHtml()
     {
         $result = null;
@@ -481,6 +544,9 @@ class ScenarioAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function templateupload()
     {
         $uploadDir = FoldersAndFilesReferential::SCENARIO_TEMPLATE_FORLDER;

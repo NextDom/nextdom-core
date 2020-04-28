@@ -187,6 +187,9 @@ class ViewAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -198,12 +201,7 @@ class ViewAjax extends BaseAjax
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
-            throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
-        }
+        $this->checkSizeAndExtension($extension);
         $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/view/', 'view' . $view->getId() . '*');
         if (count($files) > 0) {
             foreach ($files as $file) {
