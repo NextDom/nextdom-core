@@ -51,19 +51,17 @@ class UpdateAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $result = [];
-        /**
-         * @var Update $update
-         */
+        /** @var Update $update */
         foreach (UpdateManager::all(Utils::init(AjaxParams::FILTER)) as $update) {
             $infos = Utils::o2a($update);
-            if ($update->getType() == 'plugin') {
+            if ($update->getType() == AjaxParams::PLUGIN) {
                 try {
                     $plugin = PluginManager::byId($update->getLogicalId());
                     if (is_object($plugin)) {
-                        $infos['plugin'] = Utils::o2a($plugin);
-                        $infos['plugin']['icon'] = $plugin->getPathImgIcon();
+                        $infos[AjaxParams::PLUGIN] = Utils::o2a($plugin);
+                        $infos[AjaxParams::PLUGIN]['icon'] = $plugin->getPathImgIcon();
                     } else {
-                        $infos['plugin'] = [];
+                        $infos[AjaxParams::PLUGIN] = [];
                     }
                 } catch (\Exception $e) {
 
@@ -97,7 +95,7 @@ class UpdateAjax extends BaseAjax
             if ($update->getType() != 'core') {
                 LogHelper::addAlert(LogTarget::UPDATE, __("Launch cron dependancy plugins"));
                 try {
-                    $cron = CronManager::byClassAndFunction('plugin', 'checkDeamon');
+                    $cron = CronManager::byClassAndFunction(AjaxParams::PLUGIN, 'checkDeamon');
                     if (is_object($cron)) {
                         $cron->start();
                     }
@@ -159,8 +157,8 @@ class UpdateAjax extends BaseAjax
         $backupUpdate = null;
 
         $updateDataJson = json_decode(Utils::init(AjaxParams::UPDATE), true);
-        if (isset($updateDataJson[Common::ID])) {
-            $targetUpdate = UpdateManager::byId($updateDataJson[Common::ID]);
+        if (isset($updateDataJson[AjaxParams::ID])) {
+            $targetUpdate = UpdateManager::byId($updateDataJson[AjaxParams::ID]);
         } elseif (isset($updateDataJson['logicalId'])) {
             $targetUpdate = UpdateManager::byLogicalId($updateDataJson[Common::LOGICAL_ID]);
         }

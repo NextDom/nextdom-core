@@ -26,9 +26,11 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\Cmd;
+use NextDom\Model\Entity\EqLogic;
 
 /**
  * Class EqLogicAjax
@@ -52,7 +54,7 @@ class EqLogicAjax extends BaseAjax
         foreach ($linkedObject->getEqLogic() as $eqLogic) {
             if ($eqLogic->isVisible()) {
                 $info_eqLogic = [];
-                $info_eqLogic[Common::ID] = $eqLogic->getId();
+                $info_eqLogic[AjaxParams::ID] = $eqLogic->getId();
                 $info_eqLogic[Common::TYPE] = $eqLogic->getEqType_name();
                 $info_eqLogic[Common::OBJECT_ID] = $eqLogic->getObject_id();
                 $info_eqLogic[Common::HTML] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
@@ -84,7 +86,7 @@ class EqLogicAjax extends BaseAjax
                     throw new CoreException(__('Pas de version indiqué pour le rendu HTML'));
                 }
                 $result[$eqLogic->getId()] = [
-                    Common::ID => $eqLogic->getId(),
+                    AjaxParams::ID => $eqLogic->getId(),
                     Common::TYPE => $eqLogic->getEqType_name(),
                     Common::OBJECT_ID => $eqLogic->getObject_id(),
                     Common::HTML => $eqLogic->toHtml($eqLogicData[AjaxParams::VERSION]),
@@ -97,7 +99,7 @@ class EqLogicAjax extends BaseAjax
                 throw new CoreException(__('Eqlogic inconnu. Vérifiez l\'ID'));
             }
             $eqLogicInfo = [];
-            $eqLogicInfo[Common::ID] = $eqLogic->getId();
+            $eqLogicInfo[AjaxParams::ID] = $eqLogic->getId();
             $eqLogicInfo[Common::TYPE] = $eqLogic->getEqType_name();
             $eqLogicInfo[Common::OBJECT_ID] = $eqLogic->getObject_id();
             $eqLogicInfo[Common::HTML] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
@@ -114,7 +116,7 @@ class EqLogicAjax extends BaseAjax
             }
             $result[$eqLogic->getId()] = [
                 Common::HTML => $eqLogic->toHtml(Utils::init(AjaxParams::VERSION)),
-                Common::ID => $eqLogic->getId(),
+                AjaxParams::ID => $eqLogic->getId(),
                 Common::TYPE => $eqLogic->getEqType_name(),
                 Common::OBJECT_ID => $eqLogic->getObject_id(),
             ];
@@ -145,7 +147,7 @@ class EqLogicAjax extends BaseAjax
         foreach ($list as $eqLogic) {
             $result[] = [
                 Common::HTML => $eqLogic->batteryWidget(Utils::init(AjaxParams::VERSION)),
-                Common::ID => $eqLogic->getId(),
+                AjaxParams::ID => $eqLogic->getId(),
                 Common::TYPE => $eqLogic->getEqType_name(),
                 Common::OBJECT_ID => $eqLogic->getObject_id(),
             ];
@@ -197,7 +199,7 @@ class EqLogicAjax extends BaseAjax
         $eqLogicList = EqLogicManager::listByTypeAndCmdType(Utils::init(AjaxParams::TYPE), Utils::init(AjaxParams::TYPE_CMD), Utils::init(AjaxParams::SUB_TYPE_CMD));
         $result = [];
         foreach ($eqLogicList as $eqLogic) {
-            $eqLogic = EqLogicManager::byId($eqLogic[Common::ID]);
+            $eqLogic = EqLogicManager::byId($eqLogic[AjaxParams::ID]);
             $info[NextDomObj::EQLOGIC] = Utils::o2a($eqLogic);
             $info[NextDomObj::OBJECT] = ['name' => 'Aucun'];
             if (is_object($eqLogic)) {
@@ -230,10 +232,10 @@ class EqLogicAjax extends BaseAjax
     {
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         foreach ($eqLogics as $eqLogic_json) {
-            if (!isset($eqLogic_json[Common::ID]) || trim($eqLogic_json[Common::ID]) == '') {
+            if (!isset($eqLogic_json[AjaxParams::ID]) || trim($eqLogic_json[AjaxParams::ID]) == '') {
                 continue;
             }
-            $eqLogic = EqLogicManager::byId($eqLogic_json[Common::ID]);
+            $eqLogic = EqLogicManager::byId($eqLogic_json[AjaxParams::ID]);
             if (!is_object($eqLogic)) {
                 continue;
             }
@@ -297,9 +299,9 @@ class EqLogicAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $eqLogicSave = json_decode(Utils::init(NextDomObj::EQLOGIC), true);
-        $eqLogic = EqLogicManager::byId($eqLogicSave[Common::ID]);
+        $eqLogic = EqLogicManager::byId($eqLogicSave[AjaxParams::ID]);
         if (!is_object($eqLogic)) {
-            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . $eqLogicSave[Common::ID]);
+            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . $eqLogicSave[AjaxParams::ID]);
         }
 
         if (!$eqLogic->hasRight(ActionRight::WRITE)) {
@@ -355,7 +357,6 @@ class EqLogicAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-
         $eqLogicsSave = json_decode(Utils::init(NextDomObj::EQLOGIC), true);
 
         foreach ($eqLogicsSave as $eqLogicSave) {
@@ -363,14 +364,15 @@ class EqLogicAjax extends BaseAjax
                 if (!is_array($eqLogicSave)) {
                     throw new CoreException(__('Informations reçues incorrectes'));
                 }
-                $typeEqLogic = Utils::init(AjaxParams::TYPE);
+                $typeEqLogic = Utils::initStr(AjaxParams::TYPE);
                 $typeCmd = $typeEqLogic . NextDomObj::CMD;
                 if ($typeEqLogic == '' || !class_exists($typeEqLogic) || !class_exists($typeCmd)) {
                     throw new CoreException(__('Type incorrect, (classe commande inexistante)') . $typeCmd);
                 }
+                /** @var EqLogic $eqLogic */
                 $eqLogic = null;
-                if (isset($eqLogicSave[Common::ID])) {
-                    $eqLogic = $typeEqLogic::byId($eqLogicSave[Common::ID]);
+                if (isset($eqLogicSave[AjaxParams::ID])) {
+                    $eqLogic = $typeEqLogic::byId($eqLogicSave[AjaxParams::ID]);
                 }
                 if (!is_object($eqLogic)) {
                     $eqLogic = new $typeEqLogic();
@@ -385,7 +387,7 @@ class EqLogicAjax extends BaseAjax
                 }
                 $eqLogicSave = NextDomHelper::fromHumanReadable($eqLogicSave);
                 Utils::a2o($eqLogic, $eqLogicSave);
-                $dbList = $typeCmd::byEqLogicId($eqLogic->getId());
+                $dbList = CmdManager::byEqLogicId($eqLogic->getId());
                 $eqLogic->save();
                 $enableList = [];
 
@@ -393,8 +395,8 @@ class EqLogicAjax extends BaseAjax
                     $cmd_order = 0;
                     foreach ($eqLogicSave[NextDomObj::CMD] as $cmd_info) {
                         $cmd = null;
-                        if (isset($cmd_info[Common::ID])) {
-                            $cmd = $typeCmd::byId($cmd_info[Common::ID]);
+                        if (isset($cmd_info[AjaxParams::ID])) {
+                            $cmd = CmdManager::byId($cmd_info[AjaxParams::ID]);
                         }
                         if (!is_object($cmd)) {
                             $cmd = new $typeCmd();
@@ -415,6 +417,7 @@ class EqLogicAjax extends BaseAjax
                 if (method_exists($eqLogic, 'postAjax')) {
                     $eqLogic->postAjax();
                 }
+                $this->ajax->success(Utils::o2a($eqLogic));
             } catch (\Exception $e) {
                 if (strpos($e->getMessage(), '[MySQL] Error code : 23000') !== false) {
                     if ($e->getTrace()[2]['class'] == NextDomObj::EQLOGIC) {
@@ -426,7 +429,6 @@ class EqLogicAjax extends BaseAjax
                     throw new CoreException($e->getMessage());
                 }
             }
-            $this->ajax->success(Utils::o2a($eqLogic));
         }
         $this->ajax->success(null);
     }

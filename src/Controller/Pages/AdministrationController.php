@@ -151,7 +151,6 @@ class AdministrationController extends BaseController
     private static function countErrorLog(&$pageData)
     {
         $pageData['logCount'] = 0;
-        Utils::init('logfile');
         $logFilesList = [];
         $dir = opendir(NEXTDOM_LOG);
         while ($file = readdir($dir)) {

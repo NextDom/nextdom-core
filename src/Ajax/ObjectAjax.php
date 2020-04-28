@@ -113,8 +113,8 @@ class ObjectAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $jsonObject = json_decode(Utils::init(AjaxParams::OBJECT), true);
-        if (isset($jsonObject['id'])) {
-            $resultObject = JeeObjectManager::byId($jsonObject['id']);
+        if (isset($jsonObject[AjaxParams::ID])) {
+            $resultObject = JeeObjectManager::byId($jsonObject[AjaxParams::ID]);
         }
         if (!isset($resultObject) || !is_object($resultObject)) {
             $resultObject = new JeeObject();
@@ -157,80 +157,68 @@ class ObjectAjax extends BaseAjax
             } else {
                 $objectsList = [];
                 if (Utils::init(AjaxParams::SUMMARY) == '') {
-                    foreach (JeeObjectManager::buildTree(null, true) as $object) {
-                        if ($object->getConfiguration('hideOnDashboard', 0) == 1) {
+                    foreach (JeeObjectManager::buildTree(null, true) as $objectId) {
+                        if ($objectId->getConfiguration('hideOnDashboard', 0) == 1) {
                             continue;
                         }
-                        $objects[] = $object->getId();
+                        $objects[] = $objectId->getId();
                     }
                 } else {
-                    foreach (JeeObjectManager::all() as $object) {
-                        $objects[] = $object->getId();
+                    foreach (JeeObjectManager::all() as $objectId) {
+                        $objects[] = $objectId->getId();
                     }
                 }
             }
             $result = [];
             $scenariosResult = [];
             $i = 0;
-            foreach ($objectsList as $id) {
-                $html = [];
-                if (Utils::init(AjaxParams::SUMMARY) == '') {
-                    $eqLogics = EqLogicManager::byObjectId($id, true, true);
-                } else {
-                    $resultObject = JeeObjectManager::byId($id);
-                    $eqLogics = $resultObject->getEqLogicBySummary(Utils::init(AjaxParams::SUMMARY), true, false);
-                }
-                $this->toHtmlEqLogics($html, $eqLogics);
-                $scenarios = ScenarioManager::byObjectId($id, false, true);
-                if (count($scenarios) > 0) {
-                    $scenariosResult[$i . '::' . $id] = [];
-                    /**
-                     * @var Scenario $scenario
-                     */
-                    foreach ($scenarios as $scenario) {
-                        $scenariosResult[$i . '::' . $id][] = [
-                            'scenario_id' => $scenario->getId(),
-                            'state' => $scenario->getState(),
-                            'name' => $scenario->getName(),
-                            'icon' => $scenario->getDisplay(Common::ICON),
-                            'active' => $scenario->getIsActive()
-                        ];
-                    }
-                }
-                ksort($html);
-                $result[$i . '::' . $id] = implode($html);
+            foreach ($objectsList as $objectId) {
+                $objectId = intval($objectId);
+                $htmlObject = $this->renderObjectAsHtml($objectId);
+                $scenariosResult = array_merge($scenariosResult, $this->renderScenariosAsHtml($objectId));
+                $result[$i . '::' . $objectId] = implode($htmlObject);
                 $i++;
             }
             $this->ajax->success([Common::OBJECT_HTML => $result, NextDomObj::SCENARIOS => $scenariosResult]);
         } else {
             $objectId = intval($objectId);
-            $html = [];
-            if (Utils::init(AjaxParams::SUMMARY) == '') {
-                $eqLogics = EqLogicManager::byObjectId($objectId, true, true);
-            } else {
-                $resultObject = JeeObjectManager::byId($objectId);
-                $eqLogics = $resultObject->getEqLogicBySummary($objectId, true, false);
-            }
-            $this->toHtmlEqLogics($html, $eqLogics);
-            $scenarios = ScenarioManager::byObjectId($objectId, false, true);
-            $scenariosResult = [];
-            if (count($scenarios) > 0) {
-                /**
-                 * @var Scenario $scenario
-                 */
-                foreach ($scenarios as $scenario) {
-                    $scenariosResult[] = [
-                        'scenario_id' => $scenario->getId(),
-                        'state' => $scenario->getState(),
-                        'name' => $scenario->getName(),
-                        'icon' => $scenario->getDisplay('icon'),
-                        'active' => $scenario->getIsActive()
-                    ];
-                }
-            }
-            ksort($html);
-            $this->ajax->success([Common::OBJECT_HTML => implode($html), NextDomObj::SCENARIOS => $scenariosResult]);
+            $htmlObject = $this->renderObjectAsHtml($objectId);
+            $scenariosObject = $this->renderScenariosAsHtml($objectId);
+            $this->ajax->success([Common::OBJECT_HTML => implode($htmlObject), NextDomObj::SCENARIOS => $scenariosObject]);
         }
+    }
+
+    private function renderObjectAsHtml($objectId)
+    {
+        $result = [];
+        if (Utils::init(AjaxParams::SUMMARY) == '') {
+            $eqLogics = EqLogicManager::byObjectId($objectId, true, true);
+        } else {
+            $resultObject = JeeObjectManager::byId($objectId);
+            $eqLogics = $resultObject->getEqLogicBySummary($objectId, true, false);
+        }
+        $this->toHtmlEqLogics($result, $eqLogics);
+        ksort($result);
+        return $result;
+    }
+
+    private function renderScenariosAsHtml($objectId)
+    {
+        $scenarios = ScenarioManager::byObjectId($objectId, false, true);
+        $result = [];
+        if (count($scenarios) > 0) {
+            /** @var Scenario $scenario */
+            foreach ($scenarios as $scenario) {
+                $result[] = [
+                    'scenario_id' => $scenario->getId(),
+                    'state' => $scenario->getState(),
+                    'name' => $scenario->getName(),
+                    'icon' => $scenario->getDisplay('icon'),
+                    'active' => $scenario->getIsActive()
+                ];
+            }
+        }
+        return $result;
     }
 
     /**
@@ -310,7 +298,7 @@ class ObjectAjax extends BaseAjax
                 if ($id == Common::GLOBAL) {
                     $result[Common::GLOBAL] = [
                         Common::HTML => JeeObjectManager::getGlobalHtmlSummary($value[Common::VERSION]),
-                        Common::ID => Common::GLOBAL
+                        AjaxParams::ID => Common::GLOBAL
                     ];
                     continue;
                 }
@@ -320,7 +308,7 @@ class ObjectAjax extends BaseAjax
                 }
                 $result[$resultObject->getId()] = [
                     Common::HTML => $resultObject->getHtmlSummary($value[Common::VERSION]),
-                    Common::ID => $resultObject->getId()
+                    AjaxParams::ID => $resultObject->getId()
                 ];
             }
             $this->ajax->success($result);
@@ -330,7 +318,7 @@ class ObjectAjax extends BaseAjax
                 throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
             }
             $infoObject = [];
-            $infoObject[Common::ID] = $resultObject->getId();
+            $infoObject[AjaxParams::ID] = $resultObject->getId();
             $infoObject[Common::HTML] = $resultObject->getHtmlSummary(Utils::init(AjaxParams::VERSION));
             $this->ajax->success($infoObject);
         }
