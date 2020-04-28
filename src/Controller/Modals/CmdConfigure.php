@@ -30,6 +30,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\WidgetManager;
 
 /**
  * Class CmdConfigure
@@ -133,7 +134,7 @@ class CmdConfigure extends BaseAbstractModal
         $pageData['configDisplayStatsWidget'] = ConfigManager::byKey('displayStatsWidget');
         $pageData['cmdDisplayParameters'] = $cmd->getDisplay('parameters');
 
-        $cmdWidgetDashboard = CmdManager::availableWidget('dashboard');
+        $cmdWidgetDashboard = WidgetManager::availableWidget('dashboard');
         if (is_array($cmdWidgetDashboard[$cmd->getType()]) && is_array($cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()]) && count($cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()]) > 0) {
             $pageData['cmdWidgetDashboard'] = $cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()];
         }

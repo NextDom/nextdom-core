@@ -17,6 +17,7 @@
 */
 
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\WidgetManager;
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
@@ -131,7 +132,7 @@ class cmd extends NextDom\Model\Entity\Cmd {
     }
 
     public static function availableWidget($_version) {
-        return CmdManager::availableWidget($_version);
+        return WidgetManager::availableWidget($_version);
     }
 
     public static function returnState($_options) {

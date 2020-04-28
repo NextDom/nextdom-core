@@ -24,6 +24,7 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\WidgetManager;
 
 /**
  * Class WidgetReplace
@@ -40,8 +41,8 @@ class WidgetReplace extends BaseAbstractModal
     public static function get(): string
     {
         $pageData = array('dashboardList' => '','mobileList'=>'');
-        $pageData['dashboardList'] = CmdManager::availableWidget('dashboard');
-        $pageData['mobileList'] = CmdManager::availableWidget('mobile');
+        $pageData['dashboardList'] = WidgetManager::availableWidget('dashboard');
+        $pageData['mobileList'] = WidgetManager::availableWidget('mobile');
         return Render::getInstance()->get('/modals/widget.replace.html.twig', $pageData);
     }
 
