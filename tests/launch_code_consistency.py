@@ -5,7 +5,7 @@
 """
 import sys
 import os
-from tests.libs.tests_funcs import *
+from pylibs.tests_funcs import *
 
 def check_php():
     """Check php code consistency
@@ -29,7 +29,7 @@ def check_python():
     """Check python code quality
     """
     print_subtitle('Python code quality')
-    folders_to_test = ['', 'tests/libs/']
+    folders_to_test = ['', 'pylibs/']
     error = False
     for folder_to_test in folders_to_test:
         output, status = get_command_output('python3 -m pylint --rcfile=.pylintrc --output-format=colorized ' + folder_to_test + '*.py') #pylint: disable=line-too-long
