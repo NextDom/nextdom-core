@@ -265,7 +265,7 @@ function updateScenarioControls(scenarioData) {
     }
     // Status Label
     stateField.classList.remove('label-danger', 'label-info', 'label-success', 'label-warning', 'label-default');
-    if (isset(scenarioData.active) && scenarioData.active !== 1) {
+    if (isset(scenarioData.active) && scenarioData.active != 1) {
         stateField.textContent = '';
         scenarioContainer.style.opacity = 0.6;
         $(enableButton).show();
