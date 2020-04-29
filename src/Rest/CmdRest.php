@@ -92,6 +92,7 @@ class CmdRest
             $cmdRow['value'] = $cmd->getValue();
             $cmdRow['visible'] = $cmd->getIsVisible();
             $cmdRow['unite'] = $cmd->getUnite();
+            $cmdRow['configuration'] = $cmd->getConfiguration();
             $cmdRow = array_merge($cmdRow, self::getSpecialData($cmd));
             if (empty($cmdRow['value'])) {
                 $cmdRow['value'] = 0;

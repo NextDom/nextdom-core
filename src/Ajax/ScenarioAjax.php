@@ -67,6 +67,7 @@ class ScenarioAjax extends BaseAjax
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         switch (Utils::init(AjaxParams::STATE)) {
+            default:
             case 'start':
                 if (!$scenario->getIsActive()) {
                     throw new CoreException(__('Impossible de lancer le scénario car il est désactivé. Veuillez l\'activer'));
@@ -110,10 +111,10 @@ class ScenarioAjax extends BaseAjax
     {
         $scenarios = json_decode(Utils::init(AjaxParams::SCENARIOS), true);
         foreach ($scenarios as $scenario_json) {
-            if (!isset($scenario_json[Common::ID]) || trim($scenario_json[Common::ID]) == '') {
+            if (!isset($scenario_json[AjaxParams::ID]) || trim($scenario_json[AjaxParams::ID]) == '') {
                 continue;
             }
-            $scenario = ScenarioManager::byId($scenario_json[Common::ID]);
+            $scenario = ScenarioManager::byId($scenario_json[AjaxParams::ID]);
             if (!is_object($scenario)) {
                 continue;
             }
@@ -310,7 +311,7 @@ class ScenarioAjax extends BaseAjax
         $scenarios = json_decode(Utils::init(AjaxParams::SCENARIOS), true);
         if (is_array($scenarios)) {
             foreach ($scenarios as $scenario_ajax) {
-                $scenario = ScenarioManager::byId($scenario_ajax[Common::ID]);
+                $scenario = ScenarioManager::byId($scenario_ajax[AjaxParams::ID]);
                 if (!is_object($scenario)) {
                     continue;
                 }
@@ -437,7 +438,7 @@ class ScenarioAjax extends BaseAjax
       			if($scenarioLink->getId() == $scenario->getId()){
       				  continue;
       			}
-    			  $result['scenarioLinkBy'][NextDomObj::SCENARIO][$scenarioLink->getId()] = [Common::ID => $scenarioLink->getId(),Common::NAME => $scenarioLink->getHumanName(),'isActive' => $scenarioLink->getIsActive(),'isVisible' => $scenarioLink->getIsVisible()];
+    			  $result['scenarioLinkBy'][NextDomObj::SCENARIO][$scenarioLink->getId()] = [AjaxParams::ID => $scenarioLink->getId(),Common::NAME => $scenarioLink->getHumanName(),'isActive' => $scenarioLink->getIsActive(),'isVisible' => $scenarioLink->getIsVisible()];
     		}
         $result['scenarioLinkIn'] = [NextDomObj::SCENARIO => []];
     		$scenarioUse = $scenario->getUse();
@@ -445,7 +446,7 @@ class ScenarioAjax extends BaseAjax
       			if($scenarioLink->getId() == $scenario->getId()){
       				  continue;
       			}
-      			$result['scenarioLinkIn'][NextDomObj::SCENARIO][$scenarioLink->getId()] = [Common::ID => $scenarioLink->getId(),Common::NAME => $scenarioLink->getHumanName(),'isActive' => $scenarioLink->getIsActive(),'isVisible' => $scenarioLink->getIsVisible()];
+      			$result['scenarioLinkIn'][NextDomObj::SCENARIO][$scenarioLink->getId()] = [AjaxParams::ID => $scenarioLink->getId(),Common::NAME => $scenarioLink->getHumanName(),'isActive' => $scenarioLink->getIsActive(),'isVisible' => $scenarioLink->getIsVisible()];
     		}
         $this->ajax->success($result);
     }
@@ -483,8 +484,8 @@ class ScenarioAjax extends BaseAjax
 
         // Prepare object from Ajax data
         $scenarioAjaxData = json_decode(Utils::init(AjaxParams::SCENARIO), true);
-        if (isset($scenarioAjaxData[Common::ID])) {
-            $targetScenario = ScenarioManager::byId($scenarioAjaxData[Common::ID]);
+        if (isset($scenarioAjaxData[AjaxParams::ID])) {
+            $targetScenario = ScenarioManager::byId($scenarioAjaxData[AjaxParams::ID]);
         }
         if (!isset($targetScenario) || !is_object($targetScenario)) {
             $targetScenario = new Scenario();
@@ -533,7 +534,7 @@ class ScenarioAjax extends BaseAjax
                 }
                 $result[] = [
                     'html' => $html,
-                    Common::ID => $param[Common::ID],
+                    AjaxParams::ID => $param[AjaxParams::ID],
                 ];
             }
         }
