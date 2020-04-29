@@ -525,7 +525,7 @@ class MigrationHelper
      */
     private static function migrate_0_8_0($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
+        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8mb4_unicode_ci;");
         DBHelper::exec("ALTER TABLE `eqLogic` DROP `eqReal_id`;");
         DBHelper::exec("DROP TABLE `eqReal`;");
 
@@ -558,16 +558,25 @@ class MigrationHelper
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
         $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
-              `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-              `type` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `subtype` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `template` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-              `display` text COLLATE utf8_unicode_ci,
-              `replace` text COLLATE utf8_unicode_ci,
-              `test` text COLLATE utf8_unicode_ci,
+              `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+              `type` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+              `subtype` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+              `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+              `display` text COLLATE utf8mb4_unicode_ci,
+              `replace` text COLLATE utf8mb4_unicode_ci,
+              `test` text COLLATE utf8mb4_unicode_ci,
               PRIMARY KEY (`id`),
               UNIQUE KEY `unique` (`type`,`subtype`,`name`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
         DBHelper::exec($createWidget);
+
+
+        self::logMessage($logFile, 'Migrate database and tables to utf8mb4.');
+        DBHelper::exec("ALTER DATABASE `'". CONFIG['db']['dbname'] ."'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $tables = DBHelper::getAllNextDomTables();
+        foreach ($tables as $table) {
+            DBHelper::exec("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+        }
+
     }
 }

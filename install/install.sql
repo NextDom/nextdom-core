@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Schema nextdom
 -- -----------------------------------------------------
 
-ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------
 -- Table `object`
@@ -491,16 +491,16 @@ CREATE TABLE IF NOT EXISTS `note` (
 -- -----------------------------------------------------
 CREATE TABLE `widget` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `subtype` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `template` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `display` text COLLATE utf8_unicode_ci,
-  `replace` text COLLATE utf8_unicode_ci,
-  `test` text COLLATE utf8_unicode_ci,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subtype` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display` text COLLATE utf8mb4_unicode_ci,
+  `replace` text COLLATE utf8mb4_unicode_ci,
+  `test` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`type`,`subtype`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

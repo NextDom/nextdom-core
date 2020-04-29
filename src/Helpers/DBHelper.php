@@ -58,9 +58,9 @@ class DBHelper
     {
         global $CONFIG;
         if (isset($CONFIG['db']['unix_socket'])) {
-            $this->connection = new \PDO('mysql:unix_socket=' . $CONFIG['db']['unix_socket'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true]);
+            $this->connection = new \PDO('mysql:unix_socket=' . $CONFIG['db']['unix_socket'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', \PDO::ATTR_PERSISTENT => true]);
         } else {
-            $this->connection = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true]);
+            $this->connection = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', \PDO::ATTR_PERSISTENT => true]);
         }
     }
 
@@ -1143,6 +1143,15 @@ class DBHelper
     public function __clone()
     {
         trigger_error('DB : Cloner cet objet n\'est pas permis', E_USER_ERROR);
+    }
+
+    /**
+     * Return all tables in NextDom database
+     * @return array
+     */
+    public function getAllNextDomTables()
+    {
+        return self::getAll('SHOW TABLES', []);
     }
 
 }

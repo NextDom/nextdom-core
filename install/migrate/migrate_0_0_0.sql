@@ -11,7 +11,7 @@ ALTER TABLE `view`     ADD `image`         MEDIUMTEXT   NULL;
 ALTER TABLE `view`     ADD `configuration` TEXT         NULL;
 ALTER TABLE `eqLogic`  ADD `tags`          VARCHAR(255) NULL;
 
-ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;
+ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8mb4_unicode_ci;
 
 CREATE INDEX `tags` ON eqLogic (`tags` ASC);
 
