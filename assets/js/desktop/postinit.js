@@ -183,12 +183,14 @@ function initSliders() {
  */
 function initTabs() {
   $('.nav-tabs a').on('click', function (e) {
-    var scrollHeight = $(document).scrollTop();
-    $(this).tab('show');
-    window.scrollTo(0, scrollHeight);
-    setTimeout(function () {
+    if ($(this).attr('href') !== '#') {
+      var scrollHeight = $(document).scrollTop();
+      $(this).tab('show');
       window.scrollTo(0, scrollHeight);
-    }, 0);
+      setTimeout(function () {
+        window.scrollTo(0, scrollHeight);
+      }, 0);
+    }
   });
 }
 
