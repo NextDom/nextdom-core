@@ -558,10 +558,10 @@ class MigrationHelper
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
         $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
-              `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-              `type` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-              `subtype` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-              `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+              `name` VARCHAR(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+              `type` VARCHAR(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+              `subtype` VARCHAR(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+              `template` VARCHAR(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
               `display` text COLLATE utf8mb4_unicode_ci,
               `replace` text COLLATE utf8mb4_unicode_ci,
               `test` text COLLATE utf8mb4_unicode_ci,
@@ -571,11 +571,12 @@ class MigrationHelper
         DBHelper::exec($createWidget);
 
 
+        global $CONFIG;
         self::logMessage($logFile, 'Migrate database and tables to utf8mb4.');
-        DBHelper::exec("ALTER DATABASE `'". CONFIG['db']['dbname'] ."'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        DBHelper::exec("ALTER DATABASE `'". $CONFIG['db']['dbname'] ."'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
         $tables = DBHelper::getAllNextDomTables();
         foreach ($tables as $table) {
-            DBHelper::exec("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+            DBHelper::exec("ALTER TABLE `".$table['Tables_in_' . $CONFIG['db']['dbname']] . "` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         }
 
     }

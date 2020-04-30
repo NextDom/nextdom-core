@@ -687,8 +687,8 @@ class BackupManager
         if (0 != SystemHelper::vsystem("sed -i -e 's/Definer=`jeedom`/Definer=`nextdom`/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
-        if (0 != SystemHelper::vsystem("sed -i -e 's/utf8 /utf8mb4 /g' '%s'", $backupFile)) {
-            throw new CoreException("unable to modify content of backup file " . $backupFile);
+        if (0 != SystemHelper::vsystem("sed -i -e 's/varchar(255) /varchar(191) /g' '%s'", $backupFile)) {
+            throw new CoreException("unable to modify varchar(255) to varchar(191) of backup file " . $backupFile);
         }
 
         DBHelper::exec("SET foreign_key_checks = 0");

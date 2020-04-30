@@ -43,7 +43,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `eqLogic` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(127) NOT NULL,
-  `generic_type` VARCHAR(255) NULL,
+  `generic_type` VARCHAR(191) NULL,
   `logicalId` VARCHAR(127) NULL,
   `object_id` INT NULL,
   `eqType_name` VARCHAR(127) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `eqLogic` (
   `display` TEXT NULL,
   `order` INT NULL DEFAULT '9999',
   `comment` TEXT NULL,
-  `tags` VARCHAR(255) NULL,
+  `tags` VARCHAR(191) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `unique` (`name` ASC, `object_id` ASC),
   INDEX `eqTypeName` (`eqType_name` ASC),
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `cmd` (
   `eqLogic_id` INT NOT NULL,
   `eqType` VARCHAR(127) NULL,
   `logicalId` VARCHAR(127) NULL,
-  `generic_type` VARCHAR(255) NULL,
+  `generic_type` VARCHAR(191) NULL,
   `order` INT NULL,
   `name` VARCHAR(45) NULL,
   `configuration` TEXT BINARY NULL,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `cmd` (
   `unite` VARCHAR(45) NULL,
   `display` TEXT NULL,
   `isVisible` INT NULL DEFAULT 1,
-  `value` VARCHAR(255) NULL,
+  `value` VARCHAR(191) NULL,
   `html` MEDIUMTEXT NULL,
   `alert` TEXT NULL,
   PRIMARY KEY (`id`),
@@ -124,9 +124,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `login` VARCHAR(45) NULL,
   `profils` VARCHAR(45) NOT NULL DEFAULT 'admin',
-  `password` VARCHAR(255) NULL,
+  `password` VARCHAR(191) NULL,
   `options` TEXT NULL,
-  `hash` VARCHAR(255) NULL,
+  `hash` VARCHAR(191) NULL,
   `rights` TEXT NULL,
   `enable` INT NULL DEFAULT 1,
   PRIMARY KEY (`id`))
@@ -138,7 +138,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `config` (
   `plugin` VARCHAR(127) NOT NULL DEFAULT 'core',
-  `key` VARCHAR(255) NOT NULL,
+  `key` VARCHAR(191) NOT NULL,
   `value` TEXT NULL,
   PRIMARY KEY (`key`, `plugin`))
 ENGINE = InnoDB;
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `scenario` (
   `mode` VARCHAR(127) NULL,
   `schedule` TEXT NULL DEFAULT NULL,
   `scenarioElement` TEXT NULL,
-  `trigger` VARCHAR(255) NULL DEFAULT NULL,
+  `trigger` VARCHAR(191) NULL DEFAULT NULL,
   `timeout` INT(11) NULL DEFAULT NULL,
   `isVisible` TINYINT(1) NULL DEFAULT '1',
   `object_id` INT(11) NULL DEFAULT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `cron` (
   `timeout` INT NULL,
   `deamon` INT NULL DEFAULT 0,
   `deamonSleepTime` INT NULL,
-  `option` VARCHAR(255) NULL DEFAULT NULL,
+  `option` VARCHAR(191) NULL DEFAULT NULL,
   `once` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `class_function_option` (`class` ASC, `function` ASC, `option` ASC),
@@ -327,11 +327,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `interactDef` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NULL,
+  `name` VARCHAR(191) NULL,
   `enable` INT NULL DEFAULT 1,
   `query` TEXT NULL,
   `reply` TEXT NULL,
-  `person` VARCHAR(255) NULL,
+  `person` VARCHAR(191) NULL,
   `options` TEXT NULL,
   `filtres` TEXT NULL,
   `group` VARCHAR(127) NULL DEFAULT NULL,
@@ -436,7 +436,7 @@ CREATE TABLE IF NOT EXISTS `listener` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `class` VARCHAR(127) NULL,
   `function` VARCHAR(127) NULL,
-  `event` VARCHAR(255) NULL,
+  `event` VARCHAR(191) NULL,
   `option` TEXT NULL,
   PRIMARY KEY (`id`),
   INDEX `event` (`event` ASC))
@@ -491,10 +491,10 @@ CREATE TABLE IF NOT EXISTS `note` (
 -- -----------------------------------------------------
 CREATE TABLE `widget` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `subtype` varchar(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` VARCHAR(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` VARCHAR(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subtype` VARCHAR(27) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `template` VARCHAR(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `display` text COLLATE utf8mb4_unicode_ci,
   `replace` text COLLATE utf8mb4_unicode_ci,
   `test` text COLLATE utf8mb4_unicode_ci,
