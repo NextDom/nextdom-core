@@ -64,7 +64,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Opening welcome modal if not saved "not display anymore"
-    if (typeof(nextdom_Welcome)!== 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome === 1 && getUrlVars('noWelcome') != 1) {
+    if (typeof(nextdom_Welcome)!== 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome === 1 && getUrlVars('noWelcome') !== '1') {
         loadModal('modal', '{{Bienvenue dans NextDom}}', 'welcome');
     }
 
@@ -78,7 +78,7 @@ function initEvents() {
 
     // Dashboard edition mode button
     $('#bt_editDashboardWidgetOrder').on('click', function () {
-        if ($(this).attr('data-mode') === 1) {
+        if ($(this).attr('data-mode') === '1') {
             $.hideAlert();
             $(this).attr('data-mode', 0);
             editWidgetMode(0);

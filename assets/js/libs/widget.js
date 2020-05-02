@@ -5,7 +5,7 @@
  */
 function editWidgetCmdMode(_mode) {
   if (!isset(_mode)) {
-    if ($('#bt_editDashboardWidgetOrder').attr('data-mode') !== undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') === 1) {
+    if ($('#bt_editDashboardWidgetOrder').attr('data-mode') !== undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') === '1') {
       editWidgetMode(0);
       editWidgetMode(1);
     }
@@ -239,7 +239,7 @@ function saveWidgetDisplay(_params) {
       order++;
     });
   });
-  if (init(_params['dashboard']) === 1) {
+  if (init(_params['dashboard']) == 1) {
     $('.div_displayEquipement').each(function () {
       order = 1;
       $(this).find('.eqLogic-widget').each(function () {

@@ -70,7 +70,7 @@ function selectCategory(_selectedCategory, _selectedIcon) {
  */
 function editWidgetMode(_mode, _save) {
     if (!isset(_mode)) {
-        if ($('#bt_editDashboardWidgetOrder').attr('data-mode') !== undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') === 1) {
+        if ($('#bt_editDashboardWidgetOrder').attr('data-mode') !== undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') === '1') {
             editWidgetMode(0, false);
             editWidgetMode(1, false);
         }
@@ -305,7 +305,7 @@ function orderItems() {
           $(itemElems).each(function (i, itemElem) {
               $(itemElem).attr('data-order', i + 1);
               value = i + 1;
-              if ($('#bt_editDashboardWidgetOrder').attr('data-mode') === 1) {
+              if ($('#bt_editDashboardWidgetOrder').attr('data-mode') === '1') {
                   if ($(itemElem).find(".card-order-number").length) {
                       $(itemElem).find(".card-order-number").text(value);
                   } else {
