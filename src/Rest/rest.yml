@@ -136,3 +136,9 @@ dash_save:
   path: '/dash/save'
   controller: NextDom\Rest\DashRest::save
   methods: POST
+dash_pictures:
+  path: '/dash/pictures/{path}'
+  controller: NextDom\Rest\DashRest::pictures
+  methods: GET
+  requirements:
+    path: "[a-zA-Z0-9\\-_]+"

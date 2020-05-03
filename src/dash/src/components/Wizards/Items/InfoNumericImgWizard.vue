@@ -44,9 +44,13 @@ export default {
     WidgetPreview
   },
   data: () => ({
-    command: []
+    command: [],
+    previewData: {}
   }),
   watch: {
+    previewData: function(newData) {
+      console.log(newData);
+    },
     step: function(newStep) {
       switch (newStep) {
         case 1:
@@ -93,7 +97,7 @@ export default {
           type: "InfoNumericImg",
           cmdId: -1,
           pos: { top: 0, left: 0 },
-          picture: "shutter",
+          picture: { name: "shutter", values: [0, 100] },
           title: "",
           unit: "%",
           percent: false,

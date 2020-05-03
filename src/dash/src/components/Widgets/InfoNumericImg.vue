@@ -10,15 +10,14 @@
 </template>
 
 <script>
-import Data from "@/libs/Data";
-
 export default {
   name: "InfoNumericImg",
   props: {
     widgetData: {}
   },
   data: () => ({
-    mult: 1
+    mult: 1,
+    pictureCode: ""
   }),
   mounted() {
     if (!this.widgetData.percent) {
@@ -27,16 +26,16 @@ export default {
   },
   computed: {
     icon() {
-      let picture = this.widgetData.picture;
-
-      return require("../../assets/buttons/var/" +
-        picture +
+      return (
+        "/data/pictures/level/" +
+        this.widgetData.picture.name +
         "-" +
         this.getClosest(
           this.widgetData.state * this.mult,
-          Data.assets.var.list[picture]
+          this.widgetData.picture.values
         ) +
-        ".png");
+        ".png"
+      );
     }
   },
   methods: {

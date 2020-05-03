@@ -22,6 +22,7 @@ namespace NextDom\Rest;
 use Exception;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\DashManager;
 use NextDom\Managers\JeeObjectManager;
@@ -66,5 +67,11 @@ class DashRest
         $dash->setData($data);
         $dash->save();
         return true;
+    }
+
+    public static function pictures($path = '')
+    {
+        $path = Utils::sanitizeString($path);
+        return FileSystemHelper::ls(NEXTDOM_DATA . '/data/pictures/' . $path, '*', true);
     }
 }

@@ -51,21 +51,21 @@ export default {
           top: this.widgetData.pos.top + "px",
           left: this.widgetData.pos.left + "px"
         };
+        if (this.widgetData.style.width === "auto") {
+          result["width"] = this.widgetData.style.width;
+        } else {
+          result["width"] = this.widgetData.style.width + "px";
+        }
+        if (this.widgetData.style.height === "auto") {
+          result["height"] = this.widgetData.style.height;
+        } else {
+          result["height"] = this.widgetData.style.height + "px";
+        }
       } else {
         result = {
           width: "100%",
           height: "100%"
         };
-      }
-      if (this.widgetData.style.width === "auto") {
-        result["width"] = this.widgetData.style.width;
-      } else {
-        result["width"] = this.widgetData.style.width + "px";
-      }
-      if (this.widgetData.style.height === "auto") {
-        result["height"] = this.widgetData.style.height;
-      } else {
-        result["height"] = this.widgetData.style.height + "px";
       }
       result["backgroundColor"] = this.widgetData.style.transparent
         ? "transparent"

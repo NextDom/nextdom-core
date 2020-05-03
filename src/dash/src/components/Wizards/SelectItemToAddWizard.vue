@@ -115,10 +115,10 @@ export default {
           data: {
             title: "Information",
             hideBorder: true,
-            state: 0,
+            state: 20,
             percent: true,
             unit: "%",
-            picture: "shutter",
+            picture: { name: "shutter", values: [0, 20, 100] },
             style: {
               titleSize: 20,
               contentSize: 52

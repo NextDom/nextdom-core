@@ -28,7 +28,7 @@ export default {
       } else {
         picture += "-off";
       }
-      return require("../../assets/buttons/on-off/" + picture + ".png");
+      return "/data/pictures/on-off/" + picture + ".png";
     }
   }
 };
