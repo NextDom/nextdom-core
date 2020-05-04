@@ -47,4 +47,14 @@ class DashManager extends BaseManager
     const DB_CLASS_NAME = '`dash`';
     const CLASS_NAME = Dash::class;
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function all()
+    {
+        return static::getAll();
+    }
+
 }

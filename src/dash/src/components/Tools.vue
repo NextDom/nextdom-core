@@ -70,19 +70,19 @@ export default {
       this.$eventBus.$emit("showDashPreferences");
     },
     save() {
-      console.log(JSON.stringify(this.$store.getters.dashData));
-      this.$store.commit("saveToLocalStorage");
       Communication.postWithOptions(
         "/api/dash/save",
         {
-          id: 1,
+          id: this.$store.getters.dashData.id,
           name: "Dash",
           data: JSON.stringify({
             dashData: this.$store.getters.dashData,
             widgetsData: this.$store.getters.widgets
           })
         },
-        () => {
+        result => {
+          this.$store.commit("setDashId", parseInt(result.data));
+          this.$store.commit("saveToLocalStorage", result.data);
           this.message = "Sauvegarde réussie";
           this.snackbarColor = "success";
           this.snackbar = true;

@@ -1,19 +1,12 @@
 <template>
   <v-app>
-    <Dash />
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
-import Dash from "./components/Dash";
-
 export default {
   name: "App",
-
-  components: {
-    Dash
-  },
-
   data: () => ({
     //
   })

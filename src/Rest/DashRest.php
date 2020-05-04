@@ -64,6 +64,7 @@ class DashRest
         if ($name === '' || $data === '') {
             throw new CoreException(__('Invalid data'));
         }
+        /** @var Dash $dash */
         $dash = DashManager::byId($id);
         if (!is_object($dash)) {
             $dash = new Dash();
@@ -71,7 +72,7 @@ class DashRest
         $dash->setName($name);
         $dash->setData($data);
         $dash->save();
-        return true;
+        return $dash->getId();
     }
 
     /**

@@ -73,17 +73,20 @@ export const store = new Vuex.Store({
         initWidgets(state, payload) {
             state.widgets = payload;
         },
-        loadFromLocalStorage(state) {
-            state.dashData = JSON.parse(localStorage.dashData);
-            state.widgets = JSON.parse(localStorage.widgetsData);
+        loadFromLocalStorage(state, payload) {
+            state.dashData = JSON.parse(localStorage['dashData' + payload]);
+            state.widgets = JSON.parse(localStorage['widgetsData' + payload]);
         },
-        saveToLocalStorage(state) {
-            localStorage.dashData = JSON.stringify(state.dashData);
-            localStorage.widgetsData = JSON.stringify(state.widgets);
+        setDashId(state, payload) {
+            Vue.set(state.dashData, 'id', payload);
         },
-        deleteDash(state) {
-            localStorage.dashData = undefined;
-            localStorage.widgetsData = undefined;
+        saveToLocalStorage(state, payload) {
+            localStorage['dashData' + payload] = JSON.stringify(state.dashData);
+            localStorage['widgetsData' + payload] = JSON.stringify(state.widgets);
+        },
+        deleteDash(state, payload) {
+            localStorage['dashData' + payload] = undefined;
+            localStorage['widgetsData' + payload] = undefined;
             state.widgets = {};
             state.dashData = {};
         }

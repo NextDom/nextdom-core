@@ -2,17 +2,10 @@
   <div v-bind:style="gridStyle" class="grid-container" v-bind:class="previewClass">
     <span class="grid-group-btns" v-if="$store.getters.editMode && gridData.children.length === 0">
       <v-hover v-model="divideHorizontallyPreview">
-        <v-btn fab color="success" v-on:click="divide('horizontal')">
-          <v-icon>fa-angle-double-up</v-icon>
-        </v-btn>
+        <v-btn id="fab-vertical" fab color="success" v-on:click="divide('horizontal')">&#9707;</v-btn>
       </v-hover>
       <v-hover v-model="divideVerticallyPreview">
-        <v-btn fab color="success" v-on:click="divide('vertical')">
-          <v-icon>fa-angle-double-left</v-icon>
-        </v-btn>
-      </v-hover>
-      <v-hover v-model="divideVerticallyPreview">
-        <v-btn fab color="success" v-on:click="divide('vertical')">&#9707;</v-btn>
+        <v-btn id="fab-horizontal" fab color="success" v-on:click="divide('vertical')">&#9707;</v-btn>
       </v-hover>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -168,5 +161,15 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+#fab-vertical span,
+#fab-horizontal span {
+  font-size: 2.5rem;
+  margin-top: -0.5rem;
+}
+
+#fab-horizontal {
+  transform: rotateZ(90deg);
 }
 </style>

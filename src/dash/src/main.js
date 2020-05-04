@@ -2,6 +2,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@/assets/global.css'
 import Vue from 'vue'
 import App from '@/App.vue'
+import router from "@/router"
 import vuetify from '@/plugins/vuetify'
 import { store } from '@/libs/Store'
 import EventsManager from "@/libs/EventsManager.js";
@@ -14,6 +15,7 @@ EventsManager.init(Communication, store);
 new Vue({
   vuetify,
   store,
+  router,
   iconfont: 'fa',
   render: h => h(App)
 }).$mount('#app')

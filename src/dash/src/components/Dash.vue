@@ -11,6 +11,9 @@ Composant global du Dash
     <AddDashWizard v-on:endOfWizard="endOfWizard" v-bind:showWizard="showWizard" />
     <SelectItemToAddWizard />
     <AddItemWizard />
+    <!--
+    <router-link v-bind:to="{name: 'dash', params: {dashId: 2}}">AA</router-link>
+    -->
   </div>
 </template>
 
@@ -38,11 +41,15 @@ export default {
     AddItemWizard,
     AddDashWizard
   },
+  props: {
+    dashId: undefined
+  },
   data: () => ({
     initialized: false,
     showWizard: false,
     responsive: false,
     dashData: {
+      id: -1,
       width: 640,
       height: 480,
       positioning: "manual",
@@ -83,51 +90,56 @@ export default {
      * Lance le wizard si aucun dash n'est configuré
      */
     start() {
-      if (localStorage.dashData !== undefined) {
-        this.$store.commit("loadFromLocalStorage");
-        this.dashData = this.$store.getters.dashData;
-        this.initialized = true;
-      }
-      // Lecture des données depuis le serveur
-      Communication.get(
-        "/api/dash/1",
-        result => {
-          if (result.id !== 1) {
-            this.$store.commit("initDash", result.data.dashData);
-            this.$store.commit("initWidgets", result.data.widgetsData);
-          }
-          if (!this.initialized) {
-            this.startWizard();
-          }
-        },
-        () => {
-          if (!this.initialized) {
-            this.startWizard();
-          }
+      if (this.dashId !== undefined) {
+        if (localStorage["dashData" + this.dashId] !== undefined) {
+          this.$store.commit("loadFromLocalStorage", this.dashId);
+          this.dashData = this.$store.getters.dashData;
+          this.initialized = true;
         }
-      );
+        // Lecture des données depuis le serveur
+        Communication.get(
+          "/api/dash/" + this.dashId,
+          result => {
+            if (result.id == this.dashId) {
+              // La première fois, l'objet n'a pas d'identifiant au moment de l'enregistrement
+              result.data.dashData.id = this.dashId;
+              this.$store.commit("initDash", result.data.dashData);
+              this.$store.commit("saveToLocalStorage", this.dashId);
+              this.$store.commit("initWidgets", result.data.widgetsData);
+              this.initialized = true;
+            }
+            this.startWizard();
+          },
+          () => {
+            this.startWizard();
+          }
+        );
+      } else {
+        this.startWizard();
+      }
       EventsManager.loop();
     },
     /**
      * Affiche la fenêtre de l'assistant
      */
     startWizard() {
-      this.dashData = {
-        width: 640,
-        height: 480,
-        positioning: "manual",
-        size: "fix"
-      };
-      this.showWizard = true;
+      if (!this.initialized) {
+        this.dashData = {
+          id: -1,
+          width: 640,
+          height: 480,
+          positioning: "manual",
+          size: "fix"
+        };
+        this.showWizard = true;
+      }
     },
     /**
      * A la fin de l'assistant, récupère les valeurs pui sle ferme
      */
     endOfWizard(wizardData) {
       this.dashData = JSON.parse(JSON.stringify(wizardData));
-      this.dashData.lastChange = Date.now();
       this.$store.commit("initDash", this.dashData);
-      this.$store.commit("saveToLocalStorage");
       this.$store.commit("setEditMode", true);
       this.initialized = true;
       this.showWizard = false;
