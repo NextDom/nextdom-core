@@ -136,6 +136,10 @@ dash_save:
   path: '/dash/save'
   controller: NextDom\Rest\DashRest::save
   methods: POST
+dash_delete:
+  path: '/dash/{dashId}/delete'
+  controller: NextDom\Rest\DashRest::delete
+  methods: GET
 dash_pictures:
   path: '/dash/pictures/{path}'
   controller: NextDom\Rest\DashRest::pictures

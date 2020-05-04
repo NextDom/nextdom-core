@@ -19,6 +19,13 @@ Fenêtre de configuration du dash
               <v-text-field v-model="formData.height" label="Hauteur" />
             </v-col>
           </v-row>
+          <v-row>
+            <v-col cols="12" right>
+              <v-btn v-on:click="deleteDash" color="red" dark>
+                <v-icon left>mdi-delete</v-icon>Supprimer
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-container>
       </v-card-text>
     </v-card>
@@ -26,6 +33,8 @@ Fenêtre de configuration du dash
 </template>
 
 <script>
+import Communication from "@/libs/Communication";
+
 export default {
   name: "DashPreferences",
   props: {
@@ -50,6 +59,14 @@ export default {
       set(newValue) {
         this.$emit("input", newValue);
       }
+    }
+  },
+  methods: {
+    deleteDash() {
+      Communication.get("/api/dash/1/delete", () => {
+        this.$store.commit("deleteDash");
+        this.$emit("startWizard");
+      });
     }
   }
 };

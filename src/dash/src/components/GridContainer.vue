@@ -11,6 +11,9 @@
           <v-icon>fa-angle-double-left</v-icon>
         </v-btn>
       </v-hover>
+      <v-hover v-model="divideVerticallyPreview">
+        <v-btn fab color="success" v-on:click="divide('vertical')">&#9707;</v-btn>
+      </v-hover>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn fab color="primary" v-on="on" v-on:click="addWidget()">

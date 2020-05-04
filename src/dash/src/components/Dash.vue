@@ -4,7 +4,7 @@ Composant global du Dash
 <template>
   <div id="global-container" v-bind:style="dashSize">
     <ConnectDialog v-on:connected="start" />
-    <DashPreferences v-model="dashData" />
+    <DashPreferences v-model="dashData" v-on:startWizard="startWizard" />
     <ManualDash v-if="dashData !== undefined && dashData.positioning === 'manual'" />
     <GridDash v-else-if="dashData !== undefined && dashData.positioning === 'grid'" />
     <Tools v-if="initialized" />
@@ -112,6 +112,12 @@ export default {
      * Affiche la fenêtre de l'assistant
      */
     startWizard() {
+      this.dashData = {
+        width: 640,
+        height: 480,
+        positioning: "manual",
+        size: "fix"
+      };
       this.showWizard = true;
     },
     /**

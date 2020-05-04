@@ -50,6 +50,11 @@ class DashRest
         return Utils::o2a($dash);
     }
 
+    /**
+     * @param Request $request
+     * @return bool
+     * @throws CoreException
+     */
     public static function save(Request $request)
     {
         $id = $request->request->get('id');
@@ -69,6 +74,27 @@ class DashRest
         return true;
     }
 
+    /**
+     * TODO: Changer en DELETE
+     * @param int $dashId
+     * @return bool
+     * @throws CoreException
+     */
+    public static function delete(int $dashId)
+    {
+        /** @var Dash $dash */
+        $dash = DashManager::byId($dashId);
+        if (is_object($dash)) {
+            $dash->remove();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $path
+     * @return array
+     */
     public static function pictures($path = '')
     {
         $path = Utils::sanitizeString($path);

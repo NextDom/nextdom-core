@@ -81,6 +81,12 @@ export const store = new Vuex.Store({
             localStorage.dashData = JSON.stringify(state.dashData);
             localStorage.widgetsData = JSON.stringify(state.widgets);
         },
+        deleteDash(state) {
+            localStorage.dashData = undefined;
+            localStorage.widgetsData = undefined;
+            state.widgets = {};
+            state.dashData = {};
+        }
     },
     getters: {
         widgets: state => state.widgets,
