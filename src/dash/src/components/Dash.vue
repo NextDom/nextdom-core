@@ -11,9 +11,6 @@ Composant global du Dash
     <AddDashWizard v-on:endOfWizard="endOfWizard" v-bind:showWizard="showWizard" />
     <SelectItemToAddWizard />
     <AddItemWizard />
-    <!--
-    <router-link v-bind:to="{name: 'dash', params: {dashId: 2}}">AA</router-link>
-    -->
   </div>
 </template>
 
@@ -50,6 +47,7 @@ export default {
     responsive: false,
     dashData: {
       id: -1,
+      title: "Dash",
       width: 640,
       height: 480,
       positioning: "manual",
@@ -126,6 +124,7 @@ export default {
       if (!this.initialized) {
         this.dashData = {
           id: -1,
+          name: "Dash",
           width: 640,
           height: 480,
           positioning: "manual",

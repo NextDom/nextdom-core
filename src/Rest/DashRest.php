@@ -99,6 +99,6 @@ class DashRest
     public static function pictures($path = '')
     {
         $path = Utils::sanitizeString($path);
-        return FileSystemHelper::ls(NEXTDOM_DATA . '/data/pictures/' . $path, '*', true);
+        return FileSystemHelper::ls(NEXTDOM_DATA . '/data/pictures/' . $path, '*.png', true);
     }
 }

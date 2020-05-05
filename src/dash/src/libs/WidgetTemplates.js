@@ -9,6 +9,7 @@ import InfoBinaryImg from "@/components/Widgets/InfoBinaryImg";
 import InfoNumeric from "@/components/Widgets/InfoNumeric";
 import InfoNumericImg from "@/components/Widgets/InfoNumericImg";
 import ScenarioAction from "@/components/Widgets/ScenarioAction";
+import ScenarioActionImg from "@/components/Widgets/ScenarioActionImg";
 import Camera from "@/components/Widgets/Camera";
 
 export default {
@@ -20,6 +21,7 @@ export default {
         InfoBinaryImg,
         InfoNumeric,
         InfoNumericImg,
-        ScenarioAction
+        ScenarioAction,
+        ScenarioActionImg
     }
 }

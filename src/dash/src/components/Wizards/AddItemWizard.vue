@@ -15,6 +15,7 @@ import InfoNumericWizard from "@/components/Wizards/Items/InfoNumericWizard";
 import InfoNumericImgWizard from "@/components/Wizards/Items/InfoNumericImgWizard";
 import CmdActionWizard from "@/components/Wizards/Items/CmdActionWizard";
 import ScenarioActionWizard from "@/components/Wizards/Items/ScenarioActionWizard";
+import ScenarioActionImgWizard from "@/components/Wizards/Items/ScenarioActionImgWizard";
 import EqLogicActionWizard from "@/components/Wizards/Items/EqLogicActionWizard";
 
 export default {
@@ -27,6 +28,7 @@ export default {
     InfoBinaryImgWizard,
     CmdActionWizard,
     ScenarioActionWizard,
+    ScenarioActionImgWizard,
     EqLogicActionWizard
   },
   data: () => ({

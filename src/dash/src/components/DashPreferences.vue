@@ -7,6 +7,7 @@ Fenêtre de configuration du dash
       <v-card-title>Préférences</v-card-title>
       <v-card-text>
         <v-container>
+          <v-text-field v-model="formData.name" label="Nom" />
           <v-radio-group v-model="formData.size" row>
             <v-radio label="Fixe" value="fix" />
             <v-radio label="Adaptée" value="responsive" />

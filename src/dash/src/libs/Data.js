@@ -31,19 +31,6 @@ export default {
             contentSize: 30
         }
     },
-    assets: {
-        buttons: {
-            path: '../../assets/buttons/on-off/',
-            list: ['v1', 'v2', 'light', 'play', 'door', 'switch1', 'switch2', 'pump', 'window', 'thermo']
-        },
-        var: {
-            path: '../../assets/buttons/var/',
-            list: {
-                shutter: [0, 10, 20, 30, 40, 50, 60, 70, 80, 100],
-                fan: [0, 50, 100]
-            }
-        }
-    },
     iconGroups: {
         door: {
             on: 'fa-door-open',

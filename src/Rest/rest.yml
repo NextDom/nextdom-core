@@ -145,4 +145,4 @@ dash_pictures:
   controller: NextDom\Rest\DashRest::pictures
   methods: GET
   requirements:
-    path: "[a-zA-Z0-9\\-_]+"
+    path: "o[a-zA-Z0-9\\-_]*"

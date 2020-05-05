@@ -158,6 +158,20 @@ export default {
           presentation: "Contrôler un scénario (Etat, démarrer, arrêter)"
         },
         {
+          component: "ScenarioActionImg",
+          data: {
+            title: "ScenarioImg",
+            hideBorder: true,
+            picture: "",
+            state: true,
+            style: {
+              titleSize: 20,
+              contentSize: 30
+            }
+          },
+          presentation: "Contrôler un scénario (Etat, démarrer, arrêter)"
+        },
+        {
           component: "EqLogicAction",
           data: {
             title: "Objet avec état",
