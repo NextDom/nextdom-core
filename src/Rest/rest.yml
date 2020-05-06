@@ -132,6 +132,10 @@ dash_get:
   methods: GET
   requirements:
     dashId: \d+
+dash_all:
+  path: '/dash/all'
+  controller: NextDom\Rest\DashRest::all
+  methods: GET
 dash_save:
   path: '/dash/save'
   controller: NextDom\Rest\DashRest::save

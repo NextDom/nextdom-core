@@ -9,17 +9,33 @@ export default {
   components: {
     GridContainer
   },
+  props: {
+    value: Object
+  },
   data: () => ({
+    /*
     gridData: {
       id: "0",
       children: [],
       orientation: "horizontal",
       type: "grid"
     },
+  */
     parentId: "0"
   }),
   mounted() {
     this.$store.commit("setDashType", "grid");
+  },
+  computed: {
+    gridData: {
+      get() {
+        console.log(this.value);
+        return this.value;
+      },
+      set(newValue) {
+        this.$emit("input", newValue);
+      }
+    }
   }
 };
 </script>

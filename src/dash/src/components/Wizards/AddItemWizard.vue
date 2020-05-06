@@ -17,6 +17,7 @@ import CmdActionWizard from "@/components/Wizards/Items/CmdActionWizard";
 import ScenarioActionWizard from "@/components/Wizards/Items/ScenarioActionWizard";
 import ScenarioActionImgWizard from "@/components/Wizards/Items/ScenarioActionImgWizard";
 import EqLogicActionWizard from "@/components/Wizards/Items/EqLogicActionWizard";
+import LinkToDashWizard from "@/components/Wizards/Items/LinkToDashWizard";
 
 export default {
   name: "AddItemWizard",
@@ -29,7 +30,8 @@ export default {
     CmdActionWizard,
     ScenarioActionWizard,
     ScenarioActionImgWizard,
-    EqLogicActionWizard
+    EqLogicActionWizard,
+    LinkToDashWizard
   },
   data: () => ({
     showed: false,

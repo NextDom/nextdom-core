@@ -76,7 +76,7 @@ export default {
             })
             .catch(error => {
                 if (errorCallbackFunc !== undefined) {
-                    errorCallbackFunc(error.response.data);
+                    errorCallbackFunc(error.response);
                 }
             });
     },

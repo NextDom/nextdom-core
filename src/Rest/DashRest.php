@@ -92,6 +92,20 @@ class DashRest
         return false;
     }
 
+    public static function all()
+    {
+        $result = [];
+        /** @var Dash[] $dashs */
+        $dashs = DashManager::all();
+        foreach ($dashs as $dash) {
+            $result[] = [
+                'id' => $dash->getId(),
+                'name' => $dash->getName()
+            ];
+        }
+        return $result;
+    }
+
     /**
      * @param string $path
      * @return array

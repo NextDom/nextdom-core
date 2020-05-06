@@ -1,7 +1,7 @@
 <template>
   <v-stepper v-model="step">
     <v-stepper-header>
-      <v-stepper-step v-bind:complete="step > 1" step="1">Commande</v-stepper-step>
+      <v-stepper-step v-bind:complete="step > 1" step="1">Scénario</v-stepper-step>
       <v-divider />
       <v-stepper-step step="2">Personnalisation</v-stepper-step>
     </v-stepper-header>

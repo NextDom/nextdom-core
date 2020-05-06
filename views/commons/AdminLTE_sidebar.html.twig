@@ -54,7 +54,7 @@
                     <ul class="treeview-menu">
                         <a href="/dash/index.html" target="_blank"><i class="fas fa-picture-o spacing-right"></i><span>{{ 'Nouveau'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                         {% for dash in MENU_DASH_LIST %}
-                            <li><a href="/dash/index.html#/{{ dash.id }}" target="_blank">{{ dash.id }}</a></li>
+                            <li><a href="/dash/index.html#/{{ dash.id }}" target="_blank">{{ dash.name }}</a></li>
                         {% endfor %}
                     </ul>
             </li>

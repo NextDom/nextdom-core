@@ -9,7 +9,7 @@ Assistant de création d'un nouveau dash
         <v-divider />
         <v-stepper-step v-bind:complete="step > 2" step="2">Dimensions</v-stepper-step>
         <v-divider />
-        <v-stepper-step step="3">Thème</v-stepper-step>
+        <v-stepper-step step="3">Personnalisation</v-stepper-step>
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
@@ -66,6 +66,12 @@ Assistant de création d'un nouveau dash
           <StepperButtons v-model="step" />
         </v-stepper-content>
         <v-stepper-content step="3">
+          <v-card color="blue-grey lighten-5">
+            <v-card-title>Personnalisation</v-card-title>
+            <v-card-text>
+              <v-text-field v-model="title" label="Nom" />
+            </v-card-text>
+          </v-card>
           <StepperButtons v-model="step" last v-on:next="endOfWizard" />
         </v-stepper-content>
       </v-stepper-items>
@@ -86,6 +92,7 @@ export default {
   },
   data: () => ({
     step: 1,
+    title: "Mon Dash",
     positioning: "manual",
     size: "fix",
     width: 1280,
@@ -104,9 +111,16 @@ export default {
     endOfWizard() {
       this.$emit("endOfWizard", {
         positioning: this.positioning,
+        name: this.title,
         size: this.size,
         width: this.width,
-        height: this.height
+        height: this.height,
+        grid: {
+          id: "0",
+          children: [],
+          orientation: "horizontal",
+          type: "grid"
+        }
       });
     }
   }

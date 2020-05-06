@@ -8,6 +8,7 @@ import InfoBinary from "@/components/Widgets/InfoBinary";
 import InfoBinaryImg from "@/components/Widgets/InfoBinaryImg";
 import InfoNumeric from "@/components/Widgets/InfoNumeric";
 import InfoNumericImg from "@/components/Widgets/InfoNumericImg";
+import LinkToDash from "@/components/Widgets/LinkToDash";
 import ScenarioAction from "@/components/Widgets/ScenarioAction";
 import ScenarioActionImg from "@/components/Widgets/ScenarioActionImg";
 import Camera from "@/components/Widgets/Camera";
@@ -21,6 +22,7 @@ export default {
         InfoBinaryImg,
         InfoNumeric,
         InfoNumericImg,
+        LinkToDash,
         ScenarioAction,
         ScenarioActionImg
     }

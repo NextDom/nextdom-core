@@ -162,7 +162,7 @@ export default {
           data: {
             title: "ScenarioImg",
             hideBorder: true,
-            picture: "",
+            picture: "on-off/v1-on.png",
             state: true,
             style: {
               titleSize: 20,
@@ -170,6 +170,20 @@ export default {
             }
           },
           presentation: "Contrôler un scénario (Etat, démarrer, arrêter)"
+        },
+        {
+          component: "LinkToDash",
+          data: {
+            title: "Lien Dash",
+            hideBorder: true,
+            target: 0,
+            picture: "on-off/v1-on.png",
+            style: {
+              titleSize: 20,
+              contentSize: 30
+            }
+          },
+          presentation: "Lien vers un autre Dash"
         },
         {
           component: "EqLogicAction",

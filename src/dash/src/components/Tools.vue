@@ -70,17 +70,24 @@ export default {
       this.$eventBus.$emit("showDashPreferences");
     },
     save() {
+      const newDash = this.$store.getters.dashData.id === undefined;
       Communication.postWithOptions(
         "/api/dash/save",
         {
           id: this.$store.getters.dashData.id,
-          name: "Dash",
+          name: this.$store.getters.dashData.name,
           data: JSON.stringify({
             dashData: this.$store.getters.dashData,
             widgetsData: this.$store.getters.widgets
           })
         },
         result => {
+          if (newDash) {
+            this.$router.push({
+              name: "dash",
+              params: { dashId: result.data }
+            });
+          }
           this.$store.commit("setDashId", parseInt(result.data));
           this.$store.commit("saveToLocalStorage", result.data);
           this.message = "Sauvegarde réussie";

@@ -6,7 +6,7 @@ Composant global du Dash
     <ConnectDialog v-on:connected="start" />
     <DashPreferences v-model="dashData" v-on:startWizard="startWizard" />
     <ManualDash v-if="dashData !== undefined && dashData.positioning === 'manual'" />
-    <GridDash v-else-if="dashData !== undefined && dashData.positioning === 'grid'" />
+    <GridDash v-else-if="dashData !== undefined && dashData.positioning === 'grid'" v-model="dashData.grid" />
     <Tools v-if="initialized" />
     <AddDashWizard v-on:endOfWizard="endOfWizard" v-bind:showWizard="showWizard" />
     <SelectItemToAddWizard />
@@ -50,12 +50,26 @@ export default {
       title: "Dash",
       width: 640,
       height: 480,
+      grid: {
+        id: "0",
+        children: [],
+        orientation: "horizontal",
+        type: "grid"
+      },
       positioning: "manual",
       size: "fix"
     }
   }),
   mounted() {
     if (Communication.isConnected()) {
+      this.start();
+    }
+  },
+  watch: {
+    /**
+     * Détection changement de dash
+     */
+    dashId: function() {
       this.start();
     }
   },
@@ -101,6 +115,10 @@ export default {
             if (result.id == this.dashId) {
               // La première fois, l'objet n'a pas d'identifiant au moment de l'enregistrement
               result.data.dashData.id = this.dashId;
+              if (Array.isArray(result.data.widgetsData)) {
+                result.data.widgetsData = {};
+              }
+              this.dashData = result.data.dashData;
               this.$store.commit("initDash", result.data.dashData);
               this.$store.commit("saveToLocalStorage", this.dashId);
               this.$store.commit("initWidgets", result.data.widgetsData);
@@ -127,6 +145,12 @@ export default {
           name: "Dash",
           width: 640,
           height: 480,
+          grid: {
+            id: "0",
+            children: [],
+            orientation: "horizontal",
+            type: "grid"
+          },
           positioning: "manual",
           size: "fix"
         };
