@@ -29,7 +29,6 @@ export default {
   computed: {
     gridData: {
       get() {
-        console.log(this.value);
         return this.value;
       },
       set(newValue) {

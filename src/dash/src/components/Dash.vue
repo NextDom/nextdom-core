@@ -123,8 +123,9 @@ export default {
               this.$store.commit("saveToLocalStorage", this.dashId);
               this.$store.commit("initWidgets", result.data.widgetsData);
               this.initialized = true;
+            } else {
+              this.startWizard();
             }
-            this.startWizard();
           },
           () => {
             this.startWizard();

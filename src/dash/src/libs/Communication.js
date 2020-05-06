@@ -22,9 +22,9 @@ export default {
                 callbackFunc(response.data);
             })
             .catch(error => {
+                console.log(error);
                 if (error.response !== undefined && error.response.status === 403) {
                     localStorage.removeItem("token");
-                    //                    this.router.push("/login");
                 } else {
                     if (errorCallbackFunc !== undefined) {
                         errorCallbackFunc(error.response);

@@ -21,12 +21,17 @@ Fenêtre de configuration du dash
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" left>
+            <v-col cols="4" left>
               <v-btn href="/dash/index.html" color="success" dark>
                 <v-icon left>mdi-plus</v-icon>Nouveau
               </v-btn>
             </v-col>
-            <v-col cols="6" right>
+            <v-col cols="4">
+              <v-btn v-bind:to="{name: 'dash-editor', params: {dashId: formData.id}}" color="success" dark>
+                <v-icon left>mdi-plus</v-icon>Editeur avancé
+              </v-btn>
+            </v-col>
+            <v-col cols="4" right>
               <v-btn v-on:click="deleteDash" color="red" dark>
                 <v-icon left>mdi-delete</v-icon>Supprimer
               </v-btn>
