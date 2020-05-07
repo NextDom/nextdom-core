@@ -45,6 +45,16 @@
 }
 
 /**
+ *       Plugin Mode
+ ************************/
+#modetab {
+    .accordion-toggle {
+        display: block;
+        color: #555 !important;
+    }
+}
+
+/**
  *       Plugin Camera
  ************************/
 .eqLogic[data-eqtype='camera'] .btn-default {
