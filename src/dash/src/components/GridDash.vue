@@ -1,5 +1,5 @@
 <template>
-  <GridContainer v-model="gridData" v-bind:parentId="parentId" />
+  <GridContainer v-model="gridData" root="0" />
 </template>
 
 <script>
@@ -12,17 +12,6 @@ export default {
   props: {
     value: Object
   },
-  data: () => ({
-    /*
-    gridData: {
-      id: "0",
-      children: [],
-      orientation: "horizontal",
-      type: "grid"
-    },
-  */
-    parentId: "0"
-  }),
   mounted() {
     this.$store.commit("setDashType", "grid");
   },
