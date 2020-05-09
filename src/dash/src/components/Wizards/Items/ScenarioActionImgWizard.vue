@@ -7,7 +7,7 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-        <FilteredScenarios v-model="scenario" />
+        <FilteredScenarios v-model="scenario" v-bind:default="previewData.scenarioId  " />
         <StepperButtons v-model="step" v-on:previous="$emit('hide')" v-bind:nextDisabled="scenario.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="2">
@@ -43,6 +43,29 @@ export default {
     WidgetPreview,
     StepperButtons
   },
+  props: {
+    baseData: {
+      type: Object,
+      default: () => ({
+        id: -1,
+        type: "ScenarioActionImg",
+        scenarioId: -1,
+        pos: { top: 0, left: 0 },
+        title: "",
+        state: "stop",
+        picture: "on-off/play-on.png",
+        style: {
+          border: true,
+          width: 280,
+          height: 150,
+          transparent: false,
+          backgroundColor: "#FFFFFFFF",
+          titleSize: 20,
+          contentSize: 40
+        }
+      })
+    }
+  },
   data: () => ({
     scenario: []
   }),
@@ -54,7 +77,9 @@ export default {
           break;
         case 2:
           if (this.scenario.length > 0) {
-            this.previewData.title = this.scenario[0].name;
+            if (this.previewData.id === -1) {
+              this.previewData.title = this.scenario[0].name;
+            }
             this.previewData.scenarioId = parseInt(this.scenario[0].id);
           }
           break;
@@ -63,30 +88,11 @@ export default {
   },
   created() {
     this.resetData();
+    if (this.previewData.id !== -1) {
+      this.step = 2;
+    }
   },
   methods: {
-    resetData() {
-      this.previewData = JSON.parse(
-        JSON.stringify({
-          id: -1,
-          type: "ScenarioActionImg",
-          scenarioId: -1,
-          pos: { top: 0, left: 0 },
-          title: "",
-          state: "stop",
-          picture: "on-off/play-on.png",
-          style: {
-            border: true,
-            width: 280,
-            height: 150,
-            transparent: false,
-            backgroundColor: "#FFFFFFFF",
-            titleSize: 20,
-            contentSize: 40
-          }
-        })
-      );
-    },
     finish() {
       this.endOfWizard();
       this.resetData();

@@ -15,7 +15,7 @@
       v-bind:loading="Object.keys(rawDashs).length === 0"
       loading-text="Chargement..."
       class="elevation-10"
-      v-model="scenario"
+      v-model="dash"
       v-bind:search="search"
     ></v-data-table>
   </v-card>
@@ -31,6 +31,10 @@ export default {
       type: Array,
       default: () => []
     },
+    default: {
+      type: Number,
+      default: -1
+    },
     type: {}
   },
   data: () => ({
@@ -42,10 +46,13 @@ export default {
       { text: "Nom", value: "name" }
     ]
   }),
-  created() {
+  mounted() {
     Communication.get("/api/dash/all", result => {
       this.rawDashs = result;
       this.dashsList = result;
+      if (this.default !== -1) {
+        this.dash = [{ id: this.default }];
+      }
       //      this.updateDashsList();
     });
   },
@@ -53,7 +60,7 @@ export default {
     dataLoaded() {
       return !(Object.keys(this.rawDashs).length === 0);
     },
-    scenario: {
+    dash: {
       get() {
         return this.value;
       },

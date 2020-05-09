@@ -7,9 +7,14 @@
     v-on:dragend="dragEndEvent"
   >
     <component class="widget-content" v-bind:is="widgetData.type" v-bind:widgetData="widgetData" />
-    <v-btn v-if="$store.getters.editMode" right absolute color="red theme--dark" small v-on:click="remove">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
+    <div v-if="$store.getters.editMode" class="widget-tools">
+      <v-btn right color="grey theme--dark" small v-on:click="edit">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-btn right color="red theme--dark" small v-on:click="remove">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </div>
   </v-card>
 </template>
 
@@ -81,8 +86,12 @@ export default {
     dragEndEvent() {
       this.dragStarted = false;
     },
+    edit() {
+      this.$eventBus.$emit("WizardEditItem", this.widgetData.id);
+    },
     remove() {
       this.$store.commit("removeWidget", this.widgetData.id);
+      this.$emit("remove");
     }
   }
 };
@@ -96,5 +105,14 @@ export default {
 
 .v-card.hide-border {
   box-shadow: none !important;
+}
+</style>
+
+<style>
+.widget-tools {
+  width: 100%;
+  text-align: right;
+  position: relative;
+  z-index: 1;
 }
 </style>

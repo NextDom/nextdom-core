@@ -31,6 +31,10 @@ export default {
       type: Array,
       default: () => []
     },
+    default: {
+      type: Number,
+      default: -1
+    },
     type: String
   },
   data: () => ({
@@ -43,6 +47,9 @@ export default {
     ]
   }),
   created() {
+    this.updateEqLogicssList();
+  },
+  mounted() {
     Communication.get("/api/summary/all", result => {
       this.eqLogicsTree = result;
       this.updateEqLogicssList();
@@ -80,14 +87,18 @@ export default {
                 this.type
             )
           ) {
-            this.eqLogicsList.push({
+            const eqLogicData = {
               room: this.eqLogicsTree[roomId]["name"],
               eqLogic: this.eqLogicsTree[roomId]["eqLogics"][eqLogicId]["name"],
               id: parseInt(
                 this.eqLogicsTree[roomId]["eqLogics"][eqLogicId]["id"]
               ),
               eqLogicData: this.eqLogicsTree[roomId]["eqLogics"][eqLogicId]
-            });
+            };
+            if (this.default == eqLogicData.id) {
+              this.eqLogic = [eqLogicData];
+            }
+            this.eqLogicsList.push(eqLogicData);
           }
         }
       }

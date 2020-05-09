@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:style="gridStyle" class="grid-container" v-bind:class="previewClass">
+  <div class="grid-container" v-bind:class="gridClass">
     <span class="grid-group-btns" v-if="$store.getters.editMode && gridData.children.length === 0">
       <v-hover v-model="divideHorizontallyPreview">
         <v-btn class="fab-vertical" fab color="success" v-on:click="divide('horizontal')">&#9707;</v-btn>
@@ -22,7 +22,7 @@
       </v-hover>
     </span>
     <template v-else-if="gridData.children.length === 1">
-      <Widget v-bind:widgetData="gridData.children[0].widgetData" />
+      <Widget v-bind:widgetData="$store.getters.widgets[gridData.children[0].widgetId]" v-on:remove="widgetRemoved" />
     </template>
     <template v-else-if="gridData.children.length === 2">
       <GridContainer
@@ -65,7 +65,7 @@ export default {
           children: [],
           orientation: "",
           type: "widget",
-          widgetData: this.$store.getters.widgets[widgetId]
+          widgetId: widgetId
         });
       }
     });
@@ -84,35 +84,26 @@ export default {
         this.$emit("input", newValue);
       }
     },
-    previewClass() {
+    gridClass() {
+      let result = [];
       if (this.divideHorizontallyPreview) {
-        return "horizontal-divide-preview";
+        result.push("horizontal-divide-preview");
       }
       if (this.divideVerticallyPreview) {
-        return "vertical-divide-preview";
+        result.push("vertical-divide-preview");
       }
       if (this.deletePreviewState) {
-        return "delete-preview";
+        result.push("delete-preview");
       }
-      return "";
-    },
-    gridStyle() {
-      let result = {};
-      switch (this.gridData.children.length) {
-        default:
-        case 0:
-          break;
-        case 1:
-          break;
-        case 2:
-          if (this.gridData.orientation === "horizontal") {
-            result = { flexDirection: "row" };
-          } else {
-            result = { flexDirection: "column" };
-          }
+      if (this.gridData.children.length === 2) {
+        if (this.gridData.orientation === "horizontal") {
+          result.push("horizontal-grid");
+        } else {
+          result.push("vertical-grid");
+        }
       }
       if (this.$store.getters.editMode) {
-        result["boxShadow"] = "0 0 5px #b0f7b0";
+        result.push("edit-container");
       }
       return result;
     }
@@ -145,6 +136,9 @@ export default {
     },
     setDeletePreviewState(state) {
       this.deletePreviewState = state;
+    },
+    widgetRemoved() {
+      this.gridData.children = [];
     }
   }
 };
@@ -166,19 +160,32 @@ export default {
   display: none;
 }
 
+.horizontal-grid {
+  flex-direction: row;
+}
+
+.horizontal-grid > div {
+  width: 50%;
+}
+
+.vertical-grid {
+  flex-direction: column;
+}
+
+.vertical-grid > div {
+  height: 50%;
+}
+
+.edit-container {
+  box-shadow: 0 0 5px #b0f7b0;
+}
+
 .grid-container:hover > .grid-group-btns,
 .grid-group-btns:hover {
   position: absolute;
   display: block;
   width: max-content;
   z-index: 9999;
-}
-
-.horizontal-grid {
-  flex-direction: row;
-}
-.vertical-grid {
-  flex-direction: column;
 }
 
 .vertical-divide-preview {

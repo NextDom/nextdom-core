@@ -7,7 +7,7 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-        <FilteredDashs v-model="dash" />
+        <FilteredDashs v-model="dash" v-bind:default="previewData.target" />
         <StepperButtons v-model="step" v-on:previous="$emit('hide')" v-bind:nextDisabled="dash.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="2">
@@ -43,6 +43,29 @@ export default {
     WidgetPreview,
     StepperButtons
   },
+  props: {
+    baseData: {
+      type: Object,
+      default: () => ({
+        id: 0,
+        type: "LinkToDash",
+        target: 0,
+        pos: { top: 0, left: 0 },
+        title: "",
+        hideBorder: true,
+        picture: "on-off/play-on.png",
+        style: {
+          border: true,
+          width: 280,
+          height: 150,
+          transparent: false,
+          backgroundColor: "#FFFFFFFF",
+          titleSize: 20,
+          contentSize: 40
+        }
+      })
+    }
+  },
   data: () => ({
     dash: []
   }),
@@ -54,7 +77,9 @@ export default {
           break;
         case 2:
           if (this.dash.length > 0) {
-            this.previewData.title = this.dash[0].name;
+            if (this.previewData.id === -1) {
+              this.previewData.title = this.dash[0].name;
+            }
             this.previewData.target = parseInt(this.dash[0].id);
           }
           break;
@@ -63,29 +88,13 @@ export default {
   },
   created() {
     this.resetData();
+    if (this.previewData.id !== -1) {
+      this.step = 2;
+    }
   },
   methods: {
     resetData() {
-      this.previewData = JSON.parse(
-        JSON.stringify({
-          id: 0,
-          type: "LinkToDash",
-          target: 0,
-          pos: { top: 0, left: 0 },
-          title: "",
-          hideBorder: true,
-          picture: "on-off/play-on.png",
-          style: {
-            border: true,
-            width: 280,
-            height: 150,
-            transparent: false,
-            backgroundColor: "#FFFFFFFF",
-            titleSize: 20,
-            contentSize: 40
-          }
-        })
-      );
+      this.previewData = JSON.parse(JSON.stringify(this.baseData));
     },
     finish() {
       this.endOfWizard();

@@ -7,7 +7,7 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-        <FilteredCommands v-model="command" type="info" subType="numeric" />
+        <FilteredCommands v-model="command" v-bind:default="previewData.cmdId" type="info" subType="numeric" />
         <StepperButtons v-model="step" v-on:previous="$emit('hide')" v-bind:nextDisabled="command.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="2">
@@ -44,6 +44,30 @@ export default {
     StepperButtons,
     WidgetPreview
   },
+  props: {
+    baseData: {
+      type: Object,
+      default: () => ({
+        id: -1,
+        type: "InfoNumeric",
+        cmdId: -1,
+        pos: { top: 0, left: 0 },
+        icon: "",
+        title: "",
+        unit: "",
+        state: 20,
+        style: {
+          border: true,
+          width: 280,
+          height: 150,
+          transparent: false,
+          backgroundColor: "#FFFFFFFF",
+          titleSize: 20,
+          contentSize: 20
+        }
+      })
+    }
+  },
   data: () => ({
     command: []
   }),
@@ -55,7 +79,9 @@ export default {
           break;
         case 2:
           if (this.command.length > 0) {
-            this.previewData.title = this.command[0]["eqLogic"];
+            if (this.previewData.id === -1) {
+              this.previewData.title = this.command[0]["eqLogic"];
+            }
             this.previewData.unit = this.command[0]["data"]["unite"];
             this.previewData.state = this.command[0]["data"]["state"];
             this.previewData.cmdId = parseInt(this.command[0]["id"]);
@@ -66,31 +92,11 @@ export default {
   },
   created() {
     this.resetData();
+    if (this.previewData.id !== -1) {
+      this.step = 2;
+    }
   },
   methods: {
-    resetData() {
-      this.previewData = JSON.parse(
-        JSON.stringify({
-          id: -1,
-          type: "InfoNumeric",
-          cmdId: -1,
-          pos: { top: 0, left: 0 },
-          icon: "",
-          title: "",
-          unit: "",
-          state: 20,
-          style: {
-            border: true,
-            width: 280,
-            height: 150,
-            transparent: false,
-            backgroundColor: "#FFFFFFFF",
-            titleSize: 20,
-            contentSize: 20
-          }
-        })
-      );
-    },
     finish() {
       this.endOfWizard();
       this.resetData();

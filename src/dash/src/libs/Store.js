@@ -44,7 +44,7 @@ export const store = new Vuex.Store({
          */
         updateCmd(state, payload) {
             for (let widget in state.widgets) {
-                if (state.widgets[widget].cmdId === payload.cmdId) {
+                if (state.widgets[widget].cmdId == payload.cmdId) {
                     state.widgets[widget].state = payload.newState;
                 }
             }

@@ -39,6 +39,10 @@ export default {
       type: String,
       default: "Commande"
     },
+    default: {
+      type: Number,
+      default: -1
+    },
     type: String,
     subType: String,
     eqLogicId: Number,
@@ -63,7 +67,6 @@ export default {
   },
   watch: {
     type: function() {
-      console.log("UPDATE");
       if (this.dataLoaded) {
         this.updateCommandsList();
       }
@@ -108,7 +111,7 @@ export default {
               this.mustBeShowed(cmdData) &&
               !(this.hideUseless && this.isUselessCommand(cmdData["name"]))
             ) {
-              this.commandsList.push({
+              const commandData = {
                 room: this.commandsTree[roomId]["name"],
                 eqLogic: this.commandsTree[roomId]["eqLogics"][eqLogicIndex][
                   "name"
@@ -116,7 +119,11 @@ export default {
                 cmd: cmdData["name"],
                 id: cmdData["id"],
                 data: cmdData
-              });
+              };
+              if (this.default == commandData.id) {
+                this.command = [commandData];
+              }
+              this.commandsList.push(commandData);
             }
           }
         }

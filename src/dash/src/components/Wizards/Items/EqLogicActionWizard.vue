@@ -13,19 +13,37 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-        <FilteredEqLogics v-model="eqLogic" />
+        <FilteredEqLogics v-model="eqLogic" v-bind:default="previewData.eqLogicId" />
         <StepperButtons v-model="step" v-on:previous="$emit('hide')" v-bind:nextDisabled="eqLogic.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="2">
-        <FilteredCommands v-model="stateCommand" v-bind:eqLogicId="eqLogicId" title="Commande d'état" type="info" />
+        <FilteredCommands
+          v-model="stateCommand"
+          v-bind:default="previewData.cmdId"
+          v-bind:eqLogicId="eqLogicId"
+          title="Commande d'état"
+          type="info"
+        />
         <StepperButtons v-model="step" v-bind:nextDisabled="stateCommand.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="3">
-        <FilteredCommands v-model="onCommand" v-bind:eqLogicId="eqLogicId" title="Commande pour allumer" type="action" />
+        <FilteredCommands
+          v-model="onCommand"
+          v-bind:eqLogicId="eqLogicId"
+          v-bind:default="previewData.onCommandId"
+          title="Commande pour allumer"
+          type="action"
+        />
         <StepperButtons v-model="step" v-bind:nextDisabled="onCommand.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="4">
-        <FilteredCommands v-model="offCommand" v-bind:eqLogicId="eqLogicId" title="Commande pour éteindre" type="action" />
+        <FilteredCommands
+          v-model="offCommand"
+          v-bind:eqLogicId="eqLogicId"
+          v-bind:default="previewData.offCommandId"
+          title="Commande pour éteindre"
+          type="action"
+        />
         <StepperButtons v-model="step" v-bind:nextDisabled="offCommand.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="5">
@@ -63,6 +81,31 @@ export default {
     StepperButtons,
     WidgetPreview
   },
+  props: {
+    baseData: {
+      type: Object,
+      default: () => ({
+        id: -1,
+        type: "EqLogicAction",
+        cmdId: -1,
+        pos: { top: 0, left: 0 },
+        icon: "lamp",
+        title: "",
+        state: true,
+        onCommandId: -1,
+        offCommandId: -1,
+        style: {
+          border: true,
+          width: 280,
+          height: 150,
+          transparent: false,
+          backgroundColor: "#FFFFFFFF",
+          titleSize: 20,
+          contentSize: 40
+        }
+      })
+    }
+  },
   data: () => ({
     eqLogic: [],
     eqLogicId: undefined,
@@ -74,22 +117,18 @@ export default {
     step: function(newStep) {
       switch (newStep) {
         case 1:
+          this.resetData();
           this.stopStateUpdater();
-          this.eqLogic = [];
           break;
         case 2:
           this.eqLogicId = this.eqLogic[0].id;
-          this.stateCommand = [];
-          break;
-        case 3:
-          this.onCommand = [];
-          break;
-        case 4:
-          this.offCommand = [];
           break;
         case 5:
           this.startStateUpdater();
-          this.previewData.title = this.eqLogic[0].eqLogic;
+          this.previewData.eqLogicId = this.eqLogicId;
+          if (this.previewData.id === -1) {
+            this.previewData.title = this.eqLogic[0].eqLogic;
+          }
           this.previewData.state = this.stateCommand[0].data.state;
           this.previewData.cmdId = parseInt(this.stateCommand[0].id);
           this.previewData.onCommandId = parseInt(this.onCommand[0].id);
@@ -100,31 +139,13 @@ export default {
   },
   created() {
     this.resetData();
+    if (this.previewData.id !== -1) {
+      this.step = 5;
+    }
   },
   methods: {
     resetData() {
-      this.previewData = JSON.parse(
-        JSON.stringify({
-          id: -1,
-          type: "EqLogicAction",
-          cmdId: -1,
-          pos: { top: 0, left: 0 },
-          icon: "lamp",
-          title: "",
-          state: true,
-          onCommandId: -1,
-          offCommandId: -1,
-          style: {
-            border: true,
-            width: 280,
-            height: 150,
-            transparent: false,
-            backgroundColor: "#FFFFFFFF",
-            titleSize: 20,
-            contentSize: 40
-          }
-        })
-      );
+      this.previewData = JSON.parse(JSON.stringify(this.baseData));
     },
     finish() {
       this.endOfWizard();

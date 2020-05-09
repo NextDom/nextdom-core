@@ -8,6 +8,9 @@ export default {
     stateUpdater: null
   }),
   methods: {
+    resetData() {
+      this.previewData = JSON.parse(JSON.stringify(this.baseData));
+    },
     startStateUpdater() {
       this.stateUpdater = setInterval(() => {
         this.previewData.state = !this.previewData.state;
@@ -21,7 +24,9 @@ export default {
     endOfWizard() {
       this.stopStateUpdater();
       this.$store.commit("setEditMode", true);
-      this.previewData.id = this.genFakeGuid();
+      if (this.previewData.id === -1) {
+        this.previewData.id = this.genFakeGuid();
+      }
       // Clone de l'objet
       this.$store.commit(
         "addWidget",

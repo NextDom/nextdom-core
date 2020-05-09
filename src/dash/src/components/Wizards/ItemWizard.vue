@@ -3,7 +3,7 @@ Dialog de base d'ajout d'un élément
 -->
 <template>
   <v-dialog v-model="showed">
-    <component v-if="currentWizard !== null" v-bind:is="currentWizard" v-on:hide="showed = false" />
+    <component v-if="currentWizard !== null" v-bind:is="currentWizard" v-on:hide="showed = false" v-bind="editAttr" />
   </v-dialog>
 </template>
 
@@ -20,7 +20,7 @@ import EqLogicActionWizard from "@/components/Wizards/Items/EqLogicActionWizard"
 import LinkToDashWizard from "@/components/Wizards/Items/LinkToDashWizard";
 
 export default {
-  name: "AddItemWizard",
+  name: "ItemWizard",
   components: {
     CameraWizard,
     InfoBinaryWizard,
@@ -35,12 +35,22 @@ export default {
   },
   data: () => ({
     showed: false,
-    currentWizard: null
+    currentWizard: null,
+    editAttr: {}
   }),
   mounted() {
     this.$eventBus.$on("WizardAddItem", component => {
-      this.showed = true;
+      this.editAttr = {};
       this.currentWizard = component + "Wizard";
+      this.showed = true;
+    });
+    this.$eventBus.$on("WizardEditItem", widgetId => {
+      this.editAttr = {
+        baseData: this.$store.getters.widgets[widgetId]
+      };
+      this.currentWizard =
+        this.$store.getters.widgets[widgetId].type + "Wizard";
+      this.showed = true;
     });
   }
 };

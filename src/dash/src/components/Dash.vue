@@ -10,7 +10,7 @@ Composant global du Dash
     <Tools v-if="initialized" />
     <AddDashWizard v-on:endOfWizard="endOfWizard" v-bind:showWizard="showWizard" />
     <SelectItemToAddWizard />
-    <AddItemWizard />
+    <ItemWizard />
   </div>
 </template>
 
@@ -22,7 +22,7 @@ import Communication from "@/libs/Communication";
 import DashPreferences from "@/components/DashPreferences";
 import Tools from "@/components/Tools";
 import SelectItemToAddWizard from "@/components/Wizards/SelectItemToAddWizard";
-import AddItemWizard from "@/components/Wizards/AddItemWizard";
+import ItemWizard from "@/components/Wizards/ItemWizard";
 import AddDashWizard from "@/components/Wizards/AddDashWizard";
 import EventsManager from "@/libs/EventsManager.js";
 
@@ -35,7 +35,7 @@ export default {
     DashPreferences,
     Tools,
     SelectItemToAddWizard,
-    AddItemWizard,
+    ItemWizard,
     AddDashWizard
   },
   props: {

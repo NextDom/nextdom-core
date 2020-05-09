@@ -3,13 +3,7 @@
     <v-card-title>
       Scénarios
       <v-spacer />
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Filtrer"
-        single-line
-        hide-details
-      ></v-text-field>
+      <v-text-field v-model="search" append-icon="mdi-magnify" label="Filtrer" single-line hide-details></v-text-field>
     </v-card-title>
     <v-data-table
       v-bind:headers="headers"
@@ -24,11 +18,7 @@
       v-model="scenario"
       v-bind:search="search"
     ></v-data-table>
-    <v-checkbox
-      label="Cacher les scénarios désactivés"
-      v-model="hideInactives"
-      v-on:change="updateScenariosList"
-    />
+    <v-checkbox label="Cacher les scénarios désactivés" v-model="hideInactives" v-on:change="updateScenariosList" />
   </v-card>
 </template>
 
@@ -42,6 +32,10 @@ export default {
       type: Array,
       default: () => []
     },
+    default: {
+      type: Number,
+      default: -1
+    },
     type: {}
   },
   data: () => ({
@@ -54,10 +48,13 @@ export default {
       { text: "Scenario", value: "name" }
     ]
   }),
-  created() {
+  mounted() {
     Communication.get("/api/scenario/all", result => {
       this.rawScenarios = result;
       this.updateScenariosList();
+      if (this.default !== -1) {
+        this.scenario = [{ id: this.default }];
+      }
     });
   },
   computed: {
@@ -79,12 +76,16 @@ export default {
       for (let scenarioIndex in this.rawScenarios) {
         const scenario = this.rawScenarios[scenarioIndex];
         if (!(!scenario.active && this.hideInactives)) {
-          this.scenariosList.push({
+          const scenarioData = {
             scenario: scenario,
             id: scenario.id,
             name: scenario.name,
             group: scenario.group
-          });
+          };
+          if (this.default == scenario.id) {
+            this.scenario = [scenarioData];
+          }
+          this.scenariosList.push();
         }
       }
     }

@@ -7,7 +7,7 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-        <FilteredEqLogics v-model="eqLogic" type="camera" />
+        <FilteredEqLogics v-model="eqLogic" v-bind:default="previewData.eqLogicId" type="camera" />
         <StepperButtons v-model="step" v-on:previous="$emit('hide')" v-bind:nextDisabled="eqLogic.length === 0" />
       </v-stepper-content>
       <v-stepper-content step="2">
@@ -46,6 +46,29 @@ export default {
     StepperButtons,
     WidgetPreview
   },
+  props: {
+    baseData: {
+      type: Object,
+      default: () => ({
+        id: -1,
+        cmdId: -1,
+        type: "Camera",
+        pos: { top: 0, left: 0 },
+        eqLogicId: -1,
+        localApiKey: "",
+        refreshInterval: 0,
+        title: "Camera",
+        quality: true,
+        style: {
+          border: false,
+          width: "auto",
+          height: "auto",
+          transparent: true,
+          titleSize: 20
+        }
+      })
+    }
+  },
   data: () => ({
     eqLogic: [],
     previewData: {}
@@ -62,7 +85,9 @@ export default {
           }
           break;
         case 2:
-          this.previewData.title = this.eqLogic[0].eqLogic;
+          if (this.previewData.id === -1) {
+            this.previewData.title = this.eqLogic[0].eqLogic;
+          }
           this.previewData.eqLogicId = this.eqLogic[0].id;
           this.previewData.refreshInterval = this.eqLogic[0].eqLogicData.configuration[
             "thumbnail::refresh"
@@ -76,29 +101,13 @@ export default {
   },
   created() {
     this.resetData();
+    if (this.previewData.id !== -1) {
+      this.step = 2;
+    }
   },
   methods: {
     resetData() {
-      this.previewData = JSON.parse(
-        JSON.stringify({
-          id: -1,
-          cmdId: -1,
-          type: "Camera",
-          pos: { top: 0, left: 0 },
-          eqLogicId: -1,
-          localApiKey: "",
-          refreshInterval: 0,
-          title: "Camera",
-          quality: true,
-          style: {
-            border: false,
-            width: "auto",
-            height: "auto",
-            transparent: true,
-            titleSize: 20
-          }
-        })
-      );
+      this.previewData = JSON.parse(JSON.stringify(this.baseData));
     },
     finish() {
       this.endOfWizard();
