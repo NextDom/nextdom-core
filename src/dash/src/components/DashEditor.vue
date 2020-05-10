@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Editeur avancé</h1>
+    <v-btn v-bind:to="{name: 'dash', params: {dashId: dashId}}">Retour au Dash</v-btn>
     <ConnectDialog v-on:connected="start" />
     <vue-json-editor
       v-bind:lang="language"
@@ -86,6 +87,7 @@ export default {
     },
     widgetsSave() {
       this.savedWidgetsData = JSON.parse(JSON.stringify(this.widgetsData));
+      this.save();
     },
     save() {
       Communication.postWithOptions("/api/dash/save", {

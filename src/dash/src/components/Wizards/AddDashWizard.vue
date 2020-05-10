@@ -70,6 +70,7 @@ Assistant de création d'un nouveau dash
             <v-card-title>Personnalisation</v-card-title>
             <v-card-text>
               <v-text-field v-model="title" label="Nom" />
+              <BackgroundStyle v-model="background" />
             </v-card-text>
           </v-card>
           <StepperButtons v-model="step" last v-on:next="endOfWizard" />
@@ -81,11 +82,13 @@ Assistant de création d'un nouveau dash
 
 <script>
 import StepperButtons from "@/components/Wizards/Helpers/StepperButtons";
+import BackgroundStyle from "@/components/Wizards/Helpers/BackgroundStyle";
 
 export default {
   name: "AddDashWizard",
   components: {
-    StepperButtons
+    StepperButtons,
+    BackgroundStyle
   },
   props: {
     showWizard: null
@@ -96,7 +99,8 @@ export default {
     positioning: "manual",
     size: "fix",
     width: 1280,
-    height: 720
+    height: 720,
+    background: "no"
   }),
   watch: {
     step: function(newStep) {
@@ -115,6 +119,7 @@ export default {
         size: this.size,
         width: this.width,
         height: this.height,
+        background: this.background,
         grid: {
           id: "0",
           children: [],

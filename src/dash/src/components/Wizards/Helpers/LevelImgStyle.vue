@@ -2,8 +2,8 @@
   <v-radio-group v-model="picture" row>
     <v-radio v-for="(pictureData, index) in picturesList" v-bind:key="`pictures-${index}`" v-bind:value="index">
       <template v-slot:label>
-        <img v-bind:src="'/data/pictures/level/' + pictureData.name + '-0.png'" />/
-        <img v-bind:src="'/data/pictures/level/' + pictureData.name + '-100.png'" />/
+        <img v-bind:src="basePath + pictureData.name + '-0.png'" />/
+        <img v-bind:src="basePath + pictureData.name + '-100.png'" />
       </template>
     </v-radio>
   </v-radio-group>

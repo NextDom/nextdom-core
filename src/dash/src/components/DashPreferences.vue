@@ -21,6 +21,9 @@ Fenêtre de configuration du dash
             </v-col>
           </v-row>
           <v-row>
+            <BackgroundStyle v-model="formData.background" />
+          </v-row>
+          <v-row>
             <v-col cols="4" left>
               <v-btn href="/dash/index.html" color="success" dark>
                 <v-icon left>mdi-plus</v-icon>Nouveau
@@ -45,9 +48,13 @@ Fenêtre de configuration du dash
 
 <script>
 import Communication from "@/libs/Communication";
+import BackgroundStyle from "@/components/Wizards/Helpers/BackgroundStyle";
 
 export default {
   name: "DashPreferences",
+  components: {
+    BackgroundStyle
+  },
   props: {
     value: {
       type: Object,

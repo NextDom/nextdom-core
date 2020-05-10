@@ -150,3 +150,7 @@ dash_pictures:
   methods: GET
   requirements:
     path: "[a-zA-Z0-9\\-_]*"
+dash_backgrounds:
+  path: '/dash/backgrounds'
+  controller: NextDom\Rest\DashRest::backgrounds
+  methods: GET

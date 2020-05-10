@@ -2,7 +2,7 @@
 Composant global du Dash
 -->
 <template>
-  <div id="global-container" v-bind:style="dashSize">
+  <div id="global-container" v-bind:style="dashStyle">
     <ConnectDialog v-on:connected="start" />
     <DashPreferences v-model="dashData" v-on:startWizard="startWizard" />
     <ManualDash v-if="dashData !== undefined && dashData.positioning === 'manual'" />
@@ -50,6 +50,7 @@ export default {
       title: "Dash",
       width: 640,
       height: 480,
+      background: "no",
       grid: {
         id: "0",
         children: [],
@@ -77,24 +78,31 @@ export default {
     /**
      * Taille de l'écran
      */
-    dashSize() {
+    dashStyle() {
+      let result = {};
       if (!this.initialized) {
-        return {
+        result = {
           width: 0,
           height: 0
         };
-      }
-      if (this.dashData.size === "fix") {
-        return {
-          width: this.dashData.width + "px",
-          height: this.dashData.height + "px"
-        };
       } else {
-        return {
-          width: "100%",
-          height: "100%"
-        };
+        if (this.dashData.size === "fix") {
+          result = {
+            width: this.dashData.width + "px",
+            height: this.dashData.height + "px"
+          };
+        } else {
+          result = {
+            width: "100%",
+            height: "100%"
+          };
+        }
       }
+      if (this.dashData.background !== "no") {
+        result["backgroundImage"] =
+          "url('/data/backgrounds/" + this.dashData.background + "')";
+      }
+      return result;
     }
   },
   methods: {
@@ -143,6 +151,7 @@ export default {
       if (!this.initialized) {
         this.dashData = {
           id: -1,
+          background: "no",
           name: "Dash",
           width: 640,
           height: 480,
@@ -172,10 +181,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 #global-container {
   padding: 0 !important;
   position: absolute;
+  background-size: cover;
+  background-position: center;
   top: 0;
   left: 0;
   width: 100%;

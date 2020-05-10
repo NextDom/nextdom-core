@@ -115,4 +115,36 @@ class DashRest
         $path = Utils::sanitizeString($path);
         return FileSystemHelper::ls(NEXTDOM_DATA . '/data/pictures/' . $path, '*.png', true);
     }
+
+    /**
+     * @param string $path
+     * @return array
+     */
+    public static function backgrounds($path = '')
+    {
+        $path = Utils::sanitizeString($path);
+        $backgroundsList = FileSystemHelper::ls(NEXTDOM_DATA . '/data/backgrounds/' . $path, '*.jpg', true);
+        $result = [];
+        foreach ($backgroundsList as $backgroundFile) {
+            $thumbPos = strpos($backgroundFile, '-thumb');
+            $fileInfo = pathinfo($backgroundFile);
+            $code = $fileInfo['filename'];
+            if ($thumbPos === false) {
+                if (!isset($result[$code])) {
+                    $result[$code] = ['thumb' => false];
+                }
+            }
+            else {
+                $code = substr($backgroundFile, 0, $thumbPos);
+                if (!isset($result[$code])) {
+                    $result[$code] = ['thumb' => true];
+                }
+                else {
+                    $result[$code]['thumb'] = true;
+                }
+            }
+            $result[$code]['ext'] = $fileInfo['extension'];
+        }
+        return $result;
+    }
 }
