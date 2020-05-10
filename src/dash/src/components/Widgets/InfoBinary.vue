@@ -2,7 +2,7 @@
   <div>
     <v-card-title v-if="widgetData.title !== ''" v-bind:style="{fontSize: widgetData.style.titleSize + 'px'}">{{ widgetData.title }}</v-card-title>
     <v-card-text class="text-center">
-      <v-icon v-bind:size="widgetData.style.contentSize">{{ icon }}</v-icon>
+      <v-icon v-bind:style="{fontSize: widgetData.style.contentSize + 'px', height: widgetData.style.contentSize + 'px' }">{{ icon }}</v-icon>
     </v-card-text>
   </div>
 </template>

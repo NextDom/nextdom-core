@@ -4,7 +4,9 @@
     <v-card-text class="text-center">
       <v-content>
         <v-btn text v-on:click="action" icon>
-          <v-icon v-bind:style="{fontSize: widgetData.style.contentSize + 'px' }">{{ widgetData.icon }}</v-icon>
+          <v-icon
+            v-bind:style="{fontSize: widgetData.style.contentSize + 'px', height: widgetData.style.contentSize + 'px' }"
+          >{{ widgetData.icon }}</v-icon>
         </v-btn>
       </v-content>
     </v-card-text>
