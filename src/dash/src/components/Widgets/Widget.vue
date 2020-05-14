@@ -1,7 +1,8 @@
 <template>
   <v-card
     v-bind:style="widgetStyle"
-    v-bind:class="widgetData.style.border ? '' : 'hide-border'"
+    class="widget"
+    v-bind:class="!widgetData.style.border || widgetData.style.transparent ? 'hide-border' : ''"
     v-bind:draggable="$store.getters.editMode"
     v-on:dragstart="dragStartEvent"
     v-on:dragend="dragEndEvent"
@@ -114,5 +115,14 @@ export default {
   text-align: right;
   position: relative;
   z-index: 1;
+}
+
+.widget-content img {
+  pointer-events: none;
+}
+
+.widget {
+  padding-left: 0;
+  padding-right: 0;
 }
 </style>

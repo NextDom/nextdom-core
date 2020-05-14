@@ -31,9 +31,7 @@ export default {
   }),
   mounted() {
     Communication.get("/api/dash/backgrounds", files => {
-      console.log(this.value);
       this.backgroundsList = files;
-      console.log(this.value);
     });
   },
   computed: {
