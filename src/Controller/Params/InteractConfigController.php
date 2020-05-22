@@ -39,11 +39,12 @@ class InteractConfigController extends BaseController
      *
      * @return string Content of interaction config page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
 
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/interact_config.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/params/interact_config.js';
 
         return Render::getInstance()->get('/desktop/params/interact_config.html.twig', $pageData);
     }

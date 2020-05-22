@@ -80,7 +80,7 @@ class DashBoardController extends BaseController
         if (!empty($currentJeeObject)) {
             $currentJeeObjectId = $currentJeeObject->getId();
         } else {
-            throw new CoreException(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
+            throw new CoreException(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?' . http_build_query(['v' => 'd', 'p' => 'object']). '">Liste objets et résumés</a>'));
         }
 
         $pageData[ControllerData::JS_VARS]['SEL_OBJECT_ID'] = $currentJeeObjectId;
@@ -98,9 +98,9 @@ class DashBoardController extends BaseController
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($currentJeeObjectId);
         $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($currentJeeObject);
 
-        $pageData[ControllerData::JS_POOL][] = '/public/js/libs/widget.js';
-        $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/pages/dashboard.js';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/dashboard_events.js';
+        $pageData[ControllerData::JS_POOL][] = self::PATH_TO_JS . '/libs/widget.js';
+        $pageData[ControllerData::JS_POOL][] = self::PATH_TO_JS . '/desktop/pages/dashboard.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/dashboard_events.js';
         // A remettre une fois mise sous forme de thème
         $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
         $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';

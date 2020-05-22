@@ -28,6 +28,8 @@ namespace NextDom\Controller;
  */
 abstract class BaseController
 {
+    const PATH_TO_JS = '/public/js';
+    const PATH_TO_CSS = '/public/css';
     /**
      * @param $pageData
      * @return string

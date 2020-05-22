@@ -39,11 +39,12 @@ class LinksController extends BaseController
      *
      * @return string Content of links page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
 
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/links.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/params/links.js';
 
         return Render::getInstance()->get('/desktop/params/links.html.twig', $pageData);
     }

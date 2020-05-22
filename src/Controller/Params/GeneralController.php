@@ -51,7 +51,7 @@ class GeneralController extends BaseController
         $cache = CacheManager::byKey('hour');
         $pageData['adminLastKnowDate'] = $cache->getValue();
 
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/general.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/params/general.js';
 
         return Render::getInstance()->get('/desktop/params/general.html.twig', $pageData);
     }
