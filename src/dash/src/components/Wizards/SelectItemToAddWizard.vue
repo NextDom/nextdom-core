@@ -186,6 +186,20 @@ export default {
           presentation: "Lien vers un autre Dash"
         },
         {
+          component: "CircleMenu",
+          data: {
+            title: "Menu circulaire",
+            hideBorder: true,
+            target: 0,
+            picture: "on-off/v1-on.png",
+            style: {
+              titleSize: 20,
+              contentSize: 30
+            }
+          },
+          presentation: "Lien vers un autre Dash"
+        },
+        {
           component: "EqLogicAction",
           data: {
             title: "Objet avec état",

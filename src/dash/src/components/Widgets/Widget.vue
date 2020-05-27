@@ -125,4 +125,8 @@ export default {
   padding-left: 0;
   padding-right: 0;
 }
+
+.v-card__title {
+  justify-content: center;
+}
 </style>

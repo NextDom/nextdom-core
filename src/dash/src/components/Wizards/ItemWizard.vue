@@ -18,11 +18,13 @@ import ScenarioActionWizard from "@/components/Wizards/Items/ScenarioActionWizar
 import ScenarioActionImgWizard from "@/components/Wizards/Items/ScenarioActionImgWizard";
 import EqLogicActionWizard from "@/components/Wizards/Items/EqLogicActionWizard";
 import LinkToDashWizard from "@/components/Wizards/Items/LinkToDashWizard";
+import CircleMenuWizard from "@/components/Wizards/Items/CircleMenuWizard";
 
 export default {
   name: "ItemWizard",
   components: {
     CameraWizard,
+    CircleMenuWizard,
     InfoBinaryWizard,
     InfoNumericWizard,
     InfoNumericImgWizard,

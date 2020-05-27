@@ -12,10 +12,12 @@ import LinkToDash from "@/components/Widgets/LinkToDash";
 import ScenarioAction from "@/components/Widgets/ScenarioAction";
 import ScenarioActionImg from "@/components/Widgets/ScenarioActionImg";
 import Camera from "@/components/Widgets/Camera";
+import CircleMenu from "@/components/Widgets/CircleMenu";
 
 export default {
     components: {
         Camera,
+        CircleMenu,
         CmdAction,
         EqLogicAction,
         InfoBinary,

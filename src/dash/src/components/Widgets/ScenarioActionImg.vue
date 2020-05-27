@@ -43,9 +43,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.v-card__title {
-  justify-content: center;
-}
-</style>
