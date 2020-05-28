@@ -1,4 +1,5 @@
-<div class="cmd cmd-widget #history#" data-type="action" data-subtype="numeric" data-template="tmplicon" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+<div class="cmd cmd-widget #history#" data-type="action" data-subtype="numeric" data-template="tmplicon" 
+     data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
     <div class="title #hide_name#">
         <div class="cmdName">#name_display#</div>
     </div>
@@ -13,7 +14,7 @@
     </div>
     <script>
         nextdom.cmd.update['#id#'] = function (_options) {
-            var cmd = $('.cmd[data-cmd_id=#id#]');
+        var cmd = $('.cmd[data-cmd_id=#id#]');
             if ('#_time_widget_#' === '1') {
                 nextdom.cmd.displayDuration(_options.valueDate, cmd.find('.timeCmd'));
             } else {

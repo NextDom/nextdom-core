@@ -1,16 +1,15 @@
-<div class="cmd cmd-widget #history#" data-type="info" data-subtype="binary" data-template="tmplicon" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#">
-    <div class="title #hide_name#">
-        <div class="cmdName">#name_display#</div>
-    </div>
-    <div class="content-sm">
+<div class="cmd cmd-widget #history#" data-type="info" data-subtype="binary" data-template="tmplicon"
+     data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+    <div class="content-xs">
+        <div class="cmdName #hide_name#">#name_display#</div>
         <span class="iconCmd"></span>
-    </div>
-    <div class="value">
-        <span class="timeCmd label label-default #history#" data-type="info"></span>
+        <div>
+            <span class="timeCmd label label-default #history#" data-type="info"></span>
+        </div>
     </div>
     <script>
         nextdom.cmd.update['#id#'] = function (_options) {
-            var cmd = $('.cmd[data-cmd_id=#id#]');
+        var cmd = $('.cmd[data-cmd_id=#id#]');
             if ('#_time_widget_#' === '1') {
                 nextdom.cmd.displayDuration(_options.valueDate, cmd.find('.timeCmd'));
             } else {
