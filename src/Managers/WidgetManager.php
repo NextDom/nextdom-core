@@ -231,6 +231,19 @@ class WidgetManager extends BaseManager {
         $lsOptions = ['files', 'quiet'];
         $widgetFileSearch = 'cmd.*';
         $widgetLocationPaths = [];
+        foreach ($NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][NextDomObj::WIDGET] as $type => $data1) {
+            foreach ($data1 as $subtype => $data2) {
+                foreach ($data2 as $name => $data3) {
+                    if (!isset($result[$type])) {
+                        $result[$type] = [];
+                    }
+                    if (!isset($result[$type][$subtype])) {
+                        $result[$type][$subtype] = [];
+                    }
+                    $result[$type][$subtype][Common::CORE][$name] = [Common::ICON => $data3[Common::ICON], Common::NAME => $name, Common::LOCATION => Common::CORE, Common::TYPE => Common::TEMPLATE];
+                }
+            }
+        }
         foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
             $pluginId = $plugin->getId();
             $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version, Common::LOCATION => $pluginId, Common::TYPE => Common::PLUGIN . ' - ' . $pluginId];
@@ -268,19 +281,6 @@ class WidgetManager extends BaseManager {
                             $result[$informations[1]][$informations[2]][$widgetLocationPath['type']][$informations[3]] = [Common::NAME => $informations[3], Common::LOCATION => $widgetLocationPath[Common::LOCATION], Common::TYPE => $widgetLocationPath['type']];
                         }
                     }
-                }
-            }
-        }
-        foreach ($NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][NextDomObj::WIDGET] as $type => $data1) {
-            foreach ($data1 as $subtype => $data2) {
-                foreach ($data2 as $name => $data3) {
-                    if (!isset($result[$type])) {
-                        $result[$type] = [];
-                    }
-                    if (!isset($result[$type][$subtype])) {
-                        $result[$type][$subtype] = [];
-                    }
-                    $result[$type][$subtype][Common::TEMPLATE][$name] = [Common::NAME => $name, Common::LOCATION => Common::CORE, Common::TYPE => Common::TEMPLATE];
                 }
             }
         }

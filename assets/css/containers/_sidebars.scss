@@ -81,12 +81,14 @@
     transition: transform .2s ease-in, width .2s ease-in;
 }
 @media (min-width: 767px) {
-    .sidebar-mini.sidebar-collapse .main-sidebar {
-        z-index: 1020;
-    }
-    .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
-        padding-top: 0;
-        padding-bottom: 0;
+    .sidebar-mini.sidebar-collapse {
+        .main-sidebar {
+           z-index: 1020;
+       }
+       .sidebar-menu > li > .treeview-menu {
+           padding-top: 0;
+           padding-bottom: 0;
+       }
     }
 }
 .sidebar-form {

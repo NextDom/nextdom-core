@@ -1,0 +1,158 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Need to be first */
+@import "../../graphics/_colors.scss";
+
+#objectOverviewContainer {
+    text-align: center !important;
+    margin:15px;
+    > div {
+        padding: 0 !important;
+    }
+    .objectPreview {
+        height: 230px;
+        background-color: var(--bg-modal-color) !important;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        color: $verydarkgrey !important;
+        margin: 5px;
+    }
+    .objectPreview:hover .topPreview {
+        box-shadow: 0 10px 15px 0 rgba(0,0,0,0.2);
+    }
+    .objectPreview > .topPreview,
+    .objectPreview > .bottomPreview {
+        text-align: left;
+        opacity: 0.9;
+        padding: 5px 5px;
+        transition: box-shadow 0.4s cubic-bezier(.25,.8,.25,1);
+    }
+    .objectPreview > .topPreview {
+        background-color: $middlegrey;
+        height: 28px;
+    }
+    .objectPreview > .topPreview > .name {
+        font-size: 16px;
+        font-weight: 200;
+        max-width: 195px;
+        max-height: 30px !important;
+        overflow: hidden;
+        display: inline-block;
+        line-height: 1.6;
+        margin-top: -4px;
+    }
+    .objectPreview > .topPreview > .bt_config {
+        position: absolute;
+        right: 20px;
+        opacity: 0.8;
+    }
+    .objectPreview > .topPreview > .bt_config:hover {
+        opacity: 0.5;
+    }
+    .objectPreview > .bottomPreview {
+        background-color: transparent;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 54px;
+        text-align: right;
+    }
+    .objectPreview > .bottomPreview > .resume {
+        position: absolute;
+        right: 6px;
+        bottom: 5px;
+        text-align: right;
+        max-width: 100%;
+        margin-right: 8px !important;
+    }
+
+
+    .objectPreview .objectSummaryParent,
+    .objectPreview .objectSummaryParent i {
+        font-size: 16px !important;
+        color: var(--link-color) !important;
+    }
+    .objectPreview .topPreview .objectSummaryParent {
+        position: absolute;
+        min-width: 80px !important;
+        font-weight: 200;
+        text-align: right;
+    }
+    .objectPreview .resume .objectSummaryParent {
+        background-color: $middlegrey;
+        padding: 6px 8px;
+        margin: 0 -4px !important;
+        display: inline-block;
+    }
+
+    .objectPreview .objectSummaryParent[data-summary="security"],
+    .objectPreview .objectSummaryParent[data-summary="motion"] {
+        background-color: $middlegrey;
+        padding: 5px;
+        width: 45px;
+        height: 28px;
+        min-width: 0 !important;
+        font-weight: 700;
+        text-align: left;
+        position: relative;
+        display: table-cell;
+        left: -5px;
+        top: -5px;
+    }
+    .objectPreview .objectSummaryParent[data-summary="temperature"] {
+        top: 10px;
+        right: 58px;
+        font-size: 20px !important;
+    }
+    .objectPreview .objectSummaryParent[data-summary="humidity"] {
+        top: 10px;
+        right: 6px;
+        font-size: 20px !important;
+    }
+    .objectPreview .objectSummaryParent[data-summary="temperature"] i,
+    .objectPreview .objectSummaryParent[data-summary="humidity"] i {
+        display: none;
+    }
+
+    .objectPreview .success,
+    .objectPreview .success > i {
+        color: var(--bt-success-color) !important;
+    }
+    .objectPreview .danger,
+    .objectPreview .danger > i {
+        color: var(--al-danger-color) !important;
+    }
+
+    .objectPreview .resume .objectSummaryParent:last-child {
+        border-radius: 0 0 var(--border-radius) 0 !important;
+    }
+}
+@media (min-width:1600px) {
+    #objectOverviewContainer > div.col-lg-3 {
+        width: 20%;
+    }
+}
+@media (min-width:1920px) {
+    #objectOverviewContainer > div.col-lg-3 {
+        width: 14.2%;
+    }
+}

@@ -476,7 +476,7 @@
                                                         {% for keyType, type in cmdWidgetDashboard %}
                                                             <optgroup label="{{ keyType|capitalize }}">
                                                                 {% for widget in type %}
-                                                                    <option value="{{ widget['location'] }}::{{ widget['name'] }}">{{ widget['name']|capitalize }}</option>
+                                                                    <option value="{{ widget['location'] }}::{{ widget['name'] }}">{{ widget['icon'] }} {{ widget['name']|capitalize }}</option>
                                                                 {% endfor %}
                                                             </optgroup>
                                                         {% endfor %}
