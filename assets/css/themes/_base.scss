@@ -665,7 +665,7 @@ pre::selection {
 /* #################################################################################################### */
 /* Textes */
 body, h1, h2, h3, h4, h5, h6 {
-  color: map_get($color_theme, 'color10') !important;
+  color: map_get($color_theme, 'color10');
 }
 .box-header span:not(.badge) {
   color: map_get($color_theme, 'color10') !important;

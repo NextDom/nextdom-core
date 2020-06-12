@@ -88,8 +88,12 @@
 }
 
 /* Core-Surcharge */
-.nav-tabs li a i {
+.nav-tabs li a i ,.flex-column li a i {
     margin-right: 8px;
+}
+
+.flex-column {
+    padding-left: 10px !important;
 }
 
 .dropdown-menu {

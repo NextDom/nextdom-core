@@ -1538,34 +1538,32 @@ class Cmd extends BaseEntity
             '#version#' => $viewVersion,
             '#eqLogic_id#' => $this->getEqLogic_id(),
             '#generic_type#' => $this->getGeneric_type(),
-            '#hideCmdName#' => '',
+            '#hide_name#' => '',
             '#value_history#' => ''
         ];
         if ($this->getConfiguration(CmdConfigKey::LIST_VALUE, '') != '') {
             $listOption = '';
             $elements = explode(';', $this->getConfiguration(CmdConfigKey::LIST_VALUE, ''));
-            $foundSelect = false;
+            $cmdValue = $this->getCmdValue();
+            $isObjectOfTypeInfo = false;
+            if (!$cmdValue) {
+                $listOption = '<option value="">' . __('Aucun') . '</option>' . $listOption;
+            } else {
+                $isObjectOfTypeInfo = is_object($cmdValue) && $cmdValue->isType(CmdType::INFO);
+            }
             foreach ($elements as $element) {
                 $coupleArray = explode('|', $element);
-                $cmdValue = $this->getCmdValue();
-                if (is_object($cmdValue) && $cmdValue->isType(CmdType::INFO)) {
-                    if ($cmdValue->execCmd() == $coupleArray[0]) {
-                        $listOption .= '<option value="' . $coupleArray[0] . '" selected>' . $coupleArray[1] . '</option>';
-                        $foundSelect = true;
-                    } else {
-                        $listOption .= '<option value="' . $coupleArray[0] . '">' . $coupleArray[1] . '</option>';
-                    }
+                if ($isObjectOfTypeInfo && ($cmdValue->execCmd() == $coupleArray[0])) {
+                    $selected = " selected";
                 } else {
-                    $listOption .= '<option value="' . $coupleArray[0] . '">' . $coupleArray[1] . '</option>';
+                    $selected = "";
                 }
-            }
-            if (!$foundSelect) {
-                $listOption = '<option value="">' . __('Aucun') . '</option>' . $listOption;
+                $listOption .= '<option value="' . $coupleArray[0] . '"' . $selected . '>' . $coupleArray[1] . '</option>';
             }
             $htmlData['#listValue#'] = $listOption;
         }
         if ($this->getDisplay('showNameOn' . $version2, 1) == 0) {
-            $htmlData['#hideCmdName#'] = 'display:none;';
+            $htmlData['#hide_name#'] = 'hidden';
         }
         if ($this->getDisplay('showIconAndName' . $version2, 0) == 1) {
             $htmlData['#name_display#'] = $this->getDisplay('icon') . ' ' . $this->getName();

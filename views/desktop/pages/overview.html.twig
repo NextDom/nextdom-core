@@ -1,3 +1,5 @@
+{#
+
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -28,61 +30,23 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+#}
 
-/**
- *       All Lunarok's Plugins
- * Fix: @Lunarok, The `.fa-tachometer` icon does not exist. You must use `.fa-tachometer-alt` !
- ************************/
-.fa-tachometer {
-	font-family: FontAwesome;
-	content: "\f3fd";
-}
-
-/**
- *       Plugin Mode
- ************************/
-#modetab {
-    .accordion-toggle {
-        display: block;
-        color: #555 !important;
-    }
-}
-
-/**
- *       Plugin Camera
- ************************/
-.eqLogic[data-eqtype='camera'] .btn-default {
-    background: #745cb0aa;
-    margin-top:2px;
-}
-
-/**
- *       Plugin Jeexplorer
- ************************/
-.elfinder {
-    .ui-widget-content {
-        background-color: #546e7a !important;
-    }
-    .elfinder-dialog .ui-dialog-titlebar {
-        background-color: rgb(85,85,85) !important;
-    }
-    .elfinder-button {
-        width: 20px;
-    }
-    .elfinder-button:hover {
-        background: rgb(85, 85, 85);
-    }
-    .ui-helper-hidden-accessible {
-        padding: 0 !important;
-        width: 0 !important;
-    }
-    .elfinder-button-search input {
-        border: 0 !important;
-    }
-}
+    <div class="row" >
+        <div id="objectOverviewContainer">
+            {% for object in objectList %}
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="objectPreview cursor shadowed fullCorner" style="background-color:{{ object.getDisplay("tagColor") }}50 !important;{% if object.getImgLink()|length > 0 %}background:url(' {{object.getImgLink()}}'){% endif %}" data-object_id="{{ object.getId() }}">
+                        <div class="topPreview topCorner">
+                            <span class="name">{{ object.getName() }}</span>
+                        </div>
+                        <div class="bottomPreview bottomCorner">
+                            <div class="resume">{{ object.getHtmlSummary()|raw }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>

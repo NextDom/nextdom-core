@@ -30,6 +30,10 @@ dashboard:
   path: 'dashboard'
   controller: NextDom\Controller\Pages\DashBoardController::get
   condition: 'user'
+dashboardit:
+  path: 'dashboardit'
+  controller: NextDom\Controller\Pages\DashBoarditController::get
+  condition: 'user'
 database:
   path: 'database'
   controller: NextDom\Controller\Tools\Osdb\DatabaseController::get
@@ -105,6 +109,10 @@ osdb:
   path: 'osdb'
   controller: NextDom\Controller\Tools\OsDbController::get
   condition: 'admin'
+overview:
+  path: 'overview'
+  controller: NextDom\Controller\Pages\OverviewController::get
+  condition: 'user'
 panel:
   path: 'panel'
   controller: NextDom\Controller\Pages\PanelPageController::get

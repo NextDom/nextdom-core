@@ -1,3 +1,5 @@
+{#
+
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -28,61 +30,18 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+#}
 
-/**
- *       All Lunarok's Plugins
- * Fix: @Lunarok, The `.fa-tachometer` icon does not exist. You must use `.fa-tachometer-alt` !
- ************************/
-.fa-tachometer {
-	font-family: FontAwesome;
-	content: "\f3fd";
-}
+{% for object in objectList %}
+    <li class="">
+        <a href="" data-id="{{ object.getId()}}" data-name="{{ object.getName()}}" >{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|raw}}{{ object.getName()}}</a>
+        {% if object.getChilds() is not empty %}
+            <ul class="nav flex-column">
+                {% include "/desktop/pages/dashboarditUL.html.twig" with {'objectList': object.getChilds()} %}
+            </ul>
+        {% endif %}
 
-/**
- *       Plugin Mode
- ************************/
-#modetab {
-    .accordion-toggle {
-        display: block;
-        color: #555 !important;
-    }
-}
-
-/**
- *       Plugin Camera
- ************************/
-.eqLogic[data-eqtype='camera'] .btn-default {
-    background: #745cb0aa;
-    margin-top:2px;
-}
-
-/**
- *       Plugin Jeexplorer
- ************************/
-.elfinder {
-    .ui-widget-content {
-        background-color: #546e7a !important;
-    }
-    .elfinder-dialog .ui-dialog-titlebar {
-        background-color: rgb(85,85,85) !important;
-    }
-    .elfinder-button {
-        width: 20px;
-    }
-    .elfinder-button:hover {
-        background: rgb(85, 85, 85);
-    }
-    .ui-helper-hidden-accessible {
-        padding: 0 !important;
-        width: 0 !important;
-    }
-    .elfinder-button-search input {
-        border: 0 !important;
-    }
-}
+    </li>
+{% endfor %}

@@ -22,7 +22,7 @@
 /* Admin-LTE Surcharge */
 .slider {
     -webkit-appearance: none;
-    height: 8px;
+    height: 4px;
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
@@ -33,6 +33,29 @@
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 6px;
+    cursor: pointer;
+    margin : 5px 10px 8px 10px;
+    width: 80px;
+    .sliderValue {
+        display:none;
+        font-weight:bold;
+        position: absolute;
+        z-index: 1;
+        padding: 2px 5px 2px 5px;
+        border-radius:5px;
+        bottom: 20px;
+        color: $lightenGrey;
+        left: 50%;
+        transform: translate(-50%, 50%);
+    }
+}
+.ui-slider-handle,
+.ui-slider-handle.ui-state-hover,
+.ui-slider-handle.ui-state-focus {
+    top: -6px !important;
+    font-size: 13px;
+    border-radius: 8px !important;
+    cursor: pointer !important;
 }
 
 .input-group .slider {

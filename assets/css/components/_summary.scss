@@ -26,18 +26,22 @@
     top: 16px;
     height: 49px;
     list-style-type: none;
-    display: inline;
-    position: inherit;
+    margin: 0 auto;
+    position: absolute;
+    left: 195px;
     @media (max-width: 767px) {
+        position: relative;
+        left: 0;
+        margin-right: 5px;
+        float: right;
         font-size: small;
-        left: -3px;
         white-space: nowrap;
         display: block;
         overflow: hidden;
     }
 }
 .objectSummaryParent {
-    margin-right: 6px !important;
+    margin: 3px !important;
 }
 
 /* Core-Ajout */

@@ -54,6 +54,11 @@
     }
 }
 
+#generalSearch, .navbar-search .input-group {
+    width: 105px;
+    z-index: 2;
+}
+
 /* AdminLTE-Surcharge : Menu de droite du header */
 .navbar-custom-menu > .navbar-nav > li {
     position: unset;

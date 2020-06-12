@@ -50,7 +50,7 @@ function initSideBar() {
 
     // About buttons event handler declaration
     $('.bt_nextdomAbout').on('click', function () {
-        loadModal('modal', '{{A propos}}', 'about')
+        loadModal('modal', '{{A propos}}', 'about');
     });
 
     // Quick note link event handler declaration
@@ -238,8 +238,8 @@ function setHeaderPosition(init) {
             var container = $(this).parent();
             if (!container.hasClass('ui-dialog-content') && !container.parent().hasClass('ui-dialog-content')) {
                 $(this).css("padding-right", paddingSideClose);
-                if (init || container.css('display') != 'none') {
-                    if (container.css('display') == 'none') {
+                if (init || container.css('display') !== 'none') {
+                    if (container.css('display') === 'none') {
                         container.show();
                         headerHeight = container.children('.content-header').height();
                         container.hide();
@@ -269,14 +269,16 @@ function setHeaderPosition(init) {
  * Search input field activation on dedicated pages
  */
 function sideMenuResize() {
-    var lists = document.getElementsByTagName("li");
+    var lists = $('.treeview');
     var bodyClassList = document.getElementsByTagName('body')[0].classList;
+    var sidebarMenu = $('.sidebar-menu');
+    var treeviewMenu = $('.treeview-menu');
     if (bodyClassList.contains('sidebar-collapse') || (window.innerWidth < 768 && !bodyClassList.contains('sidebar-open'))) {
         // Menu closed
         // Todo : Merge css {}
-        $('.sidebar-menu').css('overflow', '');
-        $('.sidebar-menu').css('height', 'none');
-        $('.treeview-menu').css('overflow-y', 'auto');
+        sidebarMenu.css('overflow', '');
+        sidebarMenu.css('height', 'none');
+        treeviewMenu.css('overflow-y', 'auto');
         for (var menuItemIndex = 0; menuItemIndex < lists.length; ++menuItemIndex) {
             if (lists[menuItemIndex].getAttribute("id") !== undefined && lists[menuItemIndex].getAttribute("id") !== null) {
                 if (lists[menuItemIndex].getAttribute("id").match("side")) {
@@ -287,15 +289,15 @@ function sideMenuResize() {
         }
     } else {
         // Menu opened
-        $('.sidebar-menu').css('overflow-y', 'auto');
-        $('.treeview-menu').css('overflow', '');
+        sidebarMenu.css('overflow-y', 'auto');
+        treeviewMenu.css('overflow', '');
 
         var goOnTopButton = document.getElementById('bt_goOnTop');
         var sidemenuBottomPadding = 0;
         var sidemenuDoubleHeaderPadding = 0;
         // If bt_goOnTop visible
         if (goOnTopButton !== undefined && goOnTopButton !== null) {
-            if (goOnTopButton.style.display == 'block') {
+            if (goOnTopButton.style.display === 'block') {
                 sidemenuBottomPadding = 75;
             }
         }
@@ -306,7 +308,7 @@ function sideMenuResize() {
         }
 
         // Height adjustement
-        $('.sidebar-menu').css('height', window.innerHeight - 50 - 70 - sidemenuBottomPadding - sidemenuDoubleHeaderPadding);
+        sidebarMenu.css('height', window.innerHeight - 50 - 70 - sidemenuBottomPadding - sidemenuDoubleHeaderPadding);
         for (var i = 0; i < lists.length; ++i) {
             if (lists[i].getAttribute('id') !== undefined && lists[i].getAttribute('id') !== null) {
                 if (lists[i].getAttribute('id').match('side')) {

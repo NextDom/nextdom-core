@@ -1,77 +1,40 @@
 /* This file is part of Jeedom.
-*
-* Jeedom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Jeedom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This file is part of NextDom.
-*
-* NextDom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* NextDom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
-*/
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Support <https://www.nextdom.org>
+ * @Email   <admin@nextdom.org>
+ * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+ */
 
 /* JS file for all that talk about SEARCH */
-
-/**
- * Events declaration on load
- */
-$(function () {
-    // Search input field toggles
-    $('#search-toggle').on('click', function () {
-        $('.navbar-search').toggle();
-        $('.search-toggle').toggle();
-        $('.objectSummaryGlobalHeader').toggle();
-    });
-
-    var delay=200, setTimeoutConst;
-    $('#search-toggle').hover(function () {
-      setTimeoutConst = setTimeout(function() {
-          $('.navbar-search').show();
-          $('.search-toggle').hide();
-          $('.objectSummaryGlobalHeader').hide();
-        }, delay);
-      }, function() {
-      clearTimeout(setTimeoutConst);
-    });
-
-    // Close search input field
-    $('#search-close').on('click', function () {
-        $('#generalSearch').val('');
-        generalSearchOnPages('');
-        $('.navbar-search').toggle();
-        $('.search-toggle').toggle();
-        $('.objectSummaryGlobalHeader').toggle();
-    });
-
-    // Run search when typing
-    $('#generalSearch').keyup(function () {
-        generalSearchOnPages($(this).value().toLowerCase());
-    });
-});
 
 /**
  * Search input field activation on dedicated pages
@@ -82,6 +45,7 @@ function activateGlobalSearch() {
     var availableSearchPage = [
         "plugin",
         "dashboard",
+        "dashboardit",
         "interact",
         "scenario",
         "object",
@@ -95,39 +59,68 @@ function activateGlobalSearch() {
         "update.list",
         "update",
         "health",
-        "widget",
+        "widget"
     ];
-    if (fullUrl.indexOf('p=') != -1) {
+    if (fullUrl.indexOf('p=') !== -1) {
         page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
     } else {
-          if (fullUrl.indexOf('modal=') != -1) {
-              page = fullUrl.split('modal=')[1].replace('#', '').split('&')[0];
-          }
+        if (fullUrl.indexOf('modal=') !== -1) {
+            page = fullUrl.split('modal=')[1].replace('#', '').split('&')[0];
+        }
     }
+    var searchToggle = $('#search-toggle');
+    var searchClose = $('#search-close');
+    var generalSearch = $('#generalSearch');
+    var navbarSearch = $('.navbar-search');
+    var searchToggle = $('.search-toggle');
+    navbarSearch.hide();
+    searchToggle.show();
+    searchToggle.unbind('click mouseenter mouseleave');
+    searchClose.unbind('click');
+    generalSearch.unbind('keyup');
+    generalSearch.val('');
+    if (jQuery.inArray(page, availableSearchPage) !== -1) {
+        searchToggle.style('cursor', 'auto');
+        searchToggle.on('click', function () {
+            navbarSearch.toggle();
+            searchToggle.toggle();
+        });
 
-    if(jQuery.inArray(page, availableSearchPage) != -1) {
-        $("#generalSearch").prop('disabled', false);
+        var delay = 200, setTimeoutConst;
+        searchToggle.hover(function () {
+            setTimeoutConst = setTimeout(function () {
+                navbarSearch.show();
+                searchToggle.hide();
+                generalSearch.focus();
+            }, delay);
+        }, function () {
+            clearTimeout(setTimeoutConst);
+        });
+
+        // Close search input field
+        searchClose.on('click', function () {
+            generalSearch.val('');
+            generalSearchOnPages(page, '');
+            navbarSearch.toggle();
+            searchToggle.toggle();
+        });
+
+        // Run search when typing
+        generalSearch.keyup(function () {
+            generalSearchOnPages(page, $(this).value().toLowerCase());
+        });
     } else {
-        $("#generalSearch").prop('disabled', true);
+        searchToggle.style('cursor', 'not-allowed');
     }
 }
 
 /**
  * Search elements in page
  *
- * @param value search caracters
+ * @param page page name
+ * @param search search caracters
  */
-function generalSearchOnPages(value) {
-    var search = value;
-    var fullUrl = document.location.toString();
-    var page = '';
-    if (fullUrl.indexOf('p=') != -1) {
-        page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
-    } else {
-          if (fullUrl.indexOf('modal=') != -1) {
-              page = fullUrl.split('modal=')[1].replace('#', '').split('&')[0];
-          }
-    }
+function generalSearchOnPages(page, search) {
     switch (page) {
         case 'plugin':
             if (search === '') {
@@ -227,6 +220,9 @@ function generalSearchOnPages(value) {
             }
             break;
 
+        case 'dashboardit':
+            break;
+
         case 'object':
             if (search === '') {
                 $('.objectDisplayCard').parent().show();
@@ -260,22 +256,22 @@ function generalSearchOnPages(value) {
                     eqLogic.show();
                     eqLogic.parents('.object').show();
                     if (search !== '' && !eqLogic.closest('.panel-collapse').hasClass("in")) {
-                        eqLogic.closest('.panel-collapse').css({'height' : '' });
+                        eqLogic.closest('.panel-collapse').css({'height': ''});
                         eqLogic.closest('.panel-collapse').addClass("in");
                     }
                 }
                 $(this).find('.cmd').each(function () {
                     var cmd = $(this);
                     var nameCmd = cmd.attr('data-name').toLowerCase();
-                    if (nameCmd.indexOf(search) >= 0 || search == '') {
+                    if (nameCmd.indexOf(search) >= 0 || search === '') {
                         eqLogic.show();
                         eqLogic.parents('.object').show();
-                        if (search != '') {
+                        if (search !== '') {
                             eqLogic.find('.cmdSortable').show();
                             eqLogic.find(".fa-chevron-right").removeClass("fa-chevron-right").addClass("fa-chevron-down");
                             cmd.removeClass('alert-warning').addClass('alert-success');
                             if (!cmd.closest('.panel-collapse').hasClass("in")) {
-                                cmd.closest('.panel-collapse').css({'height' : '' });
+                                cmd.closest('.panel-collapse').css({'height': ''});
                                 cmd.closest('.panel-collapse').addClass("in");
                             }
                         }
@@ -355,13 +351,13 @@ function generalSearchOnPages(value) {
             break;
 
         case 'update':
-            if(search === ''){
+            if (search === '') {
                 $('.box').show();
             } else {
                 $('.box').hide();
-                $('.box .box-title').each(function(){
+                $('.box .box-title').each(function () {
                     var boxTitle = $(this).text().toLowerCase();
-                    if(boxTitle.indexOf(search.toLowerCase()) >= 0){
+                    if (boxTitle.indexOf(search.toLowerCase()) >= 0) {
                         $(this).closest('.box').show();
                     }
                 });

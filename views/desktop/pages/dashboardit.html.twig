@@ -1,3 +1,5 @@
+{#
+
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -28,61 +30,28 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+#}
 
-/**
- *       All Lunarok's Plugins
- * Fix: @Lunarok, The `.fa-tachometer` icon does not exist. You must use `.fa-tachometer-alt` !
- ************************/
-.fa-tachometer {
-	font-family: FontAwesome;
-	content: "\f3fd";
-}
-
-/**
- *       Plugin Mode
- ************************/
-#modetab {
-    .accordion-toggle {
-        display: block;
-        color: #555 !important;
-    }
-}
-
-/**
- *       Plugin Camera
- ************************/
-.eqLogic[data-eqtype='camera'] .btn-default {
-    background: #745cb0aa;
-    margin-top:2px;
-}
-
-/**
- *       Plugin Jeexplorer
- ************************/
-.elfinder {
-    .ui-widget-content {
-        background-color: #546e7a !important;
-    }
-    .elfinder-dialog .ui-dialog-titlebar {
-        background-color: rgb(85,85,85) !important;
-    }
-    .elfinder-button {
-        width: 20px;
-    }
-    .elfinder-button:hover {
-        background: rgb(85, 85, 85);
-    }
-    .ui-helper-hidden-accessible {
-        padding: 0 !important;
-        width: 0 !important;
-    }
-    .elfinder-button-search input {
-        border: 0 !important;
-    }
-}
+<div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-4">
+        <div class="bs-sidebar">
+            <div id="accordionRoom" class="col-xs-12">
+                <div class="box">
+                    <div class="box-header accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionRoom" href="#room_filters">
+                        <h3 class="box-title"><i class="fas fa-chevron-down"></i>{{ 'Navigation'  | trans }}</h3>
+                    </div>
+                    <div id="room_filters" class="nav-tabs-custom">
+                        <ul class="nav flex-column">
+                            {% include "/desktop/pages/dashboarditUL.html.twig" with {'objectList': objectList} %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10 col-md-9 col-sm-8">
+        <div class="div_displayEquipement"></div>
+    </div>
+</div>

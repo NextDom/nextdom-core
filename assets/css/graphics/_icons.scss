@@ -80,7 +80,7 @@
     float: left;
     background-color: transparent;
     background-image: none;
-    padding: 15px 15px 0 4px;
+    padding: 15px 15px;
     font-family: fontAwesome;
     color: white;
 }
@@ -92,8 +92,9 @@
 
 /* Icon Widgets */
 .iconCmd {
+    position:relative;
     top: 0 !important;
-    font-size: 24px;
+    font-size: 2.5em;
     font-weight: bold;
     color: var(--link-color) !important;
     & > i {
