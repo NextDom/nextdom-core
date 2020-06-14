@@ -99,7 +99,7 @@ function initEvents() {
 
     // LDAP activation/desactivation
     $('#security').delegate('.configKey[data-l1key="ldap::enable"]', 'change', function () {
-        if($(this).value() === 1){
+        if($(this).value() === '1'){
             $('#div_config_ldap').show();
         }else{
             $('#div_config_ldap').hide();
