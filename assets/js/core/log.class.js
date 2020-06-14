@@ -55,7 +55,7 @@ nextdom.log.autoupdate = function(queryParams) {
   if (!queryParams['display'].is(':visible')) {
     return;
   }
-  if (queryParams.callCount > 0 && isset(queryParams['control']) && queryParams['control'].attr('data-state') !== 1) {
+  if (queryParams.callCount > 0 && isset(queryParams['control']) && queryParams['control'].attr('data-state') !== '1') {
     return;
   }
   if (queryParams.callCount > 0 && isset(nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')]) && nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')].log !== queryParams.log) {
@@ -68,11 +68,11 @@ nextdom.log.autoupdate = function(queryParams) {
       queryParams['search'].value('');
     }
     queryParams.display.scrollTop(queryParams.display.innerHeight() + scrollTopToDown);
-    if (queryParams['control'].attr('data-state') === 0) {
+    if (queryParams['control'].attr('data-state') === '0') {
       queryParams['control'].attr('data-state', 1);
     }
     queryParams['control'].off('click').on('click', function () {
-      if ($(this).attr('data-state') === 1) {
+      if ($(this).attr('data-state') === '1') {
         $(this).attr('data-state', 0);
         $(this).removeClass('btn-warning').addClass('btn-success');
         $(this).html('<i class="fas fa-play spacing-right"></i>{{Reprendre}}');
@@ -86,7 +86,7 @@ nextdom.log.autoupdate = function(queryParams) {
     });
 
     queryParams['search'].off('keypress').on('keypress', function () {
-      if (queryParams['control'].attr('data-state') === 0) {
+      if (queryParams['control'].attr('data-state') === '0') {
         queryParams['control'].trigger('click');
       }
     });
@@ -95,7 +95,7 @@ nextdom.log.autoupdate = function(queryParams) {
   nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')] = {log: queryParams.log};
 
   if (queryParams.callCount > 0 && (queryParams.display.scrollTop() + queryParams.display.innerHeight() + 1) < queryParams.display[0].scrollHeight) {
-    if (queryParams['control'].attr('data-state') === 1) {
+    if (queryParams['control'].attr('data-state') === '1') {
       queryParams['control'].trigger('click');
     }
     return;

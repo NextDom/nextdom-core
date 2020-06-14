@@ -308,7 +308,7 @@ function printUsers() {
                 ligne += '<input class="userAttr form-control input-sm" data-l1key="hash" disabled />';
                 ligne += '</td>';
                 ligne += '<td>';
-                if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification === 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret !== ''){
+                if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret !== ''){
                     ligne += '<span class="label label-success label-sticker btn-action-bar">{{OK}}</span>';
                     ligne += ' <a class="btn btn-sm btn-danger bt_disableTwoFactorAuthentification pull-right btn-action-bar"><i class="fas fa-ban"></i>{{Désactiver}}</span>';
                     if (isset(data[i].login) && data[i].login === currentUser){

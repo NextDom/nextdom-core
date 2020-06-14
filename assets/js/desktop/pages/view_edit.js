@@ -217,7 +217,7 @@ $("#div_viewZones").sortable({axis: "y", cursor: "move", placeholder: "ui-state-
 
 $('#div_pageContainer').delegate('#table_addViewData .enable','change', function() {
     var selectTr = $(this).closest('tr');
-    if ($(this).value() === 1) {
+    if ($(this).value() === '1') {
         selectTr.find('div.option').show();
     } else {
         selectTr.find('div.option').hide();

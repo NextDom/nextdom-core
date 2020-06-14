@@ -106,7 +106,7 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
     },
     success: function (data) {
       $('body .eqLogicAttr').value('');
-      if (isset(data) && isset(data.timeout) && data.timeout === 0) {
+      if (isset(data) && isset(data.timeout) && data.timeout == 0) {
         data.timeout = '';
       }
       $('body').setValues(data, '.eqLogicAttr');
@@ -133,11 +133,11 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
   return false;
 });
 
-if (getUrlVars('saveSuccessFull') === 1) {
+if (getUrlVars('saveSuccessFull') === '1') {
   notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
-if (getUrlVars('removeSuccessFull') === 1) {
+if (getUrlVars('removeSuccessFull') === '1') {
   notify('Info', '{{Suppression effectuée avec succès}}', 'success');
 }
 

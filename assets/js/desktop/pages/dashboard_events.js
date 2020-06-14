@@ -64,7 +64,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Opening welcome modal if not saved "not display anymore"
-    if (typeof(nextdom_Welcome)!== 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome === 1 && getUrlVars('noWelcome') !== '1') {
+    if (typeof(nextdom_Welcome)!== 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') !== '1') {
         loadModal('modal', '{{Bienvenue dans NextDom}}', 'welcome');
     }
 

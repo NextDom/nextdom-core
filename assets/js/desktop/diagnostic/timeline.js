@@ -74,7 +74,7 @@ function fillTimelineContainer(timelineData)
 
     for(var i in timelineData){
         $.each( timelineData[i]['category'], function( key, value ) {
-            var category = (value === 1) ? key: false;
+            var category = (value == 1) ? key: false;
             switch (category ) {
                 case 'energy':
                     color = '#2eb04b';

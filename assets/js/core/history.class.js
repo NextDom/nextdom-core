@@ -106,8 +106,8 @@ nextdom.history.drawChart = function(queryParams) {
           queryParams.option.groupingType = {function: split[0], time: split[1]};
         }
       }
-      var stacking = (queryParams.option.graphStack === undefined || queryParams.option.graphStack === null || queryParams.option.graphStack === 0) ? null : 'value';
-      queryParams.option.graphStack = (queryParams.option.graphStack === undefined || queryParams.option.graphStack === null || queryParams.option.graphStack === 0) ? Math.floor(Math.random() * 10000 + 2) : 1;
+      var stacking = (queryParams.option.graphStack === undefined || queryParams.option.graphStack === null || queryParams.option.graphStack == 0) ? null : 'value';
+      queryParams.option.graphStack = (queryParams.option.graphStack === undefined || queryParams.option.graphStack === null || queryParams.option.graphStack == 0) ? Math.floor(Math.random() * 10000 + 2) : 1;
       queryParams.option.graphScale = (queryParams.option.graphScale === undefined) ? 0 : parseInt(queryParams.option.graphScale);
       queryParams.showLegend = init(queryParams.showLegend, true) && init(queryParams.showLegend, true) !== '0';
       queryParams.showTimeSelector = init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) !== '0';

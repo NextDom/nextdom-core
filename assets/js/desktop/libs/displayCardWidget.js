@@ -258,7 +258,7 @@ class DisplayCardWidget extends DisplayCardPageA {
 
                 $('#bt_cmdConfigureSelectMultipleAlertToogle').off('click').on('click', function () {
                     var state = false;
-                    if ($(this).attr('data-state') === 0) {
+                    if ($(this).attr('data-state') === '0') {
                         state = true;
                         $(this).attr('data-state', 1)
                                 .find('i').removeClass('fa-check-circle-o').addClass('fa-circle-o');
