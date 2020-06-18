@@ -91,15 +91,15 @@
 .nextdom-battery0:before {
 	content: "\e602";
 }
-.jeedom-battery1:before,
+.jeedom-batterie1:before,
 .nextdom-battery1:before {
 	content: "\e603";
 }
-.jeedom-battery2:before,
+.jeedom-batterie2:before,
 .nextdom-battery2:before {
 	content: "\e604";
 }
-.jeedom-battery3:before,
+.jeedom-batterie3:before,
 .nextdom-battery3:before {
 	content: "\e605";
 }
