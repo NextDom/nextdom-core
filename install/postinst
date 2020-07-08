@@ -1,12 +1,4 @@
-#!/usr/bin/env bash
-set -e
-
-# Parameters
-DEBUG="/tmp/output.txt"
-declare -a DETAILS
-
-ENV_TYPE="prod"
-
+OSTO
 # Functions
 
 usage() {
@@ -457,7 +449,7 @@ EOS
 step_nextdom_mysql_configuration() {
   # check that mysql is locally installed before any further configuration
   # default value for mysql_host is localhost
-  [[ "localhost" != "$HOSTNAME" ]] && {
+  [[ "localhost" != "$MYSQL_HOSTNAME" ]] && {
     print_log_ok "Remote mysql server detected"
     return 0
   }
