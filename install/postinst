@@ -1,4 +1,12 @@
-OSTO
+!/usr/bin/env bash	OSTO
+set -e	
+
+# Parameters	
+DEBUG="/tmp/output.txt"	
+declare -a DETAILS	
+
+ENV_TYPE="prod"	
+
 # Functions
 
 usage() {
