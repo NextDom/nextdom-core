@@ -1,4 +1,4 @@
-!/usr/bin/env bash	OSTO
+#!/usr/bin/env bash
 set -e	
 
 # Parameters	
