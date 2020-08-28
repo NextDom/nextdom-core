@@ -81,9 +81,9 @@ class ViewController extends BaseController
             $pageData['viewHideList'] = false;
         }
         $pageData[ControllerData::JS_VARS][AjaxParams::VIEW_ID] = $currentView->getId();
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/libs/widget.js';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view.js';
+        $pageData[ControllerData::CSS_POOL][] = self::PATH_TO_CSS . '/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/libs/widget.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/view.js';
 
         return Render::getInstance()->get('/desktop/pages/view.html.twig', $pageData);
     }

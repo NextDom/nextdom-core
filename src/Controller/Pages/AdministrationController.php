@@ -95,8 +95,8 @@ class AdministrationController extends BaseController
         $pageData['hddSize'] = $diskTotal;
         $pageData['httpConnectionsCount'] = SystemHelper::getHttpConnectionsCount();
         $pageData['processCount'] = SystemHelper::getProcessCount();
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/administration.css';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/administration.js';
+        $pageData[ControllerData::CSS_POOL][] = self::PATH_TO_CSS . '/pages/administration.css';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/administration.js';
 
         return Render::getInstance()->get('/desktop/pages/administration.html.twig', $pageData);
     }

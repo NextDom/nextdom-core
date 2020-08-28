@@ -78,8 +78,8 @@ class PlanController extends BaseController
             $pageData[ControllerData::JS_VARS]['planHeader_id'] = $planHeader->getId();
         }
 
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/plan.css';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/plan.js';
+        $pageData[ControllerData::CSS_POOL][] = self::PATH_TO_CSS . '/pages/plan.css';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/plan.js';
 
         return Render::getInstance()->get('/desktop/pages/plan.html.twig', $pageData);
     }

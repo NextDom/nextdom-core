@@ -44,8 +44,8 @@ class ViewEditController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['viewEditViewsList'] = ViewManager::all();
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view_edit.js';
+        $pageData[ControllerData::CSS_POOL][] = self::PATH_TO_CSS . '/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/view_edit.js';
 
         return Render::getInstance()->get('/desktop/pages/view_edit.html.twig', $pageData);
     }

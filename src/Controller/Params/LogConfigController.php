@@ -58,7 +58,7 @@ class LogConfigController extends BaseController
             $pluginData['plugin'] = $plugin;
             $pageData['adminPluginsList'][] = $pluginData;
         }
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/log_config.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/params/log_config.js';
 
         return Render::getInstance()->get('/desktop/params/log_config.html.twig', $pageData);
     }

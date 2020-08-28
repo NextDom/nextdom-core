@@ -55,9 +55,9 @@ class ConnectionController extends BaseController
         if (count($coreUpdate) > 0) {
             $pageData['INSTALL_TYPE'] = $coreUpdate[0]->getSource();
         }
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/connection.css';
+        $pageData[ControllerData::CSS_POOL][] = self::PATH_TO_CSS . '/pages/connection.css';
         $pageData[ControllerData::JS_END_POOL][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/connection.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/connection.js';
 
 
         return Render::getInstance()->get('desktop/pages/connection.html.twig', $pageData);

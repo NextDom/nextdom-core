@@ -68,9 +68,9 @@ class FirstUseController extends BaseController
             'serverDatetime' => Utils::getMicrotime()
         ];
 
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/firstUse.css';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/log.js';
-        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/firstUse.js';
+        $pageData[ControllerData::CSS_POOL][] = self::PATH_TO_CSS . '/pages/firstUse.css';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/tools/log.js';
+        $pageData[ControllerData::JS_END_POOL][] = self::PATH_TO_JS . '/desktop/pages/firstUse.js';
         $pageData[ControllerData::AJAX_TOKEN] = AjaxHelper::getToken();
 
         return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
