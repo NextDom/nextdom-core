@@ -437,7 +437,6 @@ osdb:
 page-title:
   administration: Administration
   api: API
-  backups: Backup
   cache: Cache
   backups: Backups
   commands: Commands
