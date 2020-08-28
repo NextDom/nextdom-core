@@ -41,7 +41,8 @@
   },
   "require-dev": {
     "vrana/adminer": "^4.7",
-    "symfony/var-dumper": "^3.4"
+    "symfony/var-dumper": "^3.4",
+    "phpstan/phpstan": "^0.9.3"
   },
   "authors": [
     {
