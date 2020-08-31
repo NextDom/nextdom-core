@@ -119,7 +119,7 @@ class Widget extends BaseEntity {
     }
 
     public function preInsert() {
-        
+
     }
 
     public function preSave() {
@@ -128,6 +128,11 @@ class Widget extends BaseEntity {
         }
     }
 
+    /**
+     * @throws CoreException
+     * @throws ReflectionException
+     * @throws \Exception
+     */
     public function preUpdate() {
         $widget = WidgetManager::byId($this->getId());
         if ($widget->getName() != $this->getName()) {
@@ -140,11 +145,11 @@ class Widget extends BaseEntity {
                     if ($cmd->getTemplate('mobile') == 'custom::' . $widget->getName()) {
                         $cmd->setTemplate('mobile', 'custom::' . $this->getName());
                     }
-                    $cmd->save(true);
+                    $cmd->save();
                 }
             }
         }
-        if ($widget->getType() != $this->getType() || $widget->getSubType() != $this->getSubType()) {
+        if ($widget->getType() != $this->getType() || $widget->getSubtype() != $this->getSubtype()) {
             $usedBy = $widget->getUsedBy();
             if (is_array($usedBy) && count($usedBy) > 0) {
                 foreach ($usedBy as $cmd) {
@@ -154,7 +159,7 @@ class Widget extends BaseEntity {
                     if ($cmd->getTemplate('mobile') == 'custom::' . $widget->getName()) {
                         $cmd->setTemplate('mobile', 'default');
                     }
-                    $cmd->save(true);
+                    $cmd->save();
                 }
             }
         }
@@ -191,7 +196,11 @@ class Widget extends BaseEntity {
         return true;
     }
 
-    public function postSave() {
+    /**
+     * @throws \Exception
+     */
+    public function postSave()
+    {
         $usedBy = $this->getUsedBy();
         if (is_array($usedBy) && count($usedBy) > 0) {
             foreach ($usedBy as $cmd) {
@@ -203,11 +212,19 @@ class Widget extends BaseEntity {
         }
     }
 
-    public function preRemove() {
-        
+    public function preRemove()
+    {
+
     }
 
-    public function remove() {
+    /**
+     * @return bool|void
+     * @throws CoreException
+     * @throws ReflectionException
+     * @throws \Exception
+     */
+    public function remove()
+    {
         $usedBy = $this->getUsedBy();
         if (is_array($usedBy) && count($usedBy) > 0) {
             foreach ($usedBy as $cmd) {
@@ -224,8 +241,9 @@ class Widget extends BaseEntity {
     }
 
     /**
-     * 
+     *
      * @return Cmd[]
+     * @throws \Exception
      */
     public function getUsedBy() {
         return array_merge(
@@ -234,11 +252,13 @@ class Widget extends BaseEntity {
         );
     }
 
-    public function postRemove() {
+    public function postRemove()
+    {
         //WidgetManager::cleanWidget();
     }
 
-    public function emptyTest() {
+    public function emptyTest()
+    {
         $this->test = null;
     }
 

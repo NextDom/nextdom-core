@@ -40,8 +40,8 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
 use NextDom\Model\Entity\Cron;
 
-const MAX_DURATION_TIME = 59;
-const GARBAGE_COLLECTOR_LIMIT = 30;
+define('MAX_DURATION_TIME', 59);
+define('GARBAGE_COLLECTOR_LIMIT', 30);
 
 require_once __DIR__ . "/../../src/core.php";
 
@@ -68,10 +68,10 @@ function setCronErrorAndDie($cron, $msg, $startTime)
 /**
  * Set cron error on exception
  *
- * @param Cron $cron Cron object
+ * @param Cron       $cron Cron object
  * @param \Exception $e Exception informations
- * @param string $logChannel Target log channel
- * @param int $startTime Start time of the cron
+ * @param string     $logChannel Target log channel
+ * @param int        $startTime Start time of the cron
  * @throws \Exception
  */
 function setCronErrorOnException($cron, $e, $logChannel, $startTime)
@@ -197,7 +197,7 @@ function startCronTargetFunction($cron, $option, $startTime)
  *
  * @param int $cronId Id of the cron
  * @throws CoreException
- * @throws \ReflectionException
+ * @throws \Exception
  */
 function startSingleCron($cronId)
 {
@@ -233,6 +233,7 @@ function startSingleCron($cronId)
 
 /**
  * Start all crons jobs
+ * @throws \Exception
  */
 function startAllCrons()
 {

@@ -116,7 +116,7 @@ class ScenarioSubElement extends BaseEntity
         if (is_array($this->_expression) && count($this->_expression) > 0) {
             return $this->_expression;
         }
-        $this->_expression = ScenarioExpressionManager::byscenarioSubElementId($this->getId());
+        $this->_expression = ScenarioExpressionManager::byScenarioSubElementId($this->getId());
         return $this->_expression;
     }
 
