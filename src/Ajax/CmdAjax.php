@@ -374,6 +374,7 @@ class CmdAjax extends BaseAjax
      *
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function getHistory()
     {
@@ -491,7 +492,7 @@ class CmdAjax extends BaseAjax
                 $data[] = $infoHistory;
             }
         } else {
-            $histories = HistoryManager::getHistoryFromCalcul(NextDomHelper::fromHumanReadable($cmdId), $dateStart, $dateEnd, Utils::init('allowZero', false), Utils::init(AjaxParams::GROUPING_TYPE));
+            $histories = HistoryManager::getHistoryFromCalcul(NextDomHelper::fromHumanReadable($cmdId), $dateStart, $dateEnd, Utils::init('allowZero', false));
             if (is_array($histories)) {
                 foreach ($histories as $datetime => $value) {
                     $infoHistory = [];

@@ -126,7 +126,7 @@ class AdministrationController extends BaseController
                         return $value !== '';
                     }
                 )
-            );
+           );
             if ($memData[1] != 0) {
                 $pageData['memoryLoad'] = round(100 * $memData[2] / $memData[1], 2);
                 if ($memData[1] < 1024) {
