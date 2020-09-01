@@ -63,7 +63,7 @@ echo "Charge l'environnement de Jeedom...";
 try {
 	require_once $install_dir . "/core/php/core.inc.php";
 	echo "OK\n";
-} catch (\Exeption $e) {
+} catch (\Exception $e) {
 	echo "ERREUR\n";
 	echo "Impossible de charger l'environnement de NextDom : " . $e->getMessage();
 	echo "\n";
@@ -105,11 +105,11 @@ try {
 		$user = (new \user())
 			->setLogin('admin')
 			->setPassword(sha512('admin'))
-			->setProfils('admin', 1);
+			->setProfils('admin');
 		$user->save();
 		echo "OK (admin/admin)\n";
 	}
-} catch (Exeption $e) {
+} catch (\Exception $e) {
 	echo "ERREUR\n";
 	echo "Description : " . $e->getMessage();
 	echo "\n";

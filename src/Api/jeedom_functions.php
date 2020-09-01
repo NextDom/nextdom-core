@@ -72,7 +72,10 @@ function resizeImage($contents, $width, $height)
     return Utils::resizeImage($contents, $width, $height);
 }
 
-function getmicrotime()
+/**
+ * @return float
+ */
+function getmicrotime(): float
 {
     return Utils::getMicrotime();
 }
@@ -98,18 +101,22 @@ function mySqlIsHere()
 }
 
 /**
- * @param $e
+ * @param throwable $e
  * @return string
  * @throws Exception
- * @deprecated see displayException
  */
-function displayExeption($e)
+function displayExeption(\Throwable $e)
 {
     //@trigger_error('La fonction displayExeption devient displayException', E_USER_DEPRECATED);
     return Utils::displayException($e);
 }
 
-function displayException($e)
+/**
+ * @param $e
+ * @return string
+ * @throws Exception
+ */
+function displayException(\Throwable $e)
 {
     return Utils::displayException($e);
 }

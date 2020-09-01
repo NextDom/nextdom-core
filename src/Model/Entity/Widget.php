@@ -41,6 +41,8 @@ class Widget extends BaseEntity {
 
     const TABLE_NAME = NextDomObj::WIDGET;
 
+    private $filtres;
+
     use NameEntity,
         TypeEntity,
         SubTypeEntity,
@@ -175,14 +177,15 @@ class Widget extends BaseEntity {
     }
 
     /**
-     * @param $_key
-     * @param $_value
+     * @param $key
+     * @param $value
      * @return $this
      */
-    public function setFiltres($_key, $_value) {
-        $filtres = Utils::setJsonAttr($this->filtres, $_key, $_value);
-        $this->updateChangeState($this->filtres, $filtres);
-        $this->filtres = $filtres;
+    public function setFiltres($key, $value)
+    {
+        $filters = Utils::setJsonAttr($this->filtres, $key, $value);
+        $this->updateChangeState($this->filtres, $filters);
+        $this->filtres = $filters;
         return $this;
     }
 
@@ -234,7 +237,7 @@ class Widget extends BaseEntity {
                 if ($cmd->getTemplate('mobile') == 'custom::' . $this->getName()) {
                     $cmd->setTemplate('mobile', 'default');
                 }
-                $cmd->save(true);
+                $cmd->save();
             }
         }
         DBHelper::remove($this);
@@ -294,7 +297,7 @@ class Widget extends BaseEntity {
             'texty' => -14,
             'textx' => 0,
             'title' => $this->getHumanName(),
-            'url' => 'index.php?v=d&p=widget&id=' . $this->getId(),
+            'url' => 'index.php?' . http_build_query([ 'v' => 'd', 'p' => 'widget', 'id' => $this->getId() ]),
         ];
         return null;
     }

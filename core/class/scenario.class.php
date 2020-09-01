@@ -111,6 +111,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
      *
      * @param mixed $_element_id
      * @return mixed
+     * @throws Exception
      */
     public static function byElement($_element_id)
     {
@@ -123,6 +124,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
      * @param mixed $_onlyEnable
      * @param mixed $_onlyVisible
      * @return mixed
+     * @throws Exception
      */
     public static function byObjectId($_object_id, $_onlyEnable = true, $_onlyVisible = false)
     {
@@ -134,6 +136,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
      * @param mixed $_event
      * @param mixed $_forceSyncMode
      * @return boolean
+     * @throws Exception
      */
     public static function check($_event = null, $_forceSyncMode = false)
     {
@@ -152,7 +155,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
      */
     public static function doIn($_options)
     {
-        ScenarioManager::doIn($_options, __FILE__);
+        ScenarioManager::doIn($_options);
     }
 
     /**
