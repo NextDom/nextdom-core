@@ -94,22 +94,24 @@ class ViewAjax extends BaseAjax
         $view_ajax = json_decode(Utils::init('view'), true);
         Utils::a2o($view, $view_ajax);
         $view->save();
-        if (isset($view_ajax['zones']) && count($view_ajax['zones']) > 0) {
+        if (isset($view_ajax['zones'])) {
             $view->removeviewZone();
-            foreach ($view_ajax['zones'] as $viewZone_info) {
-                $viewZone = new ViewZone();
-                $viewZone->setView_id($view->getId());
-                Utils::a2o($viewZone, $viewZone_info);
-                $viewZone->save();
-                if (isset($viewZone_info['viewData'])) {
-                    $order = 0;
-                    foreach ($viewZone_info['viewData'] as $viewData_info) {
-                        $viewData = new ViewData();
-                        $viewData->setviewZone_id($viewZone->getId());
-                        $viewData->setOrder($order);
-                        Utils::a2o($viewData, NextDomHelper::fromHumanReadable($viewData_info));
-                        $viewData->save();
-                        $order++;
+            if(count($view_ajax['zones']) > 0){
+                foreach ($view_ajax['zones'] as $viewZone_info) {
+                    $viewZone = new ViewZone();
+                    $viewZone->setView_id($view->getId());
+                    Utils::a2o($viewZone, $viewZone_info);
+                    $viewZone->save();
+                    if (isset($viewZone_info['viewData'])) {
+                        $order = 0;
+                        foreach ($viewZone_info['viewData'] as $viewData_info) {
+                            $viewData = new ViewData();
+                            $viewData->setviewZone_id($viewZone->getId());
+                            $viewData->setOrder($order);
+                            Utils::a2o($viewData, NextDomHelper::fromHumanReadable($viewData_info));
+                            $viewData->save();
+                            $order++;
+                        }
                     }
                 }
             }
