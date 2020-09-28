@@ -744,7 +744,7 @@ function initScenarioEditorEvents() {
     scenarioContainer.off('focus', ':input').on('focus', ':input', function () {
         blocFocusing($(this), false);
         if ($(this).closest(".expression").find(".expressionAttr[data-l1key='type']").filter(function () {
-            return this.value == 'condition'
+            return this.value == 'condition' || this.value == 'code'
         }).length == 0) {
             BLOC_LAST_FOCUS = false;
         } else {
@@ -2468,7 +2468,7 @@ function blocFocusing(bloc, onlyBloc) {
     BLOC_FOCUS.addClass("scenario-bloc-focused");
     if (!onlyBloc) {
         if (bloc.closest(".expression").find(".expressionAttr[data-l1key='type']").filter(function () {
-            return this.value == 'condition'
+            return this.value == 'condition' || this.value == 'code'
         }).length == 0) {
             ACTION_FOCUS = bloc.closest('.expression');
             ACTION_FOCUS.addClass("scenario-action-focused");
