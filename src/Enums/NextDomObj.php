@@ -25,6 +25,7 @@ class NextDomObj extends Enum
 {
     const CMD = 'cmd';
     const CRON = 'cron';
+    const DASH = 'dash';
     const EQLOGIC = 'eqLogic';
     const DATASTORE = 'dataStore';
     const HISTORY = 'history';

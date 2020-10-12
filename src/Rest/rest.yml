@@ -126,3 +126,31 @@ scenario_disable:
   methods: POST
   requirements:
     scenarioId: \d+
+dash_get:
+  path: '/dash/{dashId}'
+  controller: NextDom\Rest\DashRest::get
+  methods: GET
+  requirements:
+    dashId: \d+
+dash_all:
+  path: '/dash/all'
+  controller: NextDom\Rest\DashRest::all
+  methods: GET
+dash_save:
+  path: '/dash/save'
+  controller: NextDom\Rest\DashRest::save
+  methods: POST
+dash_delete:
+  path: '/dash/{dashId}/delete'
+  controller: NextDom\Rest\DashRest::delete
+  methods: GET
+dash_pictures:
+  path: '/dash/pictures/{path}'
+  controller: NextDom\Rest\DashRest::pictures
+  methods: GET
+  requirements:
+    path: "[a-zA-Z0-9\\-_]*"
+dash_backgrounds:
+  path: '/dash/backgrounds'
+  controller: NextDom\Rest\DashRest::backgrounds
+  methods: GET

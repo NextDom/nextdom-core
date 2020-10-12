@@ -143,6 +143,13 @@ CREATE TABLE IF NOT EXISTS `config` (
   PRIMARY KEY (`key`, `plugin`))
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `dash` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(64) NOT NULL,
+    `data` TEXT NULL DEFAULT NULL,
+    PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table `scenario`
 -- -----------------------------------------------------
