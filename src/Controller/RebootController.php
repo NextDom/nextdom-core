@@ -38,6 +38,7 @@ class RebootController extends BaseController
      *
      * @return string Content of reboot page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

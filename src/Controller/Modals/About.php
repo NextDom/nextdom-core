@@ -34,6 +34,7 @@ class About extends BaseAbstractModal
      * Render about
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {

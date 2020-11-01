@@ -45,11 +45,11 @@ class DisplayController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $nbEqlogics = 0;
-        $nbCmds = 0;
-        $jeeObjects = JeeObjectManager::all();
-        $eqLogics = [];
-        $cmds = [];
+        $nbEqlogics   = 0;
+        $nbCmds       = 0;
+        $jeeObjects   = JeeObjectManager::all();
+        $eqLogics     = [];
+        $cmds         = [];
         $eqLogics[-1] = EqLogicManager::byObjectId(null, false);
 
         foreach ($eqLogics[-1] as $eqLogic) {
@@ -67,11 +67,11 @@ class DisplayController extends BaseController
             $nbEqlogics += count($eqLogics[$jeeObject->getId()]);
         }
 
-        $pageData['displayObjects'] = $jeeObjects;
+        $pageData['displayObjects']    = $jeeObjects;
         $pageData['displayNbEqLogics'] = $nbEqlogics;
-        $pageData['displayNbCmds'] = $nbCmds;
-        $pageData['displayEqLogics'] = $eqLogics;
-        $pageData['displayCmds'] = $cmds;
+        $pageData['displayNbCmds']     = $nbCmds;
+        $pageData['displayEqLogics']   = $eqLogics;
+        $pageData['displayCmds']       = $cmds;
 
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/display.js';
 

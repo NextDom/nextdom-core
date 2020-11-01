@@ -38,6 +38,7 @@ class ScenarioExport extends BaseAbstractModal
      *
      * @return string
      * @throws CoreException
+     * @throws \Exception
      */
     public static function get(): string
     {

@@ -39,6 +39,7 @@ class NoteController extends BaseController
      *
      * @return string Content of migration page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

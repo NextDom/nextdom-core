@@ -34,6 +34,7 @@ class ExpressionTest extends BaseAbstractModal
      * Render expression test modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {
