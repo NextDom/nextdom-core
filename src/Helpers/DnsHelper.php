@@ -28,28 +28,10 @@ class DnsHelper
         try {
             $plugin = PluginManager::byId('openvpn');
             if (!is_object($plugin)) {
-                $update = UpdateManager::byLogicalId('openvpn');
-                if (!is_object($update)) {
-                    $update = new Update();
-                }
-                $update->setLogicalId('openvpn');
-                $update->setSource('market');
-                $update->setConfiguration('version', 'stable');
-                $update->save();
-                $update->doUpdate();
-                $plugin = PluginManager::byId('openvpn');
+                $plugin = self::updateOpenVpn();
             }
         } catch (CoreException $e) {
-            $update = UpdateManager::byLogicalId('openvpn');
-            if (!is_object($update)) {
-                $update = new Update();
-            }
-            $update->setLogicalId('openvpn');
-            $update->setSource('market');
-            $update->setConfiguration('version', 'stable');
-            $update->save();
-            $update->doUpdate();
-            $plugin = PluginManager::byId('openvpn');
+            $plugin = self::updateOpenVpn();
         }
         if (!is_object($plugin)) {
             throw new CoreException(__('Le plugin OpenVPN doit être installé'));
@@ -242,6 +224,25 @@ class DnsHelper
         }
         exec("(ps ax || ps w) | grep -ie 'tunnel-linux-" . SystemHelper::getArch() . "' | grep -v grep | awk '{print $1}' | xargs sudo kill -9 > /dev/null 2>&1");
         return;
+    }
+
+    /**
+     * @return mixed|\NextDom\Model\Entity\Plugin
+     * @throws CoreException
+     * @throws \Throwable
+     */
+    private static function updateOpenVpn()
+    {
+        $update = UpdateManager::byLogicalId('openvpn');
+        if (!is_object($update)) {
+            $update = new Update();
+        }
+        $update->setLogicalId('openvpn')
+               ->setSource('market')
+               ->setConfiguration('version', 'stable');
+        $update->save();
+        $update->doUpdate();
+        return PluginManager::byId('openvpn');
     }
 
 }

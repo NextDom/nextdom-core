@@ -25,6 +25,10 @@ class DB
     const FETCH_TYPE_ROW = 0;
     const FETCH_TYPE_ALL = 1;
 
+    /**
+     * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function getLastInsertId()
     {
         return DBHelper::getLastInsertId();
@@ -35,6 +39,14 @@ class DB
         return DBHelper::getConnection();
     }
 
+    /**
+     * @param      $_procName
+     * @param      $_params
+     * @param      $_fetch_type
+     * @param null $_className
+     * @param null $_fetch_opt
+     * @return mixed
+     */
     public static function &CallStoredProc($_procName, $_params, $_fetch_type, $_className = NULL, $_fetch_opt = NULL)
     {
         return self::CallStoredProc($_procName, $_params, $_fetch_type, $_className, $_fetch_opt);
@@ -84,11 +96,13 @@ class DB
      * Retourne une liste d'objets ou un objet en fonction de filtres
      * @param array $_filters Filtres à appliquer
      * @param $_object Objet sur lequel appliquer les filtres
-     * @return Objet ou liste d'objets correspondant à la requête
+     * @return array ou liste d'objets correspondant à la requête
+     * @throws ReflectionException
+     * @throws \NextDom\Exceptions\CoreException
      */
     public static function getWithFilter(array $_filters, $_object)
     {
-        return self::getWithFilter($_filters, $_object);
+        return DBHelper::getWithFilter($_filters, $_object);
     }
 
     /**
@@ -97,12 +111,18 @@ class DB
      * @param object $target
      * @return boolean
      * @throws \NextDom\Exceptions\CoreException
+     * @throws ReflectionException
      */
     public static function remove($target)
     {
         return DBHelper::remove($target);
     }
 
+    /**
+     * @param $_table
+     * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function checksum($_table)
     {
         return DBHelper::checksum($_table);
@@ -114,6 +134,7 @@ class DB
      * @param object $target
      * @return boolean
      * @throws \NextDom\Exceptions\CoreException
+     * @throws ReflectionException
      */
     public static function lock($target)
     {
@@ -122,11 +143,25 @@ class DB
 
     /*************************DB ANALYZER***************************/
 
+    /**
+     * @param        $_class
+     * @param string $_prefix
+     * @return string
+     * @throws ReflectionException
+     */
     public static function buildField($_class, $_prefix = '')
     {
         return DBHelper::buildField($_class, $_prefix);
     }
 
+    /**
+     * @param        $_database
+     * @param string $_table
+     * @param false  $_verbose
+     * @param int    $_loop
+     * @return bool
+     * @throws Exception
+     */
     public static function compareAndFix($_database, $_table = 'all', $_verbose = false, $_loop = 0)
     {
         return DBHelper::compareAndFix($_database, $_table, $_verbose, $_loop);

@@ -599,7 +599,7 @@ class FileSystemHelper
             throw new CoreException('Extension php ZIP non chargée');
         }
         $zip = new \ZipArchive();
-        if (!$zip->open($destination, \ZIPARCHIVE::CREATE)) {
+        if (!$zip->open($destination, \ZipArchive::CREATE)) {
             throw new CoreException('Impossible de créer l\'archive ZIP dans le dossier de destination : ' . $destination);
         }
         foreach ($source_arr as $source) {

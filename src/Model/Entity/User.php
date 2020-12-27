@@ -189,8 +189,12 @@ class User extends BaseEntity
     }
 
     /**
-     * @param string $_code
-     * @return bool
+     * @param $twoFactorCode
+     * @return bool|int
+     * @throws CoreException
+     * @throws \PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException
+     * @throws \PragmaRX\Google2FA\Exceptions\InvalidCharactersException
+     * @throws \PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException
      */
     public function validateTwoFactorCode($twoFactorCode)
     {

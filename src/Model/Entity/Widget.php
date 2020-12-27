@@ -41,6 +41,8 @@ class Widget extends BaseEntity {
 
     const TABLE_NAME = NextDomObj::WIDGET;
 
+    private $filtres;
+
     use NameEntity,
         TypeEntity,
         SubTypeEntity,
@@ -119,7 +121,7 @@ class Widget extends BaseEntity {
     }
 
     public function preInsert() {
-        
+
     }
 
     public function preSave() {
@@ -128,6 +130,11 @@ class Widget extends BaseEntity {
         }
     }
 
+    /**
+     * @throws CoreException
+     * @throws ReflectionException
+     * @throws \Exception
+     */
     public function preUpdate() {
         $widget = WidgetManager::byId($this->getId());
         if ($widget->getName() != $this->getName()) {
@@ -140,11 +147,11 @@ class Widget extends BaseEntity {
                     if ($cmd->getTemplate('mobile') == 'custom::' . $widget->getName()) {
                         $cmd->setTemplate('mobile', 'custom::' . $this->getName());
                     }
-                    $cmd->save(true);
+                    $cmd->save();
                 }
             }
         }
-        if ($widget->getType() != $this->getType() || $widget->getSubType() != $this->getSubType()) {
+        if ($widget->getType() != $this->getType() || $widget->getSubtype() != $this->getSubtype()) {
             $usedBy = $widget->getUsedBy();
             if (is_array($usedBy) && count($usedBy) > 0) {
                 foreach ($usedBy as $cmd) {
@@ -154,7 +161,7 @@ class Widget extends BaseEntity {
                     if ($cmd->getTemplate('mobile') == 'custom::' . $widget->getName()) {
                         $cmd->setTemplate('mobile', 'default');
                     }
-                    $cmd->save(true);
+                    $cmd->save();
                 }
             }
         }
@@ -170,14 +177,15 @@ class Widget extends BaseEntity {
     }
 
     /**
-     * @param $_key
-     * @param $_value
+     * @param $key
+     * @param $value
      * @return $this
      */
-    public function setFiltres($_key, $_value) {
-        $filtres = Utils::setJsonAttr($this->filtres, $_key, $_value);
-        $this->updateChangeState($this->filtres, $filtres);
-        $this->filtres = $filtres;
+    public function setFiltres($key, $value)
+    {
+        $filters = Utils::setJsonAttr($this->filtres, $key, $value);
+        $this->updateChangeState($this->filtres, $filters);
+        $this->filtres = $filters;
         return $this;
     }
 
@@ -191,7 +199,11 @@ class Widget extends BaseEntity {
         return true;
     }
 
-    public function postSave() {
+    /**
+     * @throws \Exception
+     */
+    public function postSave()
+    {
         $usedBy = $this->getUsedBy();
         if (is_array($usedBy) && count($usedBy) > 0) {
             foreach ($usedBy as $cmd) {
@@ -203,11 +215,19 @@ class Widget extends BaseEntity {
         }
     }
 
-    public function preRemove() {
-        
+    public function preRemove()
+    {
+
     }
 
-    public function remove() {
+    /**
+     * @return bool|void
+     * @throws CoreException
+     * @throws ReflectionException
+     * @throws \Exception
+     */
+    public function remove()
+    {
         $usedBy = $this->getUsedBy();
         if (is_array($usedBy) && count($usedBy) > 0) {
             foreach ($usedBy as $cmd) {
@@ -217,15 +237,16 @@ class Widget extends BaseEntity {
                 if ($cmd->getTemplate('mobile') == 'custom::' . $this->getName()) {
                     $cmd->setTemplate('mobile', 'default');
                 }
-                $cmd->save(true);
+                $cmd->save();
             }
         }
         DBHelper::remove($this);
     }
 
     /**
-     * 
+     *
      * @return Cmd[]
+     * @throws \Exception
      */
     public function getUsedBy() {
         return array_merge(
@@ -234,11 +255,13 @@ class Widget extends BaseEntity {
         );
     }
 
-    public function postRemove() {
+    public function postRemove()
+    {
         //WidgetManager::cleanWidget();
     }
 
-    public function emptyTest() {
+    public function emptyTest()
+    {
         $this->test = null;
     }
 
@@ -274,7 +297,7 @@ class Widget extends BaseEntity {
             'texty' => -14,
             'textx' => 0,
             'title' => $this->getHumanName(),
-            'url' => 'index.php?v=d&p=widget&id=' . $this->getId(),
+            'url' => 'index.php?' . http_build_query([ 'v' => 'd', 'p' => 'widget', 'id' => $this->getId() ]),
         ];
         return null;
     }

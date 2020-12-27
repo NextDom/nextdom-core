@@ -243,7 +243,7 @@ if (init('type') != '') {
             if (init('value') == '') {
                 $dataStore = dataStore::byTypeLinkIdKey('scenario', -1, trim(init('name')));
                 if (is_object($dataStore)) {
-                    echo $dataStore->getValue($_default);
+                    echo $dataStore->getValue();
                 }
             } else {
                 $dataStore = new dataStore();
@@ -400,7 +400,7 @@ try {
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
             throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
-        jeedom::update('', 0);
+        jeedom::update('');
         $jsonrpc->makeSuccess('ok');
     }
 
@@ -1026,7 +1026,7 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'update::update') {
-        jeedom::update('', 0);
+        jeedom::update('');
         $jsonrpc->makeSuccess('ok');
     }
 

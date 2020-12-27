@@ -55,6 +55,7 @@ class NextDomAjax extends BaseAjax
      * Get documentation link
      *
      * @throws CoreException
+     * @throws \Exception
      */
     public function getDocumentationUrl()
     {

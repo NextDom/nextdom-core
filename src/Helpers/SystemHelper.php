@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 /**
  * Class SystemHelper
  * @package NextDom\Helpers
@@ -439,7 +440,7 @@ class SystemHelper
         }
         return $arch;
     }
-    
+
     public static function getInstalledPackages($packagesManager)
     {
         if (isset(self::$_installPackage[$packagesManager])) {

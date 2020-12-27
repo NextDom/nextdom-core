@@ -649,7 +649,7 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'jeeNetwork::update') {
-            nextdom::update('', 0);
+            nextdom::update('');
             $jsonrpc->makeSuccess('ok');
         }
 
@@ -733,7 +733,7 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'backup::restoreMarket') {
-            repo_market::backup_restore($params['backup'], true);
+            repo_market::backup_restore($params['backup']);
             $jsonrpc->makeSuccess();
         }
 
@@ -823,7 +823,7 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'update::update') {
-            nextdom::update('', 0);
+            nextdom::update('');
             $jsonrpc->makeSuccess('ok');
         }
 

@@ -30,6 +30,7 @@ use NextDom\Managers\PlanManager;
 use NextDom\Model\DataClass\UploadedImage;
 use NextDom\Model\Entity\Plan;
 use NextDom\Model\Entity\PlanHeader;
+use NextDom\Helpers\FileSystemHelper;
 
 /**
  * Class PlanAjax
@@ -271,7 +272,6 @@ class PlanAjax extends BaseAjax
      * Upload image for static picture on plan
      *
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function uploadImagePlan()
     {

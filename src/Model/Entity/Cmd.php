@@ -395,7 +395,7 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_name
+     * @param $name
      * @return $this
      */
     public function setName($name)
@@ -612,6 +612,7 @@ class Cmd extends BaseEntity
      * @return bool
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function save()
     {
@@ -779,12 +780,13 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_value
-     * @param bool $_allowDuring
+     * @param        $_value
+     * @param bool   $_allowDuring
      * @param string $_checkLevel
      * @return int|string
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function checkAlertLevel($_value, $_allowDuring = true, $_checkLevel = 'none')
     {
@@ -804,12 +806,12 @@ class Cmd extends BaseEntity
                         if ($currentLevel != $this->getCache('alertLevel')) {
                             if (!is_object($cron)) {
                                 if (!($currentLevel == 'warning' && $this->getCache('alertLevel') == 'danger')) {
-                                    $cron = new Cron();
-                                    $cron->setClass(NextDomObj::CMD);
-                                    $cron->setFunction('duringAlertLevel');
-                                    $cron->setOnce(1);
-                                    $cron->setOption([Common::CMD_ID => intval($this->getId()), 'level' => $currentLevel]);
-                                    $cron->setSchedule(CronManager::convertDateToCron($next));
+                                    $cron = (new Cron())
+                                        ->setClass(NextDomObj::CMD)
+                                        ->setFunction('duringAlertLevel')
+                                        ->setOnce(1)
+                                        ->setOption([Common::CMD_ID => intval($this->getId()), 'level' => $currentLevel])
+                                        ->setSchedule(CronManager::convertDateToCron($next));
                                     $cron->setLastRun(date(DateFormat::FULL));
                                     $cron->save();
                                 } else { //je suis en condition de warning et le cron n'existe pas mais j'etais en danger, je suppose que le cron a expiré
@@ -869,6 +871,7 @@ class Cmd extends BaseEntity
      * @param $_value
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function actionAlertLevel($_level, $_value)
     {
@@ -959,11 +962,12 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $eventValue
+     * @param      $eventValue
      * @param null $_datetime
-     * @param int $eventLoop
+     * @param int  $eventLoop
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function event($eventValue, $_datetime = null, $eventLoop = 1)
     {
@@ -1094,10 +1098,10 @@ class Cmd extends BaseEntity
     public function addHistoryValue($_value, $_datetime = '')
     {
         if ($this->getIsHistorized() == 1 && ($_value == null || ($_value !== '' && $this->isType(CmdType::INFO) && $_value <= $this->getConfiguration(CmdConfigKey::MAX_VALUE, $_value) && $_value >= $this->getConfiguration(CmdConfigKey::MIN_VALUE, $_value)))) {
-            $history = new History();
-            $history->setCmd_id($this->getId());
-            $history->setValue($_value);
-            $history->setDatetime($_datetime);
+            $history =( new History())
+                ->setCmd_id($this->getId())
+                ->setValue($_value)
+                ->setDatetime($_datetime);
             $history->save($this);
         }
     }
@@ -1116,10 +1120,10 @@ class Cmd extends BaseEntity
             if (!is_object($cron)) {
                 $cron = new cron();
             }
-            $cron->setClass(NextDomObj::CMD);
-            $cron->setFunction('returnState');
-            $cron->setOnce(1);
-            $cron->setOption([Common::CMD_ID => intval($this->getId())]);
+            $cron->setClass(NextDomObj::CMD)
+                 ->setFunction('returnState')
+                 ->setOnce(1)
+                 ->setOption([Common::CMD_ID => intval($this->getId())]);
             $next = strtotime('+ ' . ($this->getConfiguration(CmdConfigKey::RETURN_STATE_TIME) + 1) . ' minutes ' . date(DateFormat::FULL));
             $cron->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date(DateFormat::FULL));
@@ -1131,6 +1135,7 @@ class Cmd extends BaseEntity
      * @param $_value
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function checkCmdAlert($_value)
     {
@@ -1153,11 +1158,11 @@ class Cmd extends BaseEntity
                     return;
                 }
             }
-            $cron->setClass(NextDomObj::CMD);
-            $cron->setFunction('cmdAlert');
-            $cron->setOnce(1);
-            $cron->setOption([Common::CMD_ID => intval($this->getId())]);
-            $cron->setSchedule(CronManager::convertDateToCron($next));
+            $cron->setClass(NextDomObj::CMD)
+                 ->setFunction('cmdAlert')
+                 ->setOnce(1)
+                 ->setOption([Common::CMD_ID => intval($this->getId())])
+                 ->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date(DateFormat::FULL));
             $cron->save();
         } else {
@@ -1308,7 +1313,7 @@ class Cmd extends BaseEntity
      */
     public function setHtml($_key, $_value)
     {
-        if (in_array($_key, [CmdViewType::DASHBOARD, CmdViewType::DVIEW, CmdViewType::MVIEW, CmdViewType::DPLAN]) && $this->getWidgetTemplateCode($_key, true) == $_value) {
+        if (in_array($_key, [CmdViewType::DASHBOARD, CmdViewType::DVIEW, CmdViewType::MVIEW, CmdViewType::DPLAN]) && $this->getWidgetTemplateCode($_key) == $_value) {
             $_value = '';
         }
         if ($this->getHtml($_key) != $_value) {
@@ -1323,7 +1328,6 @@ class Cmd extends BaseEntity
      * TODO: Déplacer dans CmdManager ???
      *
      * @param string $viewVersion
-     * @param bool $_noCustom
      * @return array|bool|mixed|null|string
      * @throws \Exception
      */
@@ -1404,7 +1408,6 @@ class Cmd extends BaseEntity
                 }
             }
         }
-        $templateCode = '';
         if (!isset(self::$_templateArray[$templateVersion . '::' . $templateName])) {
             $templateCode = FileSystemHelper::getCoreTemplateFileContent($templateVersion, $templateName);
             if (empty($templateCode)) {

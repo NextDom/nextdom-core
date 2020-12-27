@@ -62,7 +62,7 @@ try {
     foreach (CmdManager::all() as $cmd) {
         if (!is_object($cmd->getEqLogic())) {
             echo 'Remove cmd because no eqLogic found : ' . $cmd->getHumanName() . "\n";
-            $cmd->remove(true);
+            $cmd->remove();
             continue;
         }
         echo 'Cleaning cmd : ' . $cmd->getHumanName() . "\n";
@@ -95,7 +95,7 @@ try {
                 continue;
             }
         }
-        $cmd->save(true);
+        $cmd->save();
     }
 
     foreach (EqLogicManager::all() as $eqLogic) {

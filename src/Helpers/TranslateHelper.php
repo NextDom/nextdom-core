@@ -174,7 +174,7 @@ class TranslateHelper
      * @return mixed
      * @throws \Exception
      */
-    public static function getTranslation($language): array
+    public static function getTranslation(): array
     {
         // Test si les traductions ont été mises en cache
         if (!self::$translationLoaded) {

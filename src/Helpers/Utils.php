@@ -780,7 +780,7 @@ class Utils
             $hexCode = dechex($ord);
             $hex .= substr('0' . $hexCode, -2);
         }
-        return strToUpper($hex);
+        return strtoupper($hex);
     }
 
     /**
@@ -1266,10 +1266,8 @@ class Utils
      * @param bool $ignoreDarkColor
      * @return array|string
      */
-    public function getDominantColor($pathImg, $level = null, $ignoreDarkColor = false)
+    public static function getDominantColor($pathImg, $level = null, $ignoreDarkColor = false)
     {
-
-
         $colors = [];
         $i = imagecreatefromjpeg($pathImg);
         $imagesX = imagesx($i);

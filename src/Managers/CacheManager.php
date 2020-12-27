@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use Doctrine\Common\Cache\FilesystemCache;
 use NextDom\Com\ComShell;
 use NextDom\Enums\CacheEngine;
 use NextDom\Enums\CacheKey;
@@ -129,7 +130,7 @@ class CacheManager
      *
      * @param string $targetFolder Target folder
      *
-     * @return \Doctrine\Common\Cache\FilesystemCache
+     * @return FilesystemCache
      *
      * @throws \Exception
      */
@@ -137,13 +138,13 @@ class CacheManager
         if ($targetFolder === '') {
             $targetFolder = self::getFolder();
         }
-        return new \Doctrine\Common\Cache\FilesystemCache($targetFolder);
+        return new FilesystemCache($targetFolder);
     }
 
     /**
      * Get cache system
      *
-     * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
+     * @return FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
      * @throws \Exception
      */
     public static function getCache()
@@ -228,6 +229,7 @@ class CacheManager
 
     /**
      * Clear cache
+     * @throws \Exception
      */
     public static function flush()
     {
@@ -246,14 +248,13 @@ class CacheManager
 
     /**
      * Persist cache system
+     * @throws \Exception
      */
     public static function persist()
     {
         switch (ConfigManager::byKey(CacheKey::CACHE_ENGINE)) {
-            case CacheEngine::FILESYSTEM:
-                $cacheDir = self::getFolder();
-                break;
             case CacheEngine::PHPFILE:
+            case CacheEngine::FILESYSTEM:
                 $cacheDir = self::getFolder();
                 break;
             default:
@@ -437,19 +438,22 @@ class CacheManager
         }
         return $cache;
     }
-    
+
+    /**
+     * @throws \Exception
+     */
     public static function flushWidget() {
         foreach (EqLogicManager::all() as $eqLogic) {
             try {
                 $eqLogic->emptyCacheWidget();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
 
             }
         }
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->emptyCacheWidget();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
 
             }
         }

@@ -817,6 +817,11 @@ class RepoMarket implements BaseRepo
         return array_reverse($backupList);
     }
 
+    /**
+     * @param $_backup
+     * @throws CoreException
+     * @throws \Exception
+     */
     public static function backup_restore($_backup)
     {
         $backup_dir = calculPath(ConfigManager::byKey('backup::path'));
@@ -909,14 +914,21 @@ class RepoMarket implements BaseRepo
         }
     }
 
+    /**
+     * @throws CoreException
+     * @throws \Exception
+     */
     public static function sendHealth(){
         $market = self::getJsonRpc();
-        if (!$market->sendRequest('register::health', ['health' => SystemHealth::health()])) {
+        if (!$market->sendRequest('register::health', ['health' => NextDomHelper::health()])) {
             throw new CoreException($market->getError(), $market->getErrorCode());
         }
     }
 
-    public static function monitoring_status()
+    /**
+     * @return bool
+     */
+    public static function monitoring_status(): bool
     {
         if (!file_exists('/etc/zabbix/zabbix_agentd.conf')) {
             return false;
@@ -927,6 +939,10 @@ class RepoMarket implements BaseRepo
         return (count(SystemHelper::ps('zabbix')) > 0);
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public static function monitoring_allow()
     {
         if (ConfigManager::byKey('market::monitoringServer') == '') {
