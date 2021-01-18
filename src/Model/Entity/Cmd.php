@@ -183,13 +183,12 @@ class Cmd extends BaseEntity
     protected $eqLogic_id;
 
     /**
-     * @param $_options
+     * @param $options
      * @throws CoreException
-     * @throws \ReflectionException
      */
-    public static function duringAlertLevel($_options)
+    public static function duringAlertLevel($options)
     {
-        $cmd = CmdManager::byId($_options[Common::CMD_ID]);
+        $cmd = CmdManager::byId($options[Common::CMD_ID]);
         if (!is_object($cmd)) {
             return;
         }
@@ -200,7 +199,7 @@ class Cmd extends BaseEntity
             return;
         }
         $value = $cmd->execCmd();
-        $level = $cmd->checkAlertLevel($value, false, $_options[Common::LEVEL]);
+        $level = $cmd->checkAlertLevel($value, false, $options[Common::LEVEL]);
         if ($level != Common::NONE) {
             $cmd->actionAlertLevel($level, $value);
         }
@@ -231,12 +230,12 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_eqLogic
+     * @param $eqLogic
      * @return $this
      */
-    public function setEqLogic($_eqLogic)
+    public function setEqLogic($eqLogic)
     {
-        $this->_eqLogic = $_eqLogic;
+        $this->_eqLogic = $eqLogic;
         return $this;
     }
 
@@ -248,6 +247,7 @@ class Cmd extends BaseEntity
      * @return mixed result
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
@@ -364,12 +364,12 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_collectDate
+     * @param $collectDate
      * @return $this
      */
-    public function setCollectDate($_collectDate)
+    public function setCollectDate($collectDate)
     {
-        $this->_collectDate = $_collectDate;
+        $this->_collectDate = $collectDate;
         return $this;
     }
 
@@ -395,8 +395,8 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_name
-     * @return $this
+     * @param $name
+     * @return Cmd
      */
     public function setName($name)
     {
@@ -466,81 +466,81 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_value
-     * @param bool $_quote
+     * @param $value
+     * @param bool $quote
      * @return float|mixed|string
      */
-    public function formatValue($_value, $_quote = false)
+    public function formatValue($value, $quote = false)
     {
-        if (is_array($_value)) {
+        if (is_array($value)) {
             return '';
         }
-        if (trim($_value) == '' && $_value !== false && $_value !== 0) {
+        if (trim($value) == '' && $value !== false && $value !== 0) {
             return '';
         }
-        $_value = trim(trim($_value), '"');
-        if (@strpos(strtolower($_value), 'error::') !== false) {
-            return $_value;
+        $value = trim(trim($value), '"');
+        if (@strpos(strtolower($value), 'error::') !== false) {
+            return $value;
         }
         if ($this->isType(CmdType::INFO)) {
             switch ($this->getSubType()) {
                 case CmdSubType::OTHER:
                 case CmdSubType::STRING:
-                    if ($_quote) {
-                        return '"' . $_value . '"';
+                    if ($quote) {
+                        return '"' . $value . '"';
                     }
-                    return $_value;
+                    return $value;
                 case CmdSubType::BINARY:
                     $calculValueOffset = $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET);
                     if ($calculValueOffset != '') {
                         try {
-                            if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $calculValueOffset))));
+                            if (preg_match("/[a-zA-Z#]/", $value)) {
+                                $value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $calculValueOffset))));
                             } else {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $calculValueOffset));
+                                $value = NextDomHelper::evaluateExpression(str_replace('#value#', $value, $calculValueOffset));
                             }
                         } catch (\Exception $ex) {
 
                         }
                     }
-                    $parsedBinary = strtolower($_value);
+                    $parsedBinary = strtolower($value);
                     if ($parsedBinary == 'on' || $parsedBinary == 'high' || $parsedBinary == 'true' || $parsedBinary === true) {
                         return 1;
                     }
                     if ($parsedBinary == 'off' || $parsedBinary == 'low' || $parsedBinary == 'false' || $parsedBinary === false) {
                         return 0;
                     }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
+                    if ((is_numeric(intval($value)) && intval($value) > 1) || $value === true || $value == 1) {
                         return 1;
                     }
                     return 0;
                 case CmdSubType::NUMERIC:
-                    $_value = floatval(str_replace(',', '.', $_value));
+                    $value             = floatval(str_replace(',', '.', $value));
                     $calculValueOffset = $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET);
                     if ($calculValueOffset != '') {
                         try {
-                            if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $calculValueOffset))));
+                            if (preg_match("/[a-zA-Z#]/", $value)) {
+                                $value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $calculValueOffset))));
                             } else {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $calculValueOffset));
+                                $value = NextDomHelper::evaluateExpression(str_replace('#value#', $value, $calculValueOffset));
                             }
                         } catch (\Exception $ex) {
 
                         }
                     }
                     if ($this->getConfiguration(CmdConfigKey::HISTORIZE_ROUND) !== '' && is_numeric($this->getConfiguration(CmdConfigKey::HISTORIZE_ROUND)) && $this->getConfiguration(CmdConfigKey::HISTORIZE_ROUND) >= 0) {
-                        $_value = round($_value, $this->getConfiguration(CmdConfigKey::HISTORIZE_ROUND));
+                        $value = round($value, $this->getConfiguration(CmdConfigKey::HISTORIZE_ROUND));
                     }
-                    if ($_value > $this->getConfiguration(CmdConfigKey::MAX_VALUE, $_value) && $this->getConfiguration(CmdConfigKey::MAX_VALUE_REPLACE) == 1) {
-                        $_value = $this->getConfiguration(CmdConfigKey::MAX_VALUE, $_value);
+                    if ($value > $this->getConfiguration(CmdConfigKey::MAX_VALUE, $value) && $this->getConfiguration(CmdConfigKey::MAX_VALUE_REPLACE) == 1) {
+                        $value = $this->getConfiguration(CmdConfigKey::MAX_VALUE, $value);
                     }
-                    if ($_value < $this->getConfiguration(CmdConfigKey::MIN_VALUE, $_value) && $this->getConfiguration(CmdConfigKey::MIN_VALUE_REPLACE) == 1) {
-                        $_value = $this->getConfiguration(CmdConfigKey::MIN_VALUE, $_value);
+                    if ($value < $this->getConfiguration(CmdConfigKey::MIN_VALUE, $value) && $this->getConfiguration(CmdConfigKey::MIN_VALUE_REPLACE) == 1) {
+                        $value = $this->getConfiguration(CmdConfigKey::MIN_VALUE, $value);
                     }
-                    return floatval($_value);
+                    return floatval($value);
             }
         }
-        return $_value;
+        return $value;
     }
 
     /**
@@ -612,6 +612,7 @@ class Cmd extends BaseEntity
      * @return bool
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function save()
     {
@@ -754,7 +755,7 @@ class Cmd extends BaseEntity
      * Get historic command status
      * @return bool
      */
-    public function isHistorized()
+    public function isHistorized(): bool
     {
         return $this->isHistorized == 1;
     }
@@ -768,23 +769,24 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_isHistorized
+     * @param $isHistorized
      * @return $this
      */
-    public function setIsHistorized($_isHistorized)
+    public function setIsHistorized($isHistorized)
     {
-        $this->updateChangeState($this->isHistorized, $_isHistorized);
-        $this->isHistorized = $_isHistorized;
+        $this->updateChangeState($this->isHistorized, $isHistorized);
+        $this->isHistorized = $isHistorized;
         return $this;
     }
 
     /**
-     * @param $_value
-     * @param bool $_allowDuring
+     * @param        $_value
+     * @param bool   $_allowDuring
      * @param string $_checkLevel
      * @return int|string
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function checkAlertLevel($_value, $_allowDuring = true, $_checkLevel = 'none')
     {
@@ -804,12 +806,12 @@ class Cmd extends BaseEntity
                         if ($currentLevel != $this->getCache('alertLevel')) {
                             if (!is_object($cron)) {
                                 if (!($currentLevel == 'warning' && $this->getCache('alertLevel') == 'danger')) {
-                                    $cron = new Cron();
-                                    $cron->setClass(NextDomObj::CMD);
-                                    $cron->setFunction('duringAlertLevel');
-                                    $cron->setOnce(1);
-                                    $cron->setOption([Common::CMD_ID => intval($this->getId()), 'level' => $currentLevel]);
-                                    $cron->setSchedule(CronManager::convertDateToCron($next));
+                                    $cron = (new Cron())
+                                        ->setClass(NextDomObj::CMD)
+                                        ->setFunction('duringAlertLevel')
+                                        ->setOnce(1)
+                                        ->setOption([ Common::CMD_ID => intval($this->getId()), 'level' => $currentLevel ])
+                                        ->setSchedule(CronManager::convertDateToCron($next));
                                     $cron->setLastRun(date(DateFormat::FULL));
                                     $cron->save();
                                 } else { //je suis en condition de warning et le cron n'existe pas mais j'etais en danger, je suppose que le cron a expiré
@@ -841,23 +843,23 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param string $_key
-     * @param string $_default
+     * @param string $key
+     * @param string $default
      * @return array|bool|mixed|null|string
      */
-    public function getAlert($_key = '', $_default = '')
+    public function getAlert(string $key = '', string $default = '')
     {
-        return Utils::getJsonAttr($this->alert, $_key, $_default);
+        return Utils::getJsonAttr($this->alert, $key, $default);
     }
 
     /**
-     * @param $_key
-     * @param $_value
+     * @param $key
+     * @param $value
      * @return $this
      */
-    public function setAlert($_key, $_value)
+    public function setAlert($key, $value)
     {
-        $alert = Utils::setJsonAttr($this->alert, $_key, $_value);
+        $alert = Utils::setJsonAttr($this->alert, $key, $value);
         $this->updateChangeState($this->alert, $alert);
         $this->alert = $alert;
         $this->_needRefreshAlert = true;
@@ -865,44 +867,45 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_level
-     * @param $_value
+     * @param $level
+     * @param $value
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function actionAlertLevel($_level, $_value)
+    public function actionAlertLevel($level, $value)
     {
         if (!$this->isType(CmdType::INFO)) {
             return;
         }
-        if ($_level == $this->getCache('alertLevel')) {
+        if ($level == $this->getCache('alertLevel')) {
             return;
         }
         global $NEXTDOM_INTERNAL_CONFIG;
-        $this->setCache('alertLevel', $_level);
+        $this->setCache('alertLevel', $level);
         $eqLogic = $this->getEqLogic();
         if (!$eqLogic->isEnabled()) {
             return;
         }
         $maxAlert = $eqLogic->getMaxCmdAlert();
         $prevAlert = $eqLogic->getAlert();
-        if (!$_value) {
-            $_value = $this->execCmd();
+        if (!$value) {
+            $value = $this->execCmd();
         }
-        if ($_level != 'none') {
-            $message = __('Alert sur la commande ') . $this->getHumanName() . __(' niveau ') . $_level . __(' valeur : ') . $_value . trim(' ' . $this->getUnite());
-            if ($this->getAlert($_level . 'during') != '' && $this->getAlert($_level . 'during') > 0) {
-                $message .= ' ' . __('pendant plus de ') . $this->getAlert($_level . 'during') . __(' minute(s)');
+        if ($level != 'none') {
+            $message = __('Alert sur la commande ') . $this->getHumanName() . __(' niveau ') . $level . __(' valeur : ') . $value . trim(' ' . $this->getUnite());
+            if ($this->getAlert($level . 'during') != '' && $this->getAlert($level . 'during') > 0) {
+                $message .= ' ' . __('pendant plus de ') . $this->getAlert($level . 'during') . __(' minute(s)');
             }
-            $message .= ' => ' . NextDomHelper::toHumanReadable(str_replace('#value#', $_value, $this->getAlert($_level . 'if')));
+            $message .= ' => ' . NextDomHelper::toHumanReadable(str_replace('#value#', $value, $this->getAlert($level . 'if')));
             LogHelper::addInfo(LogTarget::EVENT, $message);
             $eqLogic = $this->getEqLogicId();
-            if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
+            if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($level)) == 1) {
                 MessageManager::add($eqLogic->getEqType_name(), $message);
             }
-            $cmds = explode(('&&'), ConfigManager::byKey('alert::' . $_level . 'Cmd'));
-            if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::' . $_level . 'Cmd')) != '') {
-                foreach ($cmds as $id) {
+            $cmd = explode(('&&'), ConfigManager::byKey('alert::' . $level . 'Cmd'));
+            if (count($cmd) > 0 && trim(ConfigManager::byKey('alert::' . $level . 'Cmd')) != '') {
+                foreach ($cmd as $id) {
                     $cmd = CmdManager::byId(str_replace('#', '', $id));
                     if (is_object($cmd)) {
                         $cmd->execCmd([
@@ -928,14 +931,14 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_key
-     * @param null $_value
+     * @param      $key
+     * @param null $value
      * @return $this
      * @throws \Exception
      */
-    public function setCache($_key, $_value = null)
+    public function setCache($key, $value = null)
     {
-        CacheManager::set(CmdConfigKey::CMD_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CmdConfigKey::CMD_CACHE_ATTR . $this->getId())->getValue(), $_key, $_value));
+        CacheManager::set(CmdConfigKey::CMD_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CmdConfigKey::CMD_CACHE_ATTR . $this->getId())->getValue(), $key, $value));
         return $this;
     }
 
@@ -948,24 +951,25 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_unite
+     * @param $unite
      * @return $this
      */
-    public function setUnite($_unite)
+    public function setUnite($unite)
     {
-        $this->updateChangeState($this->unite, $_unite);
-        $this->unite = $_unite;
+        $this->updateChangeState($this->unite, $unite);
+        $this->unite = $unite;
         return $this;
     }
 
     /**
-     * @param $eventValue
-     * @param null $_datetime
-     * @param int $eventLoop
+     * @param      $eventValue
+     * @param null $datetime
+     * @param int  $eventLoop
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function event($eventValue, $_datetime = null, $eventLoop = 1)
+    public function event($eventValue, $datetime = null, $eventLoop = 1)
     {
         if ($eventLoop > 4 || !$this->isType(CmdType::INFO)) {
             return;
@@ -984,24 +988,24 @@ class Cmd extends BaseEntity
         }
         $oldValue = $this->execCmd();
         $repeat = ($oldValue == $eventValue && $oldValue !== '' && $oldValue !== null);
-        $this->setCollectDate(($_datetime != null) ? $_datetime : date(DateFormat::FULL));
+        $this->setCollectDate(($datetime != null) ? $datetime : date(DateFormat::FULL));
         $this->setCache(CacheKey::COLLECT_DATE, $this->getCollectDate());
         $this->setValueDate(($repeat) ? $this->getValueDate() : $this->getCollectDate());
         $eqLogic->setStatus([EqLogicStatus::LAST_COMMUNICATION => $this->getCollectDate(), Common::TIMEOUT => 0]);
-        $display_value = $eventValue;
+        $displayValue = $eventValue;
         if (method_exists($this, 'formatValueWidget')) {
-            $display_value = $this->formatValueWidget($eventValue);
+            $displayValue = $this->formatValueWidget($eventValue);
         } elseif ($this->isSubType(CmdSubType::BINARY) && $this->getDisplay(Common::INVERSE_BINARY) == 1) {
-            $display_value = ($eventValue == 1) ? 0 : 1;
+            $displayValue = ($eventValue == 1) ? 0 : 1;
         } elseif ($this->isSubType(CmdSubType::NUMERIC) && trim($eventValue) == '') {
-            $display_value = 0;
+            $displayValue = 0;
         } elseif ($this->isSubType(CmdSubType::BINARY) && trim($eventValue) == '') {
-            $display_value = 0;
+            $displayValue = 0;
         }
         if ($repeat && $this->getConfiguration(CmdConfigKey::REPEAT_EVENT_MGMT, 'auto') == 'never') {
             $this->addHistoryValue($eventValue, $this->getCollectDate());
             $eqLogic->emptyCacheWidget();
-            EventManager::adds(EventType::CMD_UPDATE, [[Common::CMD_ID => $this->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $display_value, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate()]]);
+            EventManager::adds(EventType::CMD_UPDATE, [[Common::CMD_ID => $this->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $displayValue, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate()]]);
             return;
         }
         $eventLoop++;
@@ -1019,7 +1023,7 @@ class Cmd extends BaseEntity
             ScenarioManager::check($this);
             $eqLogic->emptyCacheWidget();
             $level = $this->checkAlertLevel($eventValue);
-            $events[] = [Common::CMD_ID => $this->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $display_value, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate(), 'alertLevel' => $level];
+            $events[] = [Common::CMD_ID => $this->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $displayValue, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate(), 'alertLevel' => $level];
             $foundInfo = false;
             $cmds = CmdManager::byValue($this->getId(), null, true);
             if (is_array($cmds) && count($cmds) > 0) {
@@ -1027,7 +1031,7 @@ class Cmd extends BaseEntity
                 foreach ($cmds as $cmd) {
                     if ($cmd->isType(CmdType::ACTION)) {
                         if (!$repeat) {
-                            $events[] = [Common::CMD_ID => $cmd->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $display_value, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate()];
+                            $events[] = [Common::CMD_ID => $cmd->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $displayValue, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate()];
                         }
                     } else {
                         if ($eventLoop > 1) {
@@ -1042,7 +1046,7 @@ class Cmd extends BaseEntity
                 ListenerManager::backgroundCalculDependencyCmd($this->getId());
             }
         } else {
-            $events[] = [Common::CMD_ID => $this->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $display_value, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate()];
+            $events[] = [Common::CMD_ID => $this->getId(), Common::VALUE => $eventValue, Common::DISPLAY_VALUE => $displayValue, CacheKey::VALUE_DATE => $this->getValueDate(), CacheKey::COLLECT_DATE => $this->getCollectDate()];
         }
         if (count($events) > 0) {
             EventManager::adds(EventType::CMD_UPDATE, $events);
@@ -1086,40 +1090,42 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_value
-     * @param string $_datetime
+     * @param $value
+     * @param string $datetime
      *
      * @throws CoreException
      */
-    public function addHistoryValue($_value, $_datetime = '')
+    public function addHistoryValue($value, $datetime = '')
     {
-        if ($this->getIsHistorized() == 1 && ($_value == null || ($_value !== '' && $this->isType(CmdType::INFO) && $_value <= $this->getConfiguration(CmdConfigKey::MAX_VALUE, $_value) && $_value >= $this->getConfiguration(CmdConfigKey::MIN_VALUE, $_value)))) {
+        if ($this->getIsHistorized() == 1 && ($value == null || ($value !== '' && $this->isType(CmdType::INFO) && $value <= $this->getConfiguration(CmdConfigKey::MAX_VALUE, $value) && $value >= $this->getConfiguration(CmdConfigKey::MIN_VALUE, $value)))) {
             $history = new History();
-            $history->setCmd_id($this->getId());
-            $history->setValue($_value);
-            $history->setDatetime($_datetime);
+            $history->setCmd_id($this->getId())
+                    ->setValue($value)
+                    ->setDatetime($datetime);
             $history->save($this);
         }
     }
 
     /**
-     * @param $_value
+     * @param $value
+     * @throws CoreException
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public function checkReturnState($_value)
+    public function checkReturnState($value)
     {
         if (is_numeric($this->getConfiguration(CmdConfigKey::RETURN_STATE_TIME))
             && $this->getConfiguration(CmdConfigKey::RETURN_STATE_TIME) > 0
-            && $_value != $this->getConfiguration(CmdConfigKey::RETURN_STATE_VALUE)
+            && $value != $this->getConfiguration(CmdConfigKey::RETURN_STATE_VALUE)
             && trim($this->getConfiguration(CmdConfigKey::RETURN_STATE_VALUE)) != '') {
             $cron = CronManager::byClassAndFunction(NextDomObj::CMD, 'returnState', [Common::CMD_ID => intval($this->getId())]);
             if (!is_object($cron)) {
                 $cron = new cron();
             }
-            $cron->setClass(NextDomObj::CMD);
-            $cron->setFunction('returnState');
-            $cron->setOnce(1);
-            $cron->setOption([Common::CMD_ID => intval($this->getId())]);
+            $cron->setClass(NextDomObj::CMD)
+                 ->setFunction('returnState')
+                 ->setOnce(1)
+                 ->setOption([Common::CMD_ID => intval($this->getId())]);
             $next = strtotime('+ ' . ($this->getConfiguration(CmdConfigKey::RETURN_STATE_TIME) + 1) . ' minutes ' . date(DateFormat::FULL));
             $cron->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date(DateFormat::FULL));
@@ -1128,16 +1134,17 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_value
+     * @param $value
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function checkCmdAlert($_value)
+    public function checkCmdAlert($value)
     {
         if ($this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_OPERATOR) == '' || $this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_TEST) == '' || is_nan($this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_TIME, 0))) {
             return;
         }
-        $check = NextDomHelper::evaluateExpression($_value . $this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_OPERATOR) . $this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_TEST));
+        $check = NextDomHelper::evaluateExpression($value . $this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_OPERATOR) . $this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_TEST));
         if ($check == 1 || $check || $check == '1') {
             if ($this->getConfiguration(CmdConfigKey::NEXTDOM_CHECK_CMD_TIME, 0) == 0) {
                 $this->executeAlertCmdAction();
@@ -1153,11 +1160,11 @@ class Cmd extends BaseEntity
                     return;
                 }
             }
-            $cron->setClass(NextDomObj::CMD);
-            $cron->setFunction('cmdAlert');
-            $cron->setOnce(1);
-            $cron->setOption([Common::CMD_ID => intval($this->getId())]);
-            $cron->setSchedule(CronManager::convertDateToCron($next));
+            $cron->setClass(NextDomObj::CMD)
+                 ->setFunction('cmdAlert')
+                 ->setOnce(1)
+                 ->setOption([Common::CMD_ID => intval($this->getId())])
+                 ->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date(DateFormat::FULL));
             $cron->save();
         } else {
@@ -1323,7 +1330,6 @@ class Cmd extends BaseEntity
      * TODO: Déplacer dans CmdManager ???
      *
      * @param string $viewVersion
-     * @param bool $_noCustom
      * @return array|bool|mixed|null|string
      * @throws \Exception
      */
@@ -1483,7 +1489,7 @@ class Cmd extends BaseEntity
     /**
      * @return bool
      * @throws CoreException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function remove()
     {
@@ -1510,10 +1516,11 @@ class Cmd extends BaseEntity
     /**
      * @param string $viewVersion
      * @param string $_options
-     * @param null $_cmdColor
+     * @param null   $_cmdColor
      * @return mixed|string
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function toHtml($viewVersion = CmdViewType::DASHBOARD, $_options = '', $_cmdColor = null)
     {
@@ -1601,6 +1608,15 @@ class Cmd extends BaseEntity
         return false;
     }
 
+    /**
+     * @param $htmlData
+     * @param $version
+     * @param $version2
+     * @param $templateCode
+     * @throws CoreException
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     private function addDataForInfoCmdRender(&$htmlData, $version, $version2, $templateCode)
     {
         $htmlData['#state#'] = '';
@@ -1648,10 +1664,10 @@ class Cmd extends BaseEntity
                     $htmlData['#maxHistoryValue#'] = round($historyStatistique['max'], 1);
                 }
                 $startHist = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . ConfigManager::byKey('historyCalculTendance') . ' hour'));
-                $tendance = $this->getTendance($startHist, date(DateFormat::FULL));
-                if ($tendance > ConfigManager::byKey('historyCalculTendanceThresholddMax')) {
+                $trend = $this->getTendance($startHist, date(DateFormat::FULL));
+                if ($trend > ConfigManager::byKey('historyCalculTendanceThresholddMax')) {
                     $htmlData['#tendance#'] = 'fa fa-arrow-up';
-                } else if ($tendance < ConfigManager::byKey('historyCalculTendanceThresholddMin')) {
+                } elseif ($trend < ConfigManager::byKey('historyCalculTendanceThresholddMin')) {
                     $htmlData['#tendance#'] = 'fa fa-arrow-down';
                 } else {
                     $htmlData['#tendance#'] = 'fa fa-minus';
@@ -1691,6 +1707,16 @@ class Cmd extends BaseEntity
         return HistoryManager::getTendance($this->getId(), $_startTime, $_endTime);
     }
 
+    /**
+     * @param $htmlData
+     * @param $htmlRender
+     * @param $_options
+     * @param $templateCode
+     * @return string
+     * @throws CoreException
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     private function addDataForOthersCmdRender(&$htmlData, $htmlRender, $_options, $templateCode)
     {
         $cmdValue = $this->getCmdValue();
@@ -1770,32 +1796,32 @@ class Cmd extends BaseEntity
     }
 
     /**
-     * @param $_response
-     * @param string $_plugin
-     * @param string $_network
+     * @param $response
+     * @param string $plugin
+     * @param string $network
      * @return string
      * @throws \Exception
      */
-    public function generateAskResponseLink($_response, $_plugin = 'core', $_network = 'external')
+    public function generateAskResponseLink($response, $plugin = 'core', $network = 'external')
     {
         $token = $this->getCache('ask::token', ConfigManager::genKey());
         $this->setCache(['ask::count' => 0, 'ask::token' => $token]);
-        $result = NetworkHelper::getNetworkAccess($_network) . '/src/Api/jeeApi.php?';
-        $result .= 'type=ask';
-        $result .= '&plugin=' . $_plugin;
-        $result .= '&apikey=' . Api::getApiKey($_plugin);
-        $result .= '&token=' . $token;
-        $result .= '&response=' . urlencode($_response);
-        return $result . '&cmd_id=' . $this->getId();
+        return NetworkHelper::getNetworkAccess($network) . '/src/Api/jeeApi.php?' . http_build_query([
+                'type'     => 'ask',
+                'plugin'   => $plugin,
+                'apikey'   => Api::getApiKey($plugin),
+                'token'    => $token,
+                'response' => urlencode($response),
+                'cmd_id'   => $this->getId(),
+            ]);
     }
 
     /**
      * @param $_response
      * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function askResponse($_response)
+    public function askResponse($_response): bool
     {
         if ($this->getCache('ask::variable', 'none') == 'none') {
             return false;
@@ -1804,13 +1830,13 @@ class Cmd extends BaseEntity
         if ($askEndTime == null || $askEndTime < strtotime('now')) {
             return false;
         }
-        $dataStore = new DataStore();
-        $dataStore->setType(NextDomObj::SCENARIO);
-        $dataStore->setKey($this->getCache('ask::variable', 'none'));
-        $dataStore->setValue($_response);
-        $dataStore->setLink_id(-1);
+        $dataStore = (new DataStore())
+            ->setType(NextDomObj::SCENARIO)
+            ->setKey($this->getCache('ask::variable', 'none'))
+            ->setValue($_response)
+            ->setLink_id(-1);
         $dataStore->save();
-        $this->setCache(['ask::variable' => 'none', 'ask::count' => 0, 'ask::token' => null, 'ask::endtime' => null]);
+        $this->setCache([ 'ask::variable' => 'none', 'ask::count' => 0, 'ask::token' => null, 'ask::endtime' => null ]);
         return true;
     }
 
@@ -2081,6 +2107,7 @@ class Cmd extends BaseEntity
     /**
      * @return array
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function getUse()
     {
