@@ -41,10 +41,9 @@ class AlternativeMarketForJeedom extends eqLogic
         if ($obj1Order == $obj2Order) {
             $result = 0;
         } else {
+            $result = 1;
             if ($obj1Order < $obj2Order) {
                 $result = -1;
-            } else {
-                $result = 1;
             }
         }
         return $result;
