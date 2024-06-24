@@ -534,6 +534,7 @@ class MigrationHelper
 
         DBHelper::exec("DROP TABLE `plan3d`");
         DBHelper::exec("DROP TABLE `plan3dHeader`");
+        DBHelper::exec("CREATE TABLE  `dash` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, `data` TEXT NULL DEFAULT NULL, PRIMARY KEY (`id`))");
 
         $dir = NEXTDOM_DATA . '/';
         $planHeaderList = PlanHeaderManager::all();

@@ -24,6 +24,7 @@ use NextDom\Enums\GetParams;
 use NextDom\Enums\NextDomObj;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\DashManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
@@ -616,6 +617,7 @@ class PrepareView
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
         $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
         $pageData['MENU_PLANS_LIST'] = PlanHeaderManager::all();
+        $pageData['MENU_DASH_LIST'] = DashManager::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
